@@ -1,0 +1,15 @@
+#!/bin/sh                              
+#Test run script    
+                  
+make run_sim                    \
+OPT="+UVM_VERBOSITY=UVM_MEDIUM   \
++inp_num_cboids=20                \
++watchdog_timer=2000               \
++weight_min=1                       \
++weight_max=16                       \
++height_min=1                         \
++height_max=19                         \
++length_min=1                           \
++length_max=12                           \
+"                                         \
+GUI=0

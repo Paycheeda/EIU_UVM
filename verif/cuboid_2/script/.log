@@ -1,0 +1,70 @@
+# vsim -c tb_cuboid_prcr -sv_lib /home/hamza/Downloads/uvm_1.2/uvm-1.2/lib/uvm_dpi -work /home/hamza/Downloads/uvm_training/verif/cuboid_1/script//work "+UVM_TESTNAME=" "+UVM_CONFIG_DB_TRACE" -classdebug -l .log -do "run -a; q" 
+# Start time: 18:30:41 on Sep 11,2024
+# Loading /tmp/hamza@hamza-IdeaPad-L3_dpi_46480/linuxaloem_gcc-7.4.0/export_tramp.so
+# ** Note: (vsim-8785) UVM-aware debugging capabilities will be disabled since no compiled "questa_uvm_pkg" can be found.
+# This also means that later if you turn on UVM-aware debugging your debug simulations may have
+# different random seeds from your non-debug simulations.
+# Loading sv_std.std
+# Loading work.uvm_pkg
+# Loading work.cuboid_pkg
+# Loading work.tb_cuboid_prcr
+# Loading work.cuboid_inp_intf
+# Loading work.cuboid_out_intf
+# Loading work.cuboid_prcr
+# ** Warning: (vsim-3764) Stand-alone call to function 'get' treated as implicit void cast.
+#    Time: 0 fs  Iteration: 0  Region: /cuboid_pkg File: /home/hamza/Downloads/uvm_training//verif/cuboid_1/uvm_tb/scoreboard/scoreboard.sv Line: 60
+# ** Warning: (vsim-3764) Stand-alone call to function 'get' treated as implicit void cast.
+#    Time: 0 fs  Iteration: 0  Region: /cuboid_pkg File: /home/hamza/Downloads/uvm_training//verif/cuboid_1/uvm_tb/env/env.sv Line: 52
+# ** Warning: (vsim-2685) [TFMPC] - Too few port connections for 'cuboid_prcr_inst'.  Expected 9, found 8.
+#    Time: 0 fs  Iteration: 0  Instance: /tb_cuboid_prcr/cuboid_prcr_inst File: /home/hamza/Downloads/uvm_training//verif/cuboid_1/vlib/tb_cuboid_prcr.sv Line: 21
+# ** Warning: (vsim-3722) /home/hamza/Downloads/uvm_training//verif/cuboid_1/vlib/tb_cuboid_prcr.sv(21): [TFMPC] - Missing connection for port 'rst'.
+# Compiling /tmp/hamza@hamza-IdeaPad-L3_dpi_46480/linuxaloem_gcc-7.4.0/exportwrapper.c
+# Loading /tmp/hamza@hamza-IdeaPad-L3_dpi_46480/linuxaloem_gcc-7.4.0/vsim_auto_compile.so
+# Loading /home/hamza/Downloads/uvm_1.2/uvm-1.2/lib/uvm_dpi.so
+# ** Warning: Design size of 55173 statements exceeds ModelSim-Intel FPGA Starter Edition recommended capacity.
+# Expect performance to be adversely affected.
+# run -a
+# UVM_INFO /home/hamza/Downloads/uvm_1.2/uvm-1.2/src//base/uvm_root.svh(392) @ 0: reporter [UVM/RELNOTES] 
+# ----------------------------------------------------------------
+# UVM-1.2
+# (C) 2007-2014 Mentor Graphics Corporation
+# (C) 2007-2014 Cadence Design Systems, Inc.
+# (C) 2006-2014 Synopsys, Inc.
+# (C) 2011-2013 Cypress Semiconductor Corp.
+# (C) 2013-2014 NVIDIA Corporation
+# ----------------------------------------------------------------
+# 
+#   ***********       IMPORTANT RELEASE NOTES         ************
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_NO_DEPRECATED undefined.
+#   See http://www.eda.org/svdb/view.php?id=3313 for more details.
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_OBJECT_DO_NOT_NEED_CONSTRUCTOR undefined.
+#   See http://www.eda.org/svdb/view.php?id=3770 for more details.
+# 
+#       (Specify +UVM_NO_RELNOTES to turn off this notice)
+# 
+# UVM_INFO /home/hamza/Downloads/uvm_1.2/uvm-1.2/src//base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/SET] Configuration 'uvm_test_top.env.ingr_agnt.drvr.cuboid_in_intf' (type virtual cuboid_inp_intf) set by  = (virtual cuboid_inp_intf) /tb_cuboid_prcr/cuboid_inp_if
+# UVM_INFO /home/hamza/Downloads/uvm_1.2/uvm-1.2/src//base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/SET] Configuration 'uvm_test_top.env.ingr_agnt.mntr.cuboid_in_intf' (type virtual cuboid_inp_intf) set by  = (virtual cuboid_inp_intf) /tb_cuboid_prcr/cuboid_inp_if
+# UVM_INFO /home/hamza/Downloads/uvm_1.2/uvm-1.2/src//base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/SET] Configuration 'uvm_test_top.env.egrs_agnt.mntr.cuboid_o_intf' (type virtual cuboid_out_intf) set by  = (virtual cuboid_out_intf) /tb_cuboid_prcr/cuboid_out_if
+# UVM_INFO /home/hamza/Downloads/uvm_1.2/uvm-1.2/src//base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/SET] Configuration 'uvm_test_top.cuboid_in_intf' (type virtual cuboid_inp_intf) set by  = (virtual cuboid_inp_intf) /tb_cuboid_prcr/cuboid_inp_if
+# UVM_FATAL @ 0: reporter [NOCOMP] No components instantiated. You must either instantiate at least one component before calling run_test or use run_test to do so. To run a test using run_test, use +UVM_TESTNAME or supply the test name in the argument to run_test(). Exiting simulation.
+# UVM_INFO /home/hamza/Downloads/uvm_1.2/uvm-1.2/src//base/uvm_report_server.svh(847) @ 0: reporter [UVM/REPORT/SERVER] 
+# --- UVM Report Summary ---
+# 
+# ** Report counts by severity
+# UVM_INFO :    5
+# UVM_WARNING :    0
+# UVM_ERROR :    0
+# UVM_FATAL :    1
+# ** Report counts by id
+# [CFGDB/SET]     4
+# [NOCOMP]     1
+# [UVM/RELNOTES]     1
+# 
+# ** Note: $finish    : /home/hamza/Downloads/uvm_1.2/uvm-1.2/src//base/uvm_root.svh(135)
+#    Time: 0 fs  Iteration: 0  Instance: /tb_cuboid_prcr
+# End time: 18:30:41 on Sep 11,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 5

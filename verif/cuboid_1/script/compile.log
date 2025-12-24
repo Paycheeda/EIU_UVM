@@ -1,0 +1,16 @@
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 04:13:16 on Jul 10,2025
+vlog "+incdir+/home/ubuntu/ICS/uvm_1.2/uvm-1.2/src/" -sv -mfcu -work /home/ubuntu/uvm_training/verif/cuboid_1/script//work "+define+VSIM" -timescale=1ns/100fs "+incdir+/home/ubuntu/uvm_training//verif/cuboid_1/uvm_tb/sequence_item" "+incdir+/home/ubuntu/uvm_training//verif/cuboid_1/uvm_tb/sequence" "+incdir+/home/ubuntu/uvm_training//verif/cuboid_1/uvm_tb/config" "+incdir+/home/ubuntu/uvm_training//verif/cuboid_1/uvm_tb/common" "+incdir+/home/ubuntu/uvm_training//verif/cuboid_1/uvm_tb/interface" "+incdir+/home/ubuntu/uvm_training//verif/cuboid_1/uvm_tb/agent" "+incdir+/home/ubuntu/uvm_training//verif/cuboid_1/uvm_tb/scoreboard" "+incdir+/home/ubuntu/uvm_training//verif/cuboid_1/uvm_tb/env" "+incdir+/home/ubuntu/uvm_training//verif/cuboid_1/uvm_tb" "+incdir+/home/ubuntu/uvm_training/verif/cuboid_1/test/short_test" /home/ubuntu/uvm_training//design/cuboid_1/cuboid_prcr.sv /home/ubuntu/uvm_training//verif/cuboid_1/uvm_tb/interface/cuboid_inp_intf.sv /home/ubuntu/uvm_training//verif/cuboid_1/uvm_tb/interface/cuboid_out_intf.sv /home/ubuntu/ICS/uvm_1.2/uvm-1.2/src/uvm_pkg.sv /home/ubuntu/uvm_training//verif/cuboid_1/uvm_tb/package/cuboid_pkg.sv /home/ubuntu/uvm_training//verif/cuboid_1/vlib/tb_cuboid_prcr.sv -l /home/ubuntu/uvm_training/verif/cuboid_1/script//compile.log 
+-- Compiling module cuboid_prcr
+-- Compiling interface cuboid_inp_intf
+-- Compiling interface cuboid_out_intf
+-- Compiling package uvm_pkg
+-- Compiling package cuboid_pkg
+-- Importing package uvm_pkg
+-- Compiling module tb_cuboid_prcr
+-- Importing package cuboid_pkg
+
+Top level modules:
+	tb_cuboid_prcr
+End time: 04:13:17 on Jul 10,2025, Elapsed time: 0:00:01
+Errors: 0, Warnings: 0

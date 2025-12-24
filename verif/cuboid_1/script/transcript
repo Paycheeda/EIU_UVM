@@ -1,0 +1,9 @@
+# vsim -c work.tb_cuboid_prcr_db 
+# Start time: 18:27:14 on Sep 11,2024
+# Loading /tmp/hamza@hamza-IdeaPad-L3_dpi_45960/linuxaloem_gcc-7.4.0/export_tramp.so
+# ** Error: (vsim-3170) Could not find 'tb_cuboid_prcr_db'.
+#         Searched libraries:
+#             /home/hamza/Downloads/uvm_training/verif/cuboid_1/script/work
+# Error loading design
+# End time: 18:27:14 on Sep 11,2024, Elapsed time: 0:00:00
+# Errors: 1, Warnings: 0
