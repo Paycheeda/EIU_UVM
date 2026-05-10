@@ -1,0 +1,34 @@
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 10:47:28 on May 07,2026
+vlog "+incdir+/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src" -modelsimini /home/ahmed/modelsim_2020_libs/modelsim.ini -sv -mfcu -work /home/ahmed/uvm_training/verif/eth_1/test/new_test/work "+define+VSIM" -timescale=1ns/100fs "+incdir+/home/ahmed/uvm_training/verif/eth_1/uvm_tb/sequence_item" "+incdir+/home/ahmed/uvm_training/verif/eth_1/uvm_tb/sequence" "+incdir+/home/ahmed/uvm_training/verif/eth_1/uvm_tb/config" "+incdir+/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface" "+incdir+/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent" "+incdir+/home/ahmed/uvm_training/verif/eth_1/uvm_tb/scoreboard" "+incdir+/home/ahmed/uvm_training/verif/eth_1/uvm_tb/env" "+incdir+/home/ahmed/uvm_training/verif/eth_1/test/new_test" /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/uvm_pkg.sv /home/ahmed/uvm_training/verif/eth_1/uvm_tb/package/eth_pkg.sv /home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_tx_if.sv /home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_rx_app_if.sv /home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/fault_inject_if.sv /home/ahmed/uvm_training/design/eth_1/crc32_data8.sv /home/ahmed/uvm_training/design/eth_1/dual_port_FIFO.sv /home/ahmed/uvm_training/design/eth_1/iddr_rx.sv /home/ahmed/uvm_training/design/eth_1/oddr_tx.sv /home/ahmed/uvm_training/design/eth_1/eth_rx_metadata.sv /home/ahmed/uvm_training/design/eth_1/eth_rx_IF.sv /home/ahmed/uvm_training/design/eth_1/eth_rx_fifo_IF.sv /home/ahmed/uvm_training/design/eth_1/eth_mac_rx.sv /home/ahmed/uvm_training/design/eth_1/eth_tx_IF.sv /home/ahmed/uvm_training/design/eth_1/eth_tx_frame_maker.sv /home/ahmed/uvm_training/design/eth_1/udp_checksum_calculator.sv /home/ahmed/uvm_training/design/eth_1/eth_mac_tx.sv /home/ahmed/uvm_training/design/eth_1/eth.sv /home/ahmed/modelsim_2020_libs/glbl.v /home/ahmed/uvm_training/verif/eth_1/vlib/top_tb_eth.sv -l /home/ahmed/uvm_training/verif/eth_1/test/new_test/compile.log 
+-- Compiling package uvm_pkg
+-- Compiling package eth_pkg
+-- Importing package uvm_pkg
+-- Compiling interface eth_tx_if
+-- Compiling interface eth_rx_app_if
+-- Compiling interface fault_inject_if
+-- Importing package eth_pkg
+-- Compiling module crc32_data8
+-- Compiling module dual_port_FIFO
+-- Compiling module iddr_rx
+-- Compiling module oddr_tx
+-- Compiling module eth_rx_metadata
+-- Compiling module eth_rx_IF
+-- Compiling module eth_rx_fifo_IF
+-- Compiling module eth_mac_rx
+-- Compiling module eth_tx_IF
+-- Compiling module eth_tx_frame_maker
+-- Compiling module udp_checksum_calculator
+-- Compiling module eth_mac_tx
+-- Compiling module eth
+-- Compiling module glbl
+-- Compiling package uvm_pkg_sv_unit
+-- Importing package uvm_pkg
+-- Importing package eth_pkg
+-- Compiling module top_tb_eth
+
+Top level modules:
+	glbl
+	top_tb_eth
+End time: 10:47:30 on May 07,2026, Elapsed time: 0:00:02
+Errors: 0, Warnings: 0

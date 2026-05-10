@@ -1,0 +1,215 @@
+# vsim -c tb_top -sv_lib /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/lib/uvm_dpi -work /home/ahmed/uvm_training/verif/uart_1/test/short_test/work "+UVM_TESTNAME=uart_short_test" "+UVM_CONFIG_DB_TRACE" -classdebug -l uart_short_test.log -do "run -a; q" 
+# Start time: 11:38:00 on Apr 04,2026
+# Loading /tmp/root@ahmedpc_dpi_6055/linuxaloem_gcc-7.4.0/export_tramp.so
+# ** Note: (vsim-8785) UVM-aware debugging capabilities will be disabled since no compiled "questa_uvm_pkg" can be found.
+# This also means that later if you turn on UVM-aware debugging your debug simulations may have
+# different random seeds from your non-debug simulations.
+# Loading sv_std.std
+# Loading work.uvm_pkg
+# Loading work.uart_pkg
+# Loading work.uart_TX_sv_unit
+# Loading work.tb_top
+# Loading work.uart_tx_intf
+# Loading work.uart_out_intf
+# Loading work.uart_TX
+# Compiling /tmp/root@ahmedpc_dpi_6055/linuxaloem_gcc-7.4.0/exportwrapper.c
+# Loading /tmp/root@ahmedpc_dpi_6055/linuxaloem_gcc-7.4.0/vsim_auto_compile.so
+# Loading /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/lib/uvm_dpi.so
+# ** Warning: Design size of 55011 statements exceeds ModelSim-Intel FPGA Starter Edition recommended capacity.
+# Expect performance to be adversely affected.
+# run -a
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_root.svh(392) @ 0: reporter [UVM/RELNOTES] 
+# ----------------------------------------------------------------
+# UVM-1.2
+# (C) 2007-2014 Mentor Graphics Corporation
+# (C) 2007-2014 Cadence Design Systems, Inc.
+# (C) 2006-2014 Synopsys, Inc.
+# (C) 2011-2013 Cypress Semiconductor Corp.
+# (C) 2013-2014 NVIDIA Corporation
+# ----------------------------------------------------------------
+# 
+#   ***********       IMPORTANT RELEASE NOTES         ************
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_NO_DEPRECATED undefined.
+#   See http://www.eda.org/svdb/view.php?id=3313 for more details.
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_OBJECT_DO_NOT_NEED_CONSTRUCTOR undefined.
+#   See http://www.eda.org/svdb/view.php?id=3770 for more details.
+# 
+#       (Specify +UVM_NO_RELNOTES to turn off this notice)
+# 
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/SET] Configuration '*.uart_tx_intf' (type virtual uart_tx_intf) set by  = (virtual uart_tx_intf) /tb_top/in_vif
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/SET] Configuration '*.uart_out_intf' (type virtual uart_out_intf) set by  = (virtual uart_out_intf) /tb_top/out_vif
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.recording_detail' (type reg signed[4095:0]) read by uvm_test_top = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.recording_detail' (type int) read by uvm_test_top = null (failed lookup)
+# UVM_INFO @ 0: reporter [RNTST] Running test uart_short_test...
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/SET] Configuration 'uvm_test_top.*.uart_cfg' (type class uart_pkg::uart_config) set by uvm_test_top = (class uart_pkg::uart_config) {cfg} 366 1 371 @uvm_status_container@1 { } @uvm_cmdline_processor@1 50 99999999 115200 0 0 {uart_config}
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.recording_detail' (type int) read by uvm_test_top.env = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.uart_tx_intf' (type virtual uart_tx_intf) read by uvm_test_top = (virtual uart_tx_intf) /tb_top/in_vif
+# UVM_INFO uart_short_test.sv(10) @ 0: uvm_test_top [UART_SHORT_TEST] Starting UART short_test... overriding config.
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.recording_detail' (type int) read by uvm_test_top.env.ingr_agnt = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.egrs_agnt.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.egrs_agnt = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.egrs_agnt.recording_detail' (type int) read by uvm_test_top.env.egrs_agnt = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.scrbrd.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.scrbrd = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.scrbrd.recording_detail' (type int) read by uvm_test_top.env.scrbrd = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.*.uart_cfg' (type class uart_pkg::uart_config) read by uvm_test_top.env = (class uart_pkg::uart_config) {cfg} 366 1 433 @uvm_status_container@1 { } @uvm_cmdline_processor@1 5 99999999 115200 0 0 {uart_config}
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/SET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.main_phase.default_sequence' (type class uvm_pkg::uvm_object_wrapper) set by uvm_test_top.env = (class uvm_pkg::uvm_object_wrapper) {uart_main_sequence} @uvm_object_registry__51@1
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.egrs_agnt.mntr.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.egrs_agnt.mntr = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.egrs_agnt.mntr.recording_detail' (type int) read by uvm_test_top.env.egrs_agnt.mntr = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.egrs_agnt.mntr.uart_out_intf' (type virtual uart_out_intf) read by uvm_test_top.env.egrs_agnt.mntr = (virtual uart_out_intf) /tb_top/out_vif
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.egrs_agnt.mntr.mon_analysis_port.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.egrs_agnt.mntr.mon_analysis_port = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.egrs_agnt.mntr.mon_analysis_port.recording_detail' (type int) read by uvm_test_top.env.egrs_agnt.mntr.mon_analysis_port = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.egrs_agnt.mntr.mon_analysis_port.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.egrs_agnt.mntr.mon_analysis_port = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.mntr.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.mntr = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.mntr.recording_detail' (type int) read by uvm_test_top.env.ingr_agnt.mntr = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.recording_detail' (type int) read by uvm_test_top.env.ingr_agnt.sqncr = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.rsp_export.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr.rsp_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.rsp_export.recording_detail' (type int) read by uvm_test_top.env.ingr_agnt.sqncr.rsp_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.rsp_export.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr.rsp_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.recording_detail' (type int) read by uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.put_export.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.put_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.put_export.recording_detail' (type int) read by uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.put_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.put_export.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.put_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.get_peek_export.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.get_peek_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.get_peek_export.recording_detail' (type int) read by uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.get_peek_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.get_peek_export.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.get_peek_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.put_ap.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.put_ap = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.put_ap.recording_detail' (type int) read by uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.put_ap = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.put_ap.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.put_ap = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.get_ap.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.get_ap = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.get_ap.recording_detail' (type int) read by uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.get_ap = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.get_ap.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.get_ap = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.analysis_export.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.analysis_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.analysis_export.recording_detail' (type int) read by uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.analysis_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.analysis_export.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr.sqr_rsp_analysis_fifo.analysis_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.req_fifo.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr.req_fifo = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.req_fifo.recording_detail' (type int) read by uvm_test_top.env.ingr_agnt.sqncr.req_fifo = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.req_fifo.put_export.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr.req_fifo.put_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.req_fifo.put_export.recording_detail' (type int) read by uvm_test_top.env.ingr_agnt.sqncr.req_fifo.put_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.req_fifo.put_export.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr.req_fifo.put_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.req_fifo.get_peek_export.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr.req_fifo.get_peek_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.req_fifo.get_peek_export.recording_detail' (type int) read by uvm_test_top.env.ingr_agnt.sqncr.req_fifo.get_peek_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.req_fifo.get_peek_export.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr.req_fifo.get_peek_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.req_fifo.put_ap.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr.req_fifo.put_ap = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.req_fifo.put_ap.recording_detail' (type int) read by uvm_test_top.env.ingr_agnt.sqncr.req_fifo.put_ap = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.req_fifo.put_ap.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr.req_fifo.put_ap = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.req_fifo.get_ap.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr.req_fifo.get_ap = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.req_fifo.get_ap.recording_detail' (type int) read by uvm_test_top.env.ingr_agnt.sqncr.req_fifo.get_ap = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.req_fifo.get_ap.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr.req_fifo.get_ap = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.seq_item_export.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr.seq_item_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.seq_item_export.recording_detail' (type int) read by uvm_test_top.env.ingr_agnt.sqncr.seq_item_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.seq_item_export.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr.seq_item_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.drvr.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.drvr = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.drvr.recording_detail' (type int) read by uvm_test_top.env.ingr_agnt.drvr = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.drvr.seq_item_port.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.drvr.seq_item_port = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.drvr.seq_item_port.recording_detail' (type int) read by uvm_test_top.env.ingr_agnt.drvr.seq_item_port = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.drvr.seq_item_port.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.drvr.seq_item_port = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.drvr.rsp_port.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.drvr.rsp_port = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.drvr.rsp_port.recording_detail' (type int) read by uvm_test_top.env.ingr_agnt.drvr.rsp_port = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.drvr.rsp_port.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.drvr.rsp_port = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.drvr.uart_tx_intf' (type virtual uart_tx_intf) read by uvm_test_top.env.ingr_agnt.drvr = (virtual uart_tx_intf) /tb_top/in_vif
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.drvr.uart_out_intf' (type virtual uart_out_intf) read by uvm_test_top.env.ingr_agnt.drvr = (virtual uart_out_intf) /tb_top/out_vif
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.mntr.uart_tx_intf' (type virtual uart_tx_intf) read by uvm_test_top.env.ingr_agnt.mntr = (virtual uart_tx_intf) /tb_top/in_vif
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.mntr.mon_analysis_port.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.mntr.mon_analysis_port = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.mntr.mon_analysis_port.recording_detail' (type int) read by uvm_test_top.env.ingr_agnt.mntr.mon_analysis_port = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.mntr.mon_analysis_port.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.mntr.mon_analysis_port = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.default_sequence' (type string) read by uvm_test_top.env.ingr_agnt.sqncr = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.count' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.max_random_count' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.max_random_depth' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.pound_zero_count' (type reg signed[4095:0]) read by uvm_test_top.env.ingr_agnt.sqncr = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.scrbrd.ingr_imp_export.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.scrbrd.ingr_imp_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.scrbrd.ingr_imp_export.recording_detail' (type int) read by uvm_test_top.env.scrbrd.ingr_imp_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.scrbrd.ingr_imp_export.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.scrbrd.ingr_imp_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.scrbrd.egrs_imp_export.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.scrbrd.egrs_imp_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.scrbrd.egrs_imp_export.recording_detail' (type int) read by uvm_test_top.env.scrbrd.egrs_imp_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.scrbrd.egrs_imp_export.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.scrbrd.egrs_imp_export = null (failed lookup)
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.scrbrd.uart_cfg' (type class uart_pkg::uart_config) read by uvm_test_top.env.scrbrd = (class uart_pkg::uart_config) {cfg} 366 1 821 @uvm_status_container@1 { } @uvm_cmdline_processor@1 5 99999999 115200 0 0 {uart_config}
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_root.svh(579) @ 0: reporter [UVMTOP] UVM testbench topology:
+# --------------------------------------------------------------
+# Name                       Type                    Size  Value
+# --------------------------------------------------------------
+# uvm_test_top               uart_short_test         -     @349 
+#   env                      uart_env                -     @373 
+#     egrs_agnt              out_agent               -     @404 
+#       mntr                 out_monitor             -     @442 
+#         mon_analysis_port  uvm_analysis_port       -     @458 
+#     ingr_agnt              inp_agent               -     @391 
+#       drvr                 inp_driver              -     @703 
+#         rsp_port           uvm_analysis_port       -     @732 
+#         seq_item_port      uvm_seq_item_pull_port  -     @716 
+#       mntr                 inp_monitor             -     @475 
+#         mon_analysis_port  uvm_analysis_port       -     @757 
+#       sqncr                uvm_sequencer           -     @488 
+#         rsp_export         uvm_analysis_export     -     @501 
+#         seq_item_export    uvm_seq_item_pull_imp   -     @687 
+#         arbitration_queue  array                   0     -    
+#         lock_queue         array                   0     -    
+#         num_last_reqs      integral                32    'd1  
+#         num_last_rsps      integral                32    'd1  
+#     scrbrd                 scoreboard              -     @417 
+#       egrs_imp_export      uvm_analysis_imp_egrs   -     @804 
+#       ingr_imp_export      uvm_analysis_imp_ingr   -     @788 
+# --------------------------------------------------------------
+# 
+# UVM_INFO uart_base_test.sv(28) @ 0: uvm_test_top [UART_BASE_TEST] Starting reset_phase..
+# UVM_INFO uart_base_test.sv(31) @ 0: uvm_test_top [UART_BASE_TEST] reset_phase done..
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/env/uart_env.sv(58) @ 9950000: uvm_test_top.env [UART_ENV] Starting main_phase.. 
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 9950000: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.ingr_agnt.sqncr.uart_cfg' (type class uart_pkg::uart_config) read by uvm_test_top.env.ingr_agnt.sqncr = (class uart_pkg::uart_config) {cfg} 366 1 870 @uvm_status_container@1 { } @uvm_cmdline_processor@1 5 99999999 115200 0 0 {uart_config}
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence/uart_main_sequence.sv(21) @ 9950000: uvm_test_top.env.ingr_agnt.sqncr@@uart_main_sequence [UART_MAIN_SEQ] Starting tx_seq for 5 packets..
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence/uart_tx_sequence.sv(12) @ 9950000: uvm_test_top.env.ingr_agnt.sqncr@@tx_seq [UART_TX_SEQ] Generating 5 UART Packets...
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/inp_monitor.sv(114) @ 10150000: uvm_test_top.env.ingr_agnt.mntr [INP_MONITOR] Sampled TX Inputs: Data=75, Parity_En=1
+# UVM_ERROR /home/ahmed/uvm_training/verif/uart_1/uvm_tb/scoreboard/scoreboard.sv(122) @ 465950000: uvm_test_top.env.scrbrd [SCB_MISMATCH] 
+# [SCOREBOARD ERROR] Parity Mismatch
+# ================================================================
+# EXPECTED: Data=75, Parity_En=1, Parity_Bit=0
+# ACTUAL  : Data=75, Parity_Bit=1
+# 
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/out_monitor.sv(136) @ 465950000: uvm_test_top.env.egrs_agnt.mntr [OUT_MONITOR] Deserialized TX Data: 75
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/inp_monitor.sv(114) @ 532450000: uvm_test_top.env.ingr_agnt.mntr [INP_MONITOR] Sampled TX Inputs: Data=125, Parity_En=0
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/out_monitor.sv(136) @ 944850000: uvm_test_top.env.egrs_agnt.mntr [OUT_MONITOR] Deserialized TX Data: 125
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/inp_monitor.sv(114) @ 1011250000: uvm_test_top.env.ingr_agnt.mntr [INP_MONITOR] Sampled TX Inputs: Data=1bf, Parity_En=0
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/out_monitor.sv(136) @ 1423650000: uvm_test_top.env.egrs_agnt.mntr [OUT_MONITOR] Deserialized TX Data: 1bf
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/inp_monitor.sv(114) @ 1490050000: uvm_test_top.env.ingr_agnt.mntr [INP_MONITOR] Sampled TX Inputs: Data=1c6, Parity_En=0
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/out_monitor.sv(136) @ 1902450000: uvm_test_top.env.egrs_agnt.mntr [OUT_MONITOR] Deserialized TX Data: 1c6
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/inp_monitor.sv(114) @ 1968850000: uvm_test_top.env.ingr_agnt.mntr [INP_MONITOR] Sampled TX Inputs: Data=d7, Parity_En=0
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/out_monitor.sv(136) @ 2381250000: uvm_test_top.env.egrs_agnt.mntr [OUT_MONITOR] Deserialized TX Data: d7
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/env/uart_env.sv(74) @ 2431250000: uvm_test_top.env [UART_ENV] Scoreboard Verification Complete..
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/env/uart_env.sv(78) @ 2431250000: uvm_test_top.env [UART_ENV] main_phase done.. 
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/scoreboard/scoreboard.sv(108) @ 2431250000: uvm_test_top.env.scrbrd [SCB] ==================================================
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/scoreboard/scoreboard.sv(109) @ 2431250000: uvm_test_top.env.scrbrd [SCB]  SCOREBOARD RESULTS: Matched=4, Mismatched=1
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/scoreboard/scoreboard.sv(110) @ 2431250000: uvm_test_top.env.scrbrd [SCB] ==================================================
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_report_server.svh(847) @ 2431250000: reporter [UVM/REPORT/SERVER] 
+# --- UVM Report Summary ---
+# 
+# ** Report counts by severity
+# UVM_INFO :  114
+# UVM_WARNING :    0
+# UVM_ERROR :    1
+# UVM_FATAL :    0
+# ** Report counts by id
+# [CFGDB/GET]    86
+# [CFGDB/SET]     4
+# [INP_MONITOR]     5
+# [OUT_MONITOR]     5
+# [RNTST]     1
+# [SCB]     3
+# [SCB_MISMATCH]     1
+# [UART_BASE_TEST]     2
+# [UART_ENV]     3
+# [UART_MAIN_SEQ]     1
+# [UART_SHORT_TEST]     1
+# [UART_TX_SEQ]     1
+# [UVM/RELNOTES]     1
+# [UVMTOP]     1
+# 
+# ** Note: $finish    : /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_root.svh(517)
+#    Time: 243125 ns  Iteration: 122  Instance: /tb_top
+# End time: 11:38:02 on Apr 04,2026, Elapsed time: 0:00:02
+# Errors: 0, Warnings: 1

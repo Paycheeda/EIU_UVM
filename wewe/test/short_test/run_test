@@ -1,0 +1,13 @@
+#!/bin/sh                              
+# UART Test run script    
+                  
+make run_sim                            \
+OPT="+UVM_TESTNAME=uart_base_test       \
++UVM_VERBOSITY=UVM_MEDIUM               \
++num_uart_packets=50                    \
++watchdog_timer=99999999                \
++baud_rate=115200                       \
++has_uart_rx=0                          \
++has_ethernet=0                         \
+"                                       \
+GUI=0

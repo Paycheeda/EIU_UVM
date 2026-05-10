@@ -1,0 +1,35 @@
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 15:47:39 on May 01,2026
+vlog "+incdir+/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src" "+define+UART_WIDTH=9" -modelsimini /home/ahmed/modelsim_2020_libs/modelsim.ini -sv -mfcu -work /home/ahmed/uvm_training/verif/uart_1/test/short_test/work "+define+VSIM" -timescale=1ns/100fs "+incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence_item" "+incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence" "+incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/config" "+incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/common" "+incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface" "+incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent" "+incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/scoreboard" "+incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/env" "+incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb" "+incdir+/home/ahmed/uvm_training/verif/uart_1/test/short_test" /home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/fifo_intf_uart.sv /home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_config_intf.sv /home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/serial_line_intf.sv /home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/error_inject_intf.sv /home/ahmed/uvm_training/design/uart_1/dual_port_FIFO.sv /home/ahmed/uvm_training/design/uart_1/uart_IF.sv /home/ahmed/uvm_training/design/uart_1/uart_TX.sv /home/ahmed/uvm_training/design/uart_1/uart_RX.sv /home/ahmed/uvm_training/design/uart_1/uart.sv /home/ahmed/modelsim_2020_libs/glbl.v /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/uvm_pkg.sv /home/ahmed/uvm_training/verif/uart_1/uvm_tb/package/fifo_pkg.sv /home/ahmed/uvm_training/verif/uart_1/uvm_tb/package/loopback_uartfifo_pkg.sv /home/ahmed/uvm_training/verif/uart_1/vlib/tb_top_loopback_uart_fifo.sv -l /home/ahmed/uvm_training/verif/uart_1/test/short_test/compile.log 
+-- Compiling interface fifo_intf_uart
+** Warning: /home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/fifo_intf_uart.sv(31): (vlog-2186) SystemVerilog testbench feature
+(randomization, coverage or assertion) detected in the design.
+These features are only supported in Questasim.
+** Warning: /home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/fifo_intf_uart.sv(31): (vlog-2186) SystemVerilog testbench feature
+(randomization, coverage or assertion) detected in the design.
+These features are only supported in Questasim.
+** Warning: /home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/fifo_intf_uart.sv(36): (vlog-2186) SystemVerilog testbench feature
+(randomization, coverage or assertion) detected in the design.
+These features are only supported in Questasim.
+-- Compiling interface uart_config_intf
+-- Compiling interface serial_line_intf
+-- Compiling interface error_inject_intf
+-- Compiling module dual_port_FIFO
+-- Compiling module uart_IF
+-- Compiling module uart_TX
+-- Compiling module uart_RX
+-- Compiling module uart
+-- Compiling module glbl
+-- Compiling package uvm_pkg
+-- Compiling package fifo_pkg
+-- Importing package uvm_pkg
+-- Compiling package loopback_uartfifo_pkg
+-- Importing package fifo_pkg
+-- Compiling module tb_top_loopback_uart_fifo
+-- Importing package loopback_uartfifo_pkg
+
+Top level modules:
+	glbl
+	tb_top_loopback_uart_fifo
+End time: 15:47:40 on May 01,2026, Elapsed time: 0:00:01
+Errors: 0, Warnings: 3

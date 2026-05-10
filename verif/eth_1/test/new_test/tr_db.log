@@ -1,0 +1,16 @@
+  CREATE_STREAM @0 {NAME:tx_seq T:Transactions SCOPE:uvm_test_top.env.tx_agent.sqr STREAM:823}
+  CREATE_STREAM @0 {NAME:tx_seq T:Transactions SCOPE:uvm_test_top.env.tx_agent.sqr STREAM:823}
+  CREATE_STREAM @0 {NAME:tx_seq T:Transactions SCOPE:uvm_test_top.env.tx_agent.sqr STREAM:823}
+  CREATE_STREAM @0 {NAME:tx_seq T:Transactions SCOPE:uvm_test_top.env.tx_agent.sqr STREAM:823}
+  CREATE_STREAM @0 {NAME:tx_seq T:Transactions SCOPE:uvm_test_top.env.tx_agent.sqr STREAM:823}
+  CREATE_STREAM @0 {NAME:tx_seq T:Transactions SCOPE:uvm_test_top.env.tx_agent.sqr STREAM:823}
+  CREATE_STREAM @0 {NAME:tx_seq T:Transactions SCOPE:uvm_test_top.env.tx_agent.sqr STREAM:823}
+  CREATE_STREAM @0 {NAME:tx_seq T:Transactions SCOPE:uvm_test_top.env.tx_agent.sqr STREAM:823}
+  CREATE_STREAM @0 {NAME:tx_seq T:Transactions SCOPE:uvm_test_top.env.tx_agent.sqr STREAM:823}
+  CREATE_STREAM @0 {NAME:tx_seq T:Transactions SCOPE:uvm_test_top.env.tx_agent.sqr STREAM:823}
+  CREATE_STREAM @0 {NAME:tx_seq T:Transactions SCOPE:uvm_test_top.env.tx_agent.sqr STREAM:823}
+  CREATE_STREAM @0 {NAME:tx_seq T:Transactions SCOPE:uvm_test_top.env.tx_agent.sqr STREAM:823}
+  CREATE_STREAM @0 {NAME:tx_seq T:Transactions SCOPE:uvm_test_top.env.tx_agent.sqr STREAM:823}
+  CREATE_STREAM @0 {NAME:tx_seq T:Transactions SCOPE:uvm_test_top.env.tx_agent.sqr STREAM:823}
+  CREATE_STREAM @0 {NAME:tx_seq T:Transactions SCOPE:uvm_test_top.env.tx_agent.sqr STREAM:823}
+  CREATE_STREAM @0 {NAME:tx_seq T:Transactions SCOPE:uvm_test_top.env.tx_agent.sqr STREAM:823}

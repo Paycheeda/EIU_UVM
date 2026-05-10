@@ -1,0 +1,35 @@
+# vsim -c tb_top glbl -modelsimini /home/ahmed/modelsim_2020_libs/modelsim.ini -L unisims_ver -L unimacro_ver -L secureip -L xpm -sv_lib /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/lib/uvm_dpi -work /home/ahmed/uvm_training/verif/kernel/test/short_test/work "+UVM_TESTNAME=nrz_base_test" "+UVM_CONFIG_DB_TRACE" -classdebug -l nrz_base_test.log -do "run -a; q" 
+# Start time: 18:36:23 on May 09,2026
+# Loading /tmp/root@ahmedpc_dpi_37620/linuxaloem_gcc-7.4.0/export_tramp.so
+# ** Note: (vsim-8785) UVM-aware debugging capabilities will be disabled since no compiled "questa_uvm_pkg" can be found.
+# This also means that later if you turn on UVM-aware debugging your debug simulations may have
+# different random seeds from your non-debug simulations.
+# Loading sv_std.std
+# Loading work.uvm_pkg
+# Loading work.kernel_pkg
+# Loading work.bkp_intf_sv_unit
+# Loading work.tb_top
+# Loading work.bkp_intf
+# Loading work.out_intf
+# Loading work.kwr_intf
+# Loading work.kst_intf
+# Loading work.krd_intf
+# Loading work.nrz_intf
+# Loading work.kernel_config
+# Loading work.kernel_write
+# Loading work.dual_port_FIFO
+# Loading unimacro_ver.FIFO_DUALCLOCK_MACRO
+# Loading work.kernel_start_tx
+# Loading work.cdc_pulse_toggle_sync
+# Loading work.cdc_bit_sync
+# Loading work.kernel_read
+# Loading work.cdc_count_11bit_toggle
+# Loading work.kernel_nrz
+# Loading work.glbl
+# Loading unisims_ver.FIFO18E1
+# Loading unisims_ver.FF18_INTERNAL_VLOG
+# ** Error (suppressible): (vsim-3389) Port 'clk_eth_nrz' not found in the connected module (7th connection).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_top/CONFIG_DUT File: /home/ahmed/uvm_training/verif/kernel/vlib/tb_top.sv Line: 423
+# Error loading design
+# End time: 18:36:24 on May 09,2026, Elapsed time: 0:00:01
+# Errors: 1, Warnings: 0

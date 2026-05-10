@@ -1,0 +1,158 @@
+######################################
+## GLOBAL VARIABLES
+######################################
+WHOAMI := $(shell whoami)
+PWD := $(shell pwd)
+DATE := $(shell date '+%Y_%m%d_%H%M_%S')
+
+TEST_DIR := $(shell pwd)
+UVM_TRAINING := /home/ahmed/uvm_training
+COMP_DIR := $(UVM_TRAINING)/verif/eth_1/test/new_test
+
+SIMULATOR := questa
+ifeq ($(SIMULATOR), questa)
+	BUILD_CMD := vlog 
+	BUILD_CMD := $(BUILD_CMD) +incdir+/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src 
+	OPTM_CMD := vopt 
+endif
+
+# ---> ETHERNET TOP MODULE <---
+DATABASE := top_tb glbl
+
+#####################################
+## TEST VARIABLES
+#####################################
+USR_OPT := $(addprefix , $(OPT))
+USR_LOG := $(addprefix , $(LOG))
+
+ifeq "$(TEST_NAME)" ""
+	TEST_NAME := eth_base_test
+endif
+
+GUI  := 0
+PLUSARGS ?=
+
+ifeq ($(SIMULATOR), questa)
+	SIM_CMD := vsim 
+	BUILD_OPT := $(BUILD_OPT) -modelsimini /home/ahmed/modelsim_2020_libs/modelsim.ini
+	BUILD_OPT := $(BUILD_OPT) -sv -mfcu 
+	BUILD_OPT := $(BUILD_OPT) -work $(COMP_DIR)/work
+	BUILD_OPT := $(BUILD_OPT) +define+VSIM
+	BUILD_OPT := $(BUILD_OPT) -timescale=1ns/100fs
+endif
+
+# Include directories exactly matching your tree
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/eth_1/uvm_tb/sequence_item
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/eth_1/uvm_tb/sequence
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/eth_1/uvm_tb/config
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/eth_1/uvm_tb/interface                               
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/eth_1/uvm_tb/agent
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/eth_1/uvm_tb/scoreboard
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/eth_1/uvm_tb/env
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/eth_1/test/new_test
+
+# =====================================================================
+# ---> COMPILATION ORDER <---
+# =====================================================================
+
+# 1. Compile Interface
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/verif/eth_1/uvm_tb/interface/eth_if.sv
+
+# 2. Compile RTL
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/eth_1/crc32_data8.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/eth_1/dual_port_FIFO.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/eth_1/udp_checksum_calculator.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/eth_1/eth_tx_frame_maker.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/eth_1/eth_tx_IF.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/eth_1/oddr_tx.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/eth_1/eth_mac_tx.sv
+
+
+# 3. Add Xilinx Global File
+BUILD_OPT := $(BUILD_OPT) /home/ahmed/modelsim_2020_libs/glbl.v
+
+# 4. Compile Packages
+BUILD_OPT := $(BUILD_OPT) /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/uvm_pkg.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/verif/eth_1/uvm_tb/package/eth_pkg.sv
+
+# 5. Compile Top Module Testbench
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/verif/eth_1/vlib/top_tb.sv
+BUILD_OPT := $(BUILD_OPT) -l $(COMP_DIR)/compile.log
+
+# Optimization options 
+ifeq ($(SIMULATOR), questa)
+	OPTM_OPT := +acc top_tb glbl -o $(DATABASE) -designfile design.bin -work $(COMP_DIR)/work
+	SIM_OPT := $(SIM_OPT) -modelsimini /home/ahmed/modelsim_2020_libs/modelsim.ini -L unisims_ver -L unimacro_ver -L secureip -L xpm
+	SIM_OPT := $(SIM_OPT) -sv_lib /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/lib/uvm_dpi -work $(COMP_DIR)/work
+	SIM_OPT := $(SIM_OPT) $(PLUSARGS)
+endif
+
+# Default to CLI mode if the user doesn't specify
+GUI ?= 0
+
+ifeq ($(GUI), 1)
+    # GUI MODE: Do NOT use the -c (command line) flag
+    SIM_OPT := $(DATABASE) $(SIM_OPT)
+else
+    # CLI MODE: Use the -c flag to run silently in the background
+    SIM_OPT := -c $(DATABASE) $(SIM_OPT)
+endif
+
+# Add the standard UVM arguments
+SIM_OPT := $(SIM_OPT) +UVM_TESTNAME=$(TEST_NAME)
+SIM_OPT := $(SIM_OPT) +UVM_CONFIG_DB_TRACE
+SIM_OPT := $(SIM_OPT) -classdebug
+SIM_OPT := $(SIM_OPT) -l $(TEST_NAME).log
+
+# Configure the DO scripts based on the GUI flag
+ifeq ($(SIMULATOR), questa)
+    ifeq ($(GUI), 1)
+        # GUI SCRIPT: Log all signals, add MAC to wave viewer, run, and STAY OPEN
+        SIM_OPT := $(SIM_OPT) -do "log -r /*; add wave -r /top_tb/u_mac/*; run -a;"
+    else
+        # CLI SCRIPT: Run the simulation and QUIT immediately when done
+        SIM_OPT := $(SIM_OPT) -do "run -a; q"
+    endif
+endif
+
+cov:
+	dve -covdir $(COMP_DIR)/simv.vdb -full64
+
+compile:
+	$(BUILD_CMD) $(BUILD_OPT)
+
+optimize:
+	$(OPTM_CMD) $(OPTM_OPT)
+
+run: build run_sim
+
+run_sim: 
+ifeq ($(SIMULATOR), questa) 
+	$(SIM_CMD) $(SIM_OPT) $(USR_OPT)
+else
+	$(SIMV_CMD) $(SIM_OPT) $(USR_OPT)
+endif
+
+build: compile
+
+build_run_sim: build run_sim
+
+clean:
+	@rm -rf $(UVM_TRAINING)/verif/eth_1/test/*/cm.log 
+	@rm -rf $(UVM_TRAINING)/verif/eth_1/test/*/DVEfiles/ 
+	@rm -rf $(UVM_TRAINING)/verif/eth_1/test/*/inter.vpd 
+	@rm -rf $(UVM_TRAINING)/verif/eth_1/test/*/*.log 
+	@rm -rf $(UVM_TRAINING)/verif/eth_1/test/*/ucli.key
+	@rm -rf $(UVM_TRAINING)/verif/eth_1/test/*/wlft*
+	@rm -rf $(UVM_TRAINING)/verif/eth_1/test/*/vsim.wlf
+	@rm -rf $(UVM_TRAINING)/verif/eth_1/test/*/*.bin
+	@rm -rf $(UVM_TRAINING)/verif/eth_1/test/*/tr_db.log
+	@rm -rf $(COMP_DIR)/compile.log
+	@rm -rf $(COMP_DIR)/work
+	@rm -rf $(COMP_DIR)/design.bin
+	@rm -rf $(COMP_DIR)/csrc  
+	@rm -rf $(COMP_DIR)/simv  
+	@rm -rf $(COMP_DIR)/simv.cst  
+	@rm -rf $(COMP_DIR)/simv.daidir  
+	@rm -rf $(COMP_DIR)/simv.vdb  
+	@rm -rf $(COMP_DIR)/vc_hdrs.h

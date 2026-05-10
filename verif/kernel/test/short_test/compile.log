@@ -1,0 +1,23 @@
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 18:37:00 on May 09,2026
+vlog "+incdir+/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src" -modelsimini /home/ahmed/modelsim_2020_libs/modelsim.ini -sv -mfcu -work /home/ahmed/uvm_training/verif/kernel/test/short_test/work "+define+VSIM" -timescale=1ns/100fs "+incdir+/home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence_item" "+incdir+/home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence" "+incdir+/home/ahmed/uvm_training/verif/kernel/uvm_tb/config" "+incdir+/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface" "+incdir+/home/ahmed/uvm_training/verif/kernel/uvm_tb/agent" "+incdir+/home/ahmed/uvm_training/verif/kernel/uvm_tb/scoreboard" "+incdir+/home/ahmed/uvm_training/verif/kernel/uvm_tb/env" "+incdir+/home/ahmed/uvm_training/verif/kernel/test/short_test" /home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/bkp_intf.sv /home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/out_intf.sv /home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/kwr_intf.sv /home/ahmed/uvm_training/design/kernel/kernel_config.sv /home/ahmed/uvm_training/design/kernel/kernel_write.sv /home/ahmed/modelsim_2020_libs/glbl.v /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/uvm_pkg.sv /home/ahmed/uvm_training/verif/kernel/uvm_tb/package/kernel_pkg.sv /home/ahmed/uvm_training/verif/kernel/test/short_test/kernel_base_test.sv /home/ahmed/uvm_training/verif/kernel/test/short_test/kwr_base_test.sv /home/ahmed/uvm_training/verif/kernel/vlib/tb_top.sv -l /home/ahmed/uvm_training/verif/kernel/test/short_test/compile.log 
+-- Compiling interface bkp_intf
+-- Compiling interface out_intf
+-- Compiling interface kwr_intf
+-- Compiling module kernel_config
+-- Compiling module kernel_write
+-- Compiling module glbl
+-- Compiling package uvm_pkg
+-- Compiling package kernel_pkg
+-- Importing package uvm_pkg
+** Warning: /home/ahmed/uvm_training/verif/kernel/test/short_test/kernel_base_test.sv(4): (vlog-13233) Design unit "bkp_intf_sv_unit" already exists and will be overwritten. Overwriting SystemVerilog $unit with different source files.
+-- Compiling package bkp_intf_sv_unit
+-- Importing package uvm_pkg
+-- Importing package kernel_pkg
+-- Compiling module tb_top
+
+Top level modules:
+	glbl
+	tb_top
+End time: 18:37:02 on May 09,2026, Elapsed time: 0:00:02
+Errors: 0, Warnings: 1

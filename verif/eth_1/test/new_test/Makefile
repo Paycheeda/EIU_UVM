@@ -1,0 +1,175 @@
+######################################
+## GLOBAL VARIABLES
+######################################
+WHOAMI := $(shell whoami)
+PWD := $(shell pwd)
+DATE := $(shell date '+%Y_%m%d_%H%M_%S')
+
+TEST_DIR := $(shell pwd)
+UVM_TRAINING := /home/ahmed/uvm_training
+COMP_DIR := $(UVM_TRAINING)/verif/eth_1/test/new_test
+
+SIMULATOR := questa
+ifeq ($(SIMULATOR), questa)
+	BUILD_CMD := vlog 
+	BUILD_CMD := $(BUILD_CMD) +incdir+/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src 
+	OPTM_CMD := vopt 
+endif
+
+# =====================================================================
+# ---> CHOOSE YOUR TARGET HERE <---
+# =====================================================================
+TOP_MODULE := top_tb_eth
+DATABASE := $(TOP_MODULE) glbl
+
+#####################################
+## TEST VARIABLES
+#####################################
+USR_OPT := $(addprefix , $(OPT))
+USR_LOG := $(addprefix , $(LOG))
+
+# Route the correct UVM Test based on the Top Module target
+ifeq "$(TEST_NAME)" ""
+	ifeq ($(TOP_MODULE), top_tb_rx)
+	TEST_NAME := eth_rx_base_test
+	else ifeq ($(TOP_MODULE), top_tb_rx_fifo)
+	TEST_NAME := rx_fifo_base_test
+	else ifeq ($(TOP_MODULE), top_tb_mac_rx)
+	TEST_NAME := mac_rx_base_test
+	else ifeq ($(TOP_MODULE), top_tb_eth)
+	TEST_NAME := eth_loopback_base_test
+	else
+	TEST_NAME := eth_base_test
+	endif
+endif
+
+# Default GUI to 0 (Command Line Mode) unless specified in terminal
+GUI ?= 0
+PLUSARGS ?=
+
+ifeq ($(SIMULATOR), questa)
+	SIM_CMD := vsim 
+	BUILD_OPT := $(BUILD_OPT) -modelsimini /home/ahmed/modelsim_2020_libs/modelsim.ini
+	BUILD_OPT := $(BUILD_OPT) -sv -mfcu 
+	BUILD_OPT := $(BUILD_OPT) -work $(COMP_DIR)/work
+	BUILD_OPT := $(BUILD_OPT) +define+VSIM
+	BUILD_OPT := $(BUILD_OPT) -timescale=1ns/100fs
+endif
+
+# Include directories
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/eth_1/uvm_tb/sequence_item
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/eth_1/uvm_tb/sequence
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/eth_1/uvm_tb/config
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/eth_1/uvm_tb/interface                               
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/eth_1/uvm_tb/agent
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/eth_1/uvm_tb/scoreboard
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/eth_1/uvm_tb/env
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/eth_1/test/new_test
+
+# =====================================================================
+# ---> COMPILATION ORDER <---
+# =====================================================================
+# 0. Compile UVM Core First!
+BUILD_OPT := $(BUILD_OPT) /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/uvm_pkg.sv
+
+# 1. Compile User Packages
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/verif/eth_1/uvm_tb/package/eth_pkg.sv
+
+# 2. Compile All Interfaces
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/verif/eth_1/uvm_tb/interface/eth_tx_if.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/verif/eth_1/uvm_tb/interface/eth_rx_app_if.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/verif/eth_1/uvm_tb/interface/fault_inject_if.sv
+
+# 3. Compile All RTL
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/eth_1/crc32_data8.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/eth_1/dual_port_FIFO.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/eth_1/iddr_rx.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/eth_1/oddr_tx.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/eth_1/eth_rx_metadata.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/eth_1/eth_rx_IF.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/eth_1/eth_rx_fifo_IF.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/eth_1/eth_mac_rx.sv 
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/eth_1/eth_tx_IF.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/eth_1/eth_tx_frame_maker.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/eth_1/udp_checksum_calculator.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/eth_1/eth_mac_tx.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/eth_1/eth.sv
+
+# 4. Add Xilinx Global File
+BUILD_OPT := $(BUILD_OPT) /home/ahmed/modelsim_2020_libs/glbl.v
+
+# (Make sure you delete or comment out the old uvm_pkg.sv line down here)
+
+# 5. Compile All Top Module Testbenches
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/verif/eth_1/vlib/top_tb_eth.sv
+BUILD_OPT := $(BUILD_OPT) -l $(COMP_DIR)/compile.log
+
+# Optimization options 
+ifeq ($(SIMULATOR), questa)
+	OPTM_OPT := +acc $(TOP_MODULE) glbl -o $(DATABASE) -designfile design.bin -work $(COMP_DIR)/work
+	SIM_OPT := $(SIM_OPT) -modelsimini /home/ahmed/modelsim_2020_libs/modelsim.ini -L unisims_ver -L unimacro_ver -L secureip -L xpm
+	SIM_OPT := $(SIM_OPT) -sv_lib /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/lib/uvm_dpi -work $(COMP_DIR)/work
+	SIM_OPT := $(SIM_OPT) $(PLUSARGS)
+endif
+
+# Dynamic GUI Toggle Logic
+ifeq ($(GUI), 1)
+	SIM_OPT := $(DATABASE) $(SIM_OPT)
+else
+	SIM_OPT := -c $(DATABASE) $(SIM_OPT)
+endif
+
+SIM_OPT := $(SIM_OPT) +UVM_TESTNAME=$(TEST_NAME)
+SIM_OPT := $(SIM_OPT) +UVM_CONFIG_DB_TRACE
+SIM_OPT := $(SIM_OPT) -classdebug
+SIM_OPT := $(SIM_OPT) -l $(TEST_NAME).log
+
+ifeq ($(SIMULATOR), questa)
+	ifeq ($(GUI), 1)
+	SIM_OPT := $(SIM_OPT) -do "log -r /*; add wave -r /$(TOP_MODULE)/*; run -a;"
+	else
+	SIM_OPT := $(SIM_OPT) -do "run -a; q"
+	endif
+endif
+
+cov:
+	dve -covdir $(COMP_DIR)/simv.vdb -full64
+
+compile:
+	$(BUILD_CMD) $(BUILD_OPT)
+
+optimize:
+	$(OPTM_CMD) $(OPTM_OPT)
+
+run: build run_sim
+
+run_sim: 
+ifeq ($(SIMULATOR), questa) 
+	$(SIM_CMD) $(SIM_OPT) $(USR_OPT)
+else
+	$(SIMV_CMD) $(SIM_OPT) $(USR_OPT)
+endif
+
+build: compile
+
+build_run_sim: build run_sim
+
+clean:
+	@rm -rf $(UVM_TRAINING)/verif/eth_1/test/*/cm.log 
+	@rm -rf $(UVM_TRAINING)/verif/eth_1/test/*/DVEfiles/ 
+	@rm -rf $(UVM_TRAINING)/verif/eth_1/test/*/inter.vpd 
+	@rm -rf $(UVM_TRAINING)/verif/eth_1/test/*/*.log 
+	@rm -rf $(UVM_TRAINING)/verif/eth_1/test/*/ucli.key
+	@rm -rf $(UVM_TRAINING)/verif/eth_1/test/*/wlft*
+	@rm -rf $(UVM_TRAINING)/verif/eth_1/test/*/vsim.wlf
+	@rm -rf $(UVM_TRAINING)/verif/eth_1/test/*/*.bin
+	@rm -rf $(UVM_TRAINING)/verif/eth_1/test/*/tr_db.log
+	@rm -rf $(COMP_DIR)/compile.log
+	@rm -rf $(COMP_DIR)/work
+	@rm -rf $(COMP_DIR)/design.bin
+	@rm -rf $(COMP_DIR)/csrc  
+	@rm -rf $(COMP_DIR)/simv  
+	@rm -rf $(COMP_DIR)/simv.cst  
+	@rm -rf $(COMP_DIR)/simv.daidir  
+	@rm -rf $(COMP_DIR)/simv.vdb  
+	@rm -rf $(COMP_DIR)/vc_hdrs.h

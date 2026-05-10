@@ -1,0 +1,218 @@
+######################################
+## GLOBAL VARIABLES
+######################################
+WHOAMI := $(shell whoami)
+PWD := $(shell pwd)
+DATE := $(shell date '+%Y_%m%d_%H%M_%S')
+
+TEST_DIR := $(shell pwd)
+UVM_TRAINING := /home/ahmed/uvm_training
+COMP_DIR := $(UVM_TRAINING)/verif/uart_1/test/short_test
+SUB_DIRS := $(shell ls $(REG_DIR) )
+
+# SIMULATOR = questa for questa and vcs for vcs
+SIMULATOR := questa
+ifeq ($(SIMULATOR), questa)
+	BUILD_CMD := vlog 
+	BUILD_CMD := $(BUILD_CMD) +incdir+/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src 
+endif
+
+ifeq ($(SIMULATOR), questa)
+	OPTM_CMD := vopt 
+endif
+
+# ---> LOOPBACK TOP MODULE <---
+DATABASE := tb_top_loopback_uart_fifo glbl
+
+#####################################
+## TEST VARIABLES
+#####################################
+USR_OPT := $(addprefix , $(OPT))
+USR_LOG := $(addprefix , $(LOG))
+
+## ---> LOOPBACK DEFAULT TEST <---
+ifeq "$(TEST_NAME)" ""
+	TEST_NAME := loopback_test
+endif
+
+# Wave options
+GUI  := 0
+# Catch plusargs from the terminal (defaults to empty)
+PLUSARGS ?=
+# Catch the physical data width from the terminal
+WIDTH ?= 9
+BUILD_OPT := $(BUILD_OPT) +define+UART_WIDTH=$(WIDTH)
+
+ifeq ($(SIMULATOR), questa)
+	SIM_CMD := vsim 
+	
+	# =====================================================================
+	# ---> XILINX LIBRARY LINKING (COMPILE PHASE) <---
+	# =====================================================================
+	BUILD_OPT := $(BUILD_OPT) -modelsimini /home/ahmed/modelsim_2020_libs/modelsim.ini
+	
+	BUILD_OPT := $(BUILD_OPT) -sv -mfcu 
+	BUILD_OPT := $(BUILD_OPT) -work $(COMP_DIR)/work
+	BUILD_OPT := $(BUILD_OPT) +define+VSIM
+	BUILD_OPT := $(BUILD_OPT) -timescale=1ns/100fs
+else
+	BUILD_OPT := vcs
+	BUILD_OPT := $(BUILD_OPT) +define+VCS
+	BUILD_OPT := $(BUILD_OPT) -sverilog
+	BUILD_OPT := $(BUILD_OPT) -sv_pragma
+	# ---> TARGET LOOPBACK TOP <---
+	BUILD_OPT := $(BUILD_OPT) -top tb_top_loopback_uart_fifo
+	BUILD_OPT := $(BUILD_OPT) -full64
+	BUILD_OPT := $(BUILD_OPT) -LDFLAGS -Wl,--no-as-needed 
+	BUILD_OPT := $(BUILD_OPT) -cm line+cond+fsm+tgl+path
+	BUILD_OPT := $(BUILD_OPT) -lca
+	BUILD_OPT := $(BUILD_OPT) +v2k
+	BUILD_OPT := $(BUILD_OPT) -debug_all
+	BUILD_OPT := $(BUILD_OPT) -Mdirectory=$(COMP_DIR)/csrc
+	BUILD_OPT := $(BUILD_OPT) -Mupdate
+	BUILD_OPT := $(BUILD_OPT) +nbaopt
+	BUILD_OPT := $(BUILD_OPT) -ntb_opts uvm-1.2+dep_check
+	BUILD_OPT := $(BUILD_OPT) -timescale=1ns/100fs
+	BUILD_OPT := $(BUILD_OPT) ${VCS_HOME}/etc/uvm-1.2
+	BUILD_OPT := $(BUILD_OPT) -o ${COMP_DIR}/simv
+endif
+
+# Build defines includes and files
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/uart_1/uvm_tb/sequence_item
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/uart_1/uvm_tb/sequence
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/uart_1/uvm_tb/config
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/uart_1/uvm_tb/common
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/uart_1/uvm_tb/interface                               
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/uart_1/uvm_tb/agent
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/uart_1/uvm_tb/scoreboard
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/uart_1/uvm_tb/env
+BUILD_OPT := $(BUILD_OPT) +incdir+$(UVM_TRAINING)/verif/uart_1/uvm_tb
+BUILD_OPT := $(BUILD_OPT) +incdir+$(TEST_DIR)
+
+# =====================================================================
+# ---> COMPILATION ORDER (CRITICAL FOR UVM & RTL) <---
+# =====================================================================
+
+# 1. Compile Interfaces
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/verif/uart_1/uvm_tb/interface/fifo_intf_uart.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/verif/uart_1/uvm_tb/interface/uart_config_intf.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/verif/uart_1/uvm_tb/interface/serial_line_intf.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/verif/uart_1/uvm_tb/interface/error_inject_intf.sv
+
+# 2. Compile RTL (FIXED TO .sv!)
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/uart_1/dual_port_FIFO.sv
+# Add the missing sub-modules! (Check your folder to ensure these names/extensions are correct)
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/uart_1/uart_IF.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/uart_1/uart_TX.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/uart_1/uart_RX.sv
+# Top level UART wrapper goes last
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/design/uart_1/uart.sv
+
+# 3. Add Xilinx Global File (Keep as .v because it's Xilinx proprietary)
+BUILD_OPT := $(BUILD_OPT) /home/ahmed/modelsim_2020_libs/glbl.v
+
+# 4. Compile Packages (Order is vital: Base UVM -> FIFO PKG -> Loopback PKG)
+BUILD_OPT := $(BUILD_OPT) /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/uvm_pkg.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/verif/uart_1/uvm_tb/package/fifo_pkg.sv
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/verif/uart_1/uvm_tb/package/loopback_uartfifo_pkg.sv
+
+# 5. Compile Top Module Testbench
+BUILD_OPT := $(BUILD_OPT) $(UVM_TRAINING)/verif/uart_1/vlib/tb_top_loopback_uart_fifo.sv
+BUILD_OPT := $(BUILD_OPT) -l $(COMP_DIR)/compile.log
+
+# Optimization options 
+ifeq ($(SIMULATOR), questa)
+	# ---> OPTIMIZE LOOPBACK TOP <---
+	OPTM_OPT := +acc tb_top_loopback_uart_fifo glbl -o $(DATABASE) -designfile design.bin -work $(COMP_DIR)/work
+	
+	# =====================================================================
+	# ---> XILINX LIBRARY LINKING (SIMULATION PHASE) <---
+	# =====================================================================
+	SIM_OPT := $(SIM_OPT) -modelsimini /home/ahmed/modelsim_2020_libs/modelsim.ini -L unisims_ver -L unimacro_ver -L secureip -L xpm
+	
+	SIM_OPT := $(SIM_OPT) -sv_lib /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/lib/uvm_dpi -work $(COMP_DIR)/work
+	SIM_OPT := $(SIM_OPT) $(PLUSARGS)
+endif
+ifeq ($(SIMULATOR), vcs)
+	VCS_SIM_ARG = +UVM_CONFIG_DB_TRACE
+	SIMV_CMD= $(COMP_DIR)/simv
+endif
+
+# Simulation options
+ifeq ($(GUI), 1)
+	SIM_OPT := $(DATABASE) $(SIM_OPT)
+else
+	SIM_OPT := -c $(DATABASE) $(SIM_OPT)
+endif
+
+SIM_OPT := $(SIM_OPT) +UVM_TESTNAME=$(TEST_NAME)
+SIM_OPT := $(SIM_OPT) +UVM_CONFIG_DB_TRACE
+SIM_OPT := $(SIM_OPT) -classdebug
+SIM_OPT := $(SIM_OPT) -l $(TEST_NAME).log
+
+ifeq ($(SIMULATOR), vcs)
+	ifeq ($(GUI), 1)
+	SIM_OPT := $(SIM_OPT) -gui
+	endif
+	SIM_OPT := $(SIM_OPT) -cm line+cond+fsm+tgl+path
+	SIM_OPT := $(SIM_OPT) -cm_dir $(COMP_DIR)/simv.vdb
+	SIM_OPT := $(SIM_OPT) -cm_name $(TEST_NAME)
+	SIM_OPT := $(SIM_OPT) -lca
+endif
+
+ifeq ($(SIMULATOR), questa)
+	ifeq ($(GUI), 1)
+	SIM_OPT := $(SIM_OPT) -do "do wave.do; run -a; q"
+	else
+	SIM_OPT := $(SIM_OPT) -do "run -a; q"
+	endif
+endif
+
+#opening coverage in DVE
+cov:
+	dve -covdir $(COMP_DIR)/simv.vdb -full64
+
+# Compile
+compile:
+	$(BUILD_CMD) $(BUILD_OPT)
+
+# Optimize
+optimize:
+	$(OPTM_CMD) $(OPTM_OPT)
+
+# Run without wave
+run: build run_sim
+
+run_sim: 
+ifeq ($(SIMULATOR), questa) 
+	$(SIM_CMD) $(SIM_OPT) $(USR_OPT)
+else
+	$(SIMV_CMD) $(SIM_OPT) $(USR_OPT)
+endif
+
+# Compile and optimize
+build: compile
+
+# Build and run
+build_run_sim: build run_sim
+
+# Clean
+clean:
+	@rm -rf $(UVM_TRAINING)/uvm_assignment/verif/uart_1/test/*/cm.log 
+	@rm -rf $(UVM_TRAINING)/uvm_assignment/verif/uart_1/test/*/DVEfiles/ 
+	@rm -rf $(UVM_TRAINING)/uvm_assignment/verif/uart_1/test/*/inter.vpd 
+	@rm -rf $(UVM_TRAINING)/uvm_assignment/verif/uart_1/test/*/*.log 
+	@rm -rf $(UVM_TRAINING)/uvm_assignment/verif/uart_1/test/*/ucli.key
+	@rm -rf $(UVM_TRAINING)/uvm_assignment/verif/uart_1/test/*/wlft*
+	@rm -rf $(UVM_TRAINING)/uvm_assignment/verif/uart_1/test/*/vsim.wlf
+	@rm -rf $(UVM_TRAINING)/uvm_assignment/verif/uart_1/test/*/*.bin
+	@rm -rf $(UVM_TRAINING)/uvm_assignment/verif/uart_1/test/*/tr_db.log
+	@rm -rf $(COMP_DIR)/compile.log
+	@rm -rf $(COMP_DIR)/work
+	@rm -rf $(COMP_DIR)/design.bin
+	@rm -rf $(COMP_DIR)/csrc  
+	@rm -rf $(COMP_DIR)/simv  
+	@rm -rf $(COMP_DIR)/simv.cst  
+	@rm -rf $(COMP_DIR)/simv.daidir  
+	@rm -rf $(COMP_DIR)/simv.vdb  
+	@rm -rf $(COMP_DIR)/vc_hdrs.h

@@ -1,0 +1,76 @@
+# vsim -c tb_top_loopback_uart_fifo glbl -modelsimini /home/ahmed/modelsim_2020_libs/modelsim.ini -L unisims_ver -L unimacro_ver -L secureip -L xpm -sv_lib /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/lib/uvm_dpi -work /home/ahmed/uvm_training/verif/uart_1/test/short_test/work "+NUM_PKTS=10" "+ERR_PROB=25" "+ERR_TYPE=PARITY" "+UVM_TESTNAME=chaos_vseq" "+UVM_CONFIG_DB_TRACE" -classdebug -l chaos_vseq.log -do "run -a; q" 
+# Start time: 18:31:06 on Apr 29,2026
+# Loading /tmp/root@ahmedpc_dpi_26238/linuxaloem_gcc-7.4.0/export_tramp.so
+# ** Note: (vsim-8785) UVM-aware debugging capabilities will be disabled since no compiled "questa_uvm_pkg" can be found.
+# This also means that later if you turn on UVM-aware debugging your debug simulations may have
+# different random seeds from your non-debug simulations.
+# Loading sv_std.std
+# Loading work.fifo_intf_uart
+# Loading work.uvm_pkg
+# Loading work.fifo_pkg
+# Loading work.loopback_uartfifo_pkg
+# Loading work.tb_top_loopback_uart_fifo
+# Loading work.uart_config_intf
+# Loading work.serial_line_intf
+# Loading work.error_inject_intf
+# Loading work.dual_port_FIFO
+# Loading unimacro_ver.FIFO_DUALCLOCK_MACRO
+# Loading work.uart
+# Loading work.uart_IF
+# Loading work.uart_TX
+# Loading work.uart_RX
+# Loading work.glbl
+# Loading unisims_ver.FIFO18E1
+# Loading unisims_ver.FF18_INTERNAL_VLOG
+# ** Warning: (vsim-8311) System Verilog assertions are supported only in Questasim.
+# Compiling /tmp/root@ahmedpc_dpi_26238/linuxaloem_gcc-7.4.0/exportwrapper.c
+# Loading /tmp/root@ahmedpc_dpi_26238/linuxaloem_gcc-7.4.0/vsim_auto_compile.so
+# Loading /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/lib/uvm_dpi.so
+# ** Warning: Design size of 58705 statements exceeds ModelSim-Intel FPGA Starter Edition recommended capacity.
+# Expect performance to be adversely affected.
+# run -a
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_root.svh(392) @ 0: reporter [UVM/RELNOTES] 
+# ----------------------------------------------------------------
+# UVM-1.2
+# (C) 2007-2014 Mentor Graphics Corporation
+# (C) 2007-2014 Cadence Design Systems, Inc.
+# (C) 2006-2014 Synopsys, Inc.
+# (C) 2011-2013 Cypress Semiconductor Corp.
+# (C) 2013-2014 NVIDIA Corporation
+# ----------------------------------------------------------------
+# 
+#   ***********       IMPORTANT RELEASE NOTES         ************
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_NO_DEPRECATED undefined.
+#   See http://www.eda.org/svdb/view.php?id=3313 for more details.
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_OBJECT_DO_NOT_NEED_CONSTRUCTOR undefined.
+#   See http://www.eda.org/svdb/view.php?id=3770 for more details.
+# 
+#       (Specify +UVM_NO_RELNOTES to turn off this notice)
+# 
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/SET] Configuration '*tx_agnt*.fifo_vif' (type virtual fifo_intf_uart) set by  = (virtual fifo_intf_uart) /tb_top_loopback_uart_fifo/vif_tx
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/SET] Configuration '*rx_agnt*.fifo_vif' (type virtual fifo_intf_uart) set by  = (virtual fifo_intf_uart) /tb_top_loopback_uart_fifo/vif_rx
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/SET] Configuration '*.cfg_vif' (type virtual uart_config_intf) set by  = (virtual uart_config_intf) /tb_top_loopback_uart_fifo/vif_cfg
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/SET] Configuration '*phys_mon*.serial_vif' (type virtual serial_line_intf) set by  = (virtual serial_line_intf) /tb_top_loopback_uart_fifo/vif_serial
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/SET] Configuration '*.err_vif' (type virtual error_inject_intf) set by  = (virtual error_inject_intf) /tb_top_loopback_uart_fifo/err_vif
+# UVM_FATAL @ 0: reporter [INVTST] Requested test from command line +UVM_TESTNAME=chaos_vseq not found.
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_report_server.svh(847) @ 0: reporter [UVM/REPORT/SERVER] 
+# --- UVM Report Summary ---
+# 
+# ** Report counts by severity
+# UVM_INFO :    6
+# UVM_WARNING :    0
+# UVM_ERROR :    0
+# UVM_FATAL :    1
+# ** Report counts by id
+# [CFGDB/SET]     5
+# [INVTST]     1
+# [UVM/RELNOTES]     1
+# 
+# ** Note: $finish    : /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_root.svh(135)
+#    Time: 0 fs  Iteration: 0  Instance: /tb_top_loopback_uart_fifo
+# End time: 18:31:07 on Apr 29,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 2

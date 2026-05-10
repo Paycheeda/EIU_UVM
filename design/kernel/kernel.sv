@@ -1,0 +1,472 @@
+module kernel(
+
+		input 			clk,
+		input 			clk_uart,
+		input 			clk_eth1,
+		input 			clk_eth2,
+		input 			clk_eth3,
+		input 			clk_eth4,
+		input 			clk_eth_nrz,
+		input 			rst_n,
+		input 			rx_clk_eth1,
+		input 			rx_clk_eth2,
+		input 			rx_clk_eth3,
+		input 			rx_clk_eth4,
+		
+		input 			clk_20MHz,
+		input 			data_in_nrz,
+		input 			bkp_prg_mode_on,
+		input 			bkp_config_wr_pulse,
+		input [3:0] 	bkp_card_id,
+		input [3:0] 	fpga_card_id,
+		input 			bkp_data_dir,
+		input [5:0] 	bkp_address,
+		inout [11:0]	bkp_data_bus,
+		input 			word_start_strobe_pulse,
+		
+		output 			config_done_uart,
+		output 			config_done_eth1,
+		output 			config_done_eth2,
+		output 			config_done_eth3,
+		output 			config_done_eth4,
+		output 			config_done_eth_nrz,
+
+		output [31:0] 	baudrate_uart1,
+		output 			parity_en_uart1,
+		output 			parity_odd_even_uart1,
+		output [3:0]	data_width_uart1,
+		
+		output [31:0] 	baudrate_uart2,
+		output 			parity_en_uart2,
+		output 			parity_odd_even_uart2,
+		output [3:0]	data_width_uart2,
+		
+		output [31:0] 	baudrate_uart3,
+		output 			parity_en_uart3,
+		output 			parity_odd_even_uart3,
+		output [3:0]	data_width_uart3,
+		
+		output [47:0] 	dest_mac_eth1,
+		output [47:0] 	source_mac_eth1,
+		output [31:0] 	source_ip_eth1,
+		output [31:0] 	dest_ip_eth1,
+		output [15:0] 	source_port_eth1,
+		output [15:0] 	dest_port_eth1,
+		output [10:0] 	tx_payload_length_eth1,
+		
+		output [47:0] 	dest_mac_eth2,
+		output [47:0] 	source_mac_eth2,
+		output [31:0] 	source_ip_eth2,
+		output [31:0] 	dest_ip_eth2,
+		output [15:0] 	source_port_eth2,
+		output [15:0] 	dest_port_eth2,
+		output [10:0] 	tx_payload_length_eth2,
+		
+		output [47:0] 	dest_mac_eth3,
+		output [47:0] 	source_mac_eth3,
+		output [31:0] 	source_ip_eth3,
+		output [31:0] 	dest_ip_eth3,
+		output [15:0] 	source_port_eth3,
+		output [15:0] 	dest_port_eth3,
+		output [10:0] 	tx_payload_length_eth3,
+		
+		output [47:0] 	dest_mac_eth4,
+		output [47:0] 	source_mac_eth4,
+		output [31:0] 	source_ip_eth4,
+		output [31:0] 	dest_ip_eth4,
+		output [15:0] 	source_port_eth4,
+		output [15:0] 	dest_port_eth4,
+		output [10:0] 	tx_payload_length_eth4,
+		
+		output [47:0] 	dest_mac_eth_nrz,
+		output [47:0] 	source_mac_eth_nrz,
+		output [31:0] 	source_ip_eth_nrz,
+		output [31:0] 	dest_ip_eth_nrz,
+		output [15:0] 	source_port_eth_nrz,
+		output [15:0] 	dest_port_eth_nrz,
+		output [10:0]	tx_payload_length_eth_nrz,
+		
+		output 			fifo_wr_en_uart1,
+		output 			fifo_wr_en_uart2,
+		output 			fifo_wr_en_uart3,
+		output 			fifo_wr_en_eth1,
+		output 			fifo_wr_en_eth2,
+		output 			fifo_wr_en_eth3,
+		output 			fifo_wr_en_eth4,
+		output 			fifo_wr_en_eth_nrz,
+		
+		output [8:0] 	fifo_data_in_uart1,
+		output [8:0] 	fifo_data_in_uart2,
+		output [8:0] 	fifo_data_in_uart3,
+		output [7:0]	fifo_data_in_eth1,
+		output [7:0]	fifo_data_in_eth2,
+		output [7:0]	fifo_data_in_eth3,
+		output [7:0]	fifo_data_in_eth4,
+		output [7:0]	fifo_data_in_eth_nrz,
+		
+		input 			tx_fifo_empty_uart1,
+		input 			tx_fifo_empty_uart2,
+		input 			tx_fifo_empty_uart3,
+		input 			tx_fifo_empty_eth1,
+		input 			tx_fifo_empty_eth2,
+		input 			tx_fifo_empty_eth3,
+		input 			tx_fifo_empty_eth4,
+		input 			tx_fifo_empty_eth_nrz,
+		
+		output 			tx_acq_start_uart1,
+		output 			tx_acq_start_uart2,
+		output 			tx_acq_start_uart3,
+		output 			eth_tx_start_pulse_eth1,
+		output 			eth_tx_start_pulse_eth2,
+		output 			eth_tx_start_pulse_eth3,
+		output 			eth_tx_start_pulse_eth4,
+		output 			eth_tx_start_pulse_eth_nrz,
+		
+		input [8:0] 	rx_fifo_data_out_uart1,
+		input [8:0] 	rx_fifo_data_out_uart2,
+		input [8:0] 	rx_fifo_data_out_uart3,
+		input [7:0] 	rx_fifo_data_out_eth1,
+		input [7:0] 	rx_fifo_data_out_eth2,
+		input [7:0] 	rx_fifo_data_out_eth3,
+		input [7:0] 	rx_fifo_data_out_eth4,
+		
+		input [10:0]	uart1_rx_valid_count,
+		input [10:0]	uart2_rx_valid_count,
+		input [10:0]	uart3_rx_valid_count,
+		input [10:0] 	rx_eth_valid_bytes_eth1,
+		input [10:0] 	rx_eth_valid_bytes_eth2,
+		input [10:0] 	rx_eth_valid_bytes_eth3,
+		input [10:0] 	rx_eth_valid_bytes_eth4,
+		
+		input [10:0]	uart1_rx_corrupt_count,
+		input [10:0]	uart2_rx_corrupt_count,
+		input [10:0]	uart3_rx_corrupt_count,
+		input [10:0]	rx_eth_corrupt_frame_count_eth1,
+		input [10:0]	rx_eth_corrupt_frame_count_eth2,
+		input [10:0]	rx_eth_corrupt_frame_count_eth3,
+		input [10:0]	rx_eth_corrupt_frame_count_eth4,
+		
+		input 			tx_fifo_full_uart1,
+		input 			tx_fifo_full_uart2,
+		input 			tx_fifo_full_uart3,
+		input 			tx_fifo_full_eth1,
+		input 			tx_fifo_full_eth2,
+		input 			tx_fifo_full_eth3,
+		input 			tx_fifo_full_eth4,
+		input 			tx_fifo_full_eth_nrz,
+		
+		input 			rx_fifo_full_uart1,
+		input 			rx_fifo_full_uart2,
+		input 			rx_fifo_full_uart3,
+		input 			rx_fifo_full_eth1,
+		input 			rx_fifo_full_eth2,
+		input 			rx_fifo_full_eth3,
+		input 			rx_fifo_full_eth4,
+		
+		input 			rx_fifo_empty_uart1,
+		input 			rx_fifo_empty_uart2,
+		input 			rx_fifo_empty_uart3,
+		input 			rx_fifo_empty_eth1,
+		input 			rx_fifo_empty_eth2,
+		input 			rx_fifo_empty_eth3,
+		input 			rx_fifo_empty_eth4,
+		
+		output 			rx_fifo_rd_en_uart1,
+		output 			rx_fifo_rd_en_uart2,
+		output 			rx_fifo_rd_en_uart3,
+		output 			rx_fifo_rd_en_eth1,
+		output 			rx_fifo_rd_en_eth2,
+		output 			rx_fifo_rd_en_eth3,
+		output 			rx_fifo_rd_en_eth4,
+		
+		input 			eth_tx_data_sent_eth1,
+		input 			eth_tx_data_sent_eth2,
+		input 			eth_tx_data_sent_eth3,
+		input 			eth_tx_data_sent_eth4,
+		input 			eth_tx_data_sent_eth_nrz
+	);
+	
+wire data_width_uart1_raw;
+assign data_width_uart1 = (data_width_uart1_raw) ? 4'd9 : 4'd8;
+
+wire data_width_uart2_raw;
+assign data_width_uart2 = (data_width_uart2_raw) ? 4'd9 : 4'd8;
+
+wire data_width_uart3_raw;
+assign data_width_uart3 = (data_width_uart3_raw) ? 4'd9 : 4'd8;
+
+
+wire [10:0] tx_payload_length_eth_nrz_raw;
+wire 		tx_zero_endian_eth_nrz;
+wire [1:0]	tx_bpw_eth_nrz;
+wire [11:0] tx_sync_word1_eth_nrz;
+wire [11:0] tx_sync_word2_eth_nrz;
+
+wire config_done_pulse;
+
+kernel_config u_kernel_config (
+        .clk(clk),
+		.clk_uart(clk_uart),
+		.clk_eth1(clk_eth1),
+		.clk_eth2(clk_eth2),
+		.clk_eth3(clk_eth3),
+		.clk_eth4(clk_eth4),
+        .rst_n(rst_n),
+        .bkp_config_wr_pulse(bkp_config_wr_pulse),
+        .bkp_card_id(bkp_card_id),
+        .fpga_card_id(fpga_card_id),
+        .bkp_data_dir(bkp_data_dir),
+        .bkp_address(bkp_address),
+        .bkp_data(bkp_data_bus),
+		.config_done_pulse(config_done_pulse),
+        .config_done_uart(config_done_uart),
+		.config_done_eth1(config_done_eth1),
+		.config_done_eth2(config_done_eth2),
+		.config_done_eth3(config_done_eth3),
+		.config_done_eth4(config_done_eth4),
+        .baudrate_uart1(baudrate_uart1),
+        .parity_en_uart1(parity_en_uart1),
+        .parity_odd_even_uart1(parity_odd_even_uart1),
+        .data_width_uart1(data_width_uart1_raw),
+        .baudrate_uart2(baudrate_uart2),
+        .parity_en_uart2(parity_en_uart2),
+        .parity_odd_even_uart2(parity_odd_even_uart2),
+        .data_width_uart2(data_width_uart2_raw),
+        .baudrate_uart3(baudrate_uart3),
+        .parity_en_uart3(parity_en_uart3),
+        .parity_odd_even_uart3(parity_odd_even_uart3),
+        .data_width_uart3(data_width_uart3_raw),
+        .dest_mac_eth1(dest_mac_eth1),
+        .source_mac_eth1(source_mac_eth1),
+        .source_ip_eth1(source_ip_eth1),
+        .dest_ip_eth1(dest_ip_eth1),
+        .source_port_eth1(source_port_eth1),
+        .dest_port_eth1(dest_port_eth1),
+        .tx_payload_length_eth1(tx_payload_length_eth1),
+        .dest_mac_eth2(dest_mac_eth2),
+        .source_mac_eth2(source_mac_eth2),
+        .source_ip_eth2(source_ip_eth2),
+        .dest_ip_eth2(dest_ip_eth2),
+        .source_port_eth2(source_port_eth2),
+        .dest_port_eth2(dest_port_eth2),
+        .tx_payload_length_eth2(tx_payload_length_eth2),
+        .dest_mac_eth3(dest_mac_eth3),
+        .source_mac_eth3(source_mac_eth3),
+        .source_ip_eth3(source_ip_eth3),
+        .dest_ip_eth3(dest_ip_eth3),
+        .source_port_eth3(source_port_eth3),
+        .dest_port_eth3(dest_port_eth3),
+        .tx_payload_length_eth3(tx_payload_length_eth3),
+        .dest_mac_eth4(dest_mac_eth4),
+        .source_mac_eth4(source_mac_eth4),
+        .source_ip_eth4(source_ip_eth4),
+        .dest_ip_eth4(dest_ip_eth4),
+        .source_port_eth4(source_port_eth4),
+        .dest_port_eth4(dest_port_eth4),
+        .tx_payload_length_eth4(tx_payload_length_eth4),
+        .dest_mac_eth_nrz(dest_mac_eth_nrz),
+        .source_mac_eth_nrz(source_mac_eth_nrz),
+        .source_ip_eth_nrz(source_ip_eth_nrz),
+        .dest_ip_eth_nrz(dest_ip_eth_nrz),
+        .source_port_eth_nrz(source_port_eth_nrz),
+        .dest_port_eth_nrz(dest_port_eth_nrz),
+        .tx_payload_length_eth_nrz(tx_payload_length_eth_nrz_raw),
+        .tx_zero_endian_eth_nrz(tx_zero_endian_eth_nrz),
+        .tx_bpw_eth_nrz(tx_bpw_eth_nrz),
+        .tx_sync_word1_eth_nrz(tx_sync_word1_eth_nrz),
+        .tx_sync_word2_eth_nrz(tx_sync_word2_eth_nrz)
+);
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+wire 		data_send_uart1;
+wire 		data_send_uart2;
+wire 		data_send_uart3;
+wire 		data_send_eth1;
+wire 		data_send_eth2;
+wire 		data_send_eth3;
+wire 		data_send_eth4;
+
+
+kernel_write u_kernel_write (
+        .clk(clk),
+        .rst_n(rst_n),
+        .bkp_card_id(bkp_card_id),
+        .fpga_card_id(fpga_card_id),
+        .bkp_data_dir(bkp_data_dir),
+        .bkp_address(bkp_address),
+        .bkp_data(bkp_data_bus),
+        .word_start_strobe_pulse(word_start_strobe_pulse),
+        .data_send_uart1(data_send_uart1),
+        .data_send_uart2(data_send_uart2),
+        .data_send_uart3(data_send_uart3),
+        .data_send_eth1(data_send_eth1),
+        .data_send_eth2(data_send_eth2),
+        .data_send_eth3(data_send_eth3),
+        .data_send_eth4(data_send_eth4),
+        .fifo_wr_en_uart1(fifo_wr_en_uart1),
+        .fifo_wr_en_uart2(fifo_wr_en_uart2),
+        .fifo_wr_en_uart3(fifo_wr_en_uart3),
+        .fifo_wr_en_eth1(fifo_wr_en_eth1),
+        .fifo_wr_en_eth2(fifo_wr_en_eth2),
+        .fifo_wr_en_eth3(fifo_wr_en_eth3),
+        .fifo_wr_en_eth4(fifo_wr_en_eth4),
+        .fifo_data_in_uart1(fifo_data_in_uart1),
+        .fifo_data_in_uart2(fifo_data_in_uart2),
+        .fifo_data_in_uart3(fifo_data_in_uart3),
+        .fifo_data_in_eth1(fifo_data_in_eth1),
+        .fifo_data_in_eth2(fifo_data_in_eth2),
+        .fifo_data_in_eth3(fifo_data_in_eth3),
+        .fifo_data_in_eth4(fifo_data_in_eth4)
+    );
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+wire 			tx_data_sent_uart1;
+wire 			tx_data_sent_uart2;
+wire 			tx_data_sent_uart3;
+
+
+kernel_start_tx u_kernel_start_tx (
+        .clk(clk),
+		.clk_uart(clk_uart),
+		.clk_eth1(clk_eth1),
+		.clk_eth2(clk_eth2),
+		.clk_eth3(clk_eth3),
+		.clk_eth4(clk_eth4),
+        .rst_n(rst_n),
+        .data_send_uart1(data_send_uart1),
+        .data_send_uart2(data_send_uart2),
+        .data_send_uart3(data_send_uart3),
+        .data_send_eth1(data_send_eth1),
+        .data_send_eth2(data_send_eth2),
+        .data_send_eth3(data_send_eth3),
+        .data_send_eth4(data_send_eth4),
+        .tx_fifo_empty_uart1(tx_fifo_empty_uart1),
+        .tx_fifo_empty_uart2(tx_fifo_empty_uart2),
+        .tx_fifo_empty_uart3(tx_fifo_empty_uart3),
+        .tx_acq_start_uart1(tx_acq_start_uart1),
+        .tx_acq_start_uart2(tx_acq_start_uart2),
+        .tx_acq_start_uart3(tx_acq_start_uart3),
+        .eth_tx_start_pulse_eth1(eth_tx_start_pulse_eth1),
+        .eth_tx_start_pulse_eth2(eth_tx_start_pulse_eth2),
+        .eth_tx_start_pulse_eth3(eth_tx_start_pulse_eth3),
+        .eth_tx_start_pulse_eth4(eth_tx_start_pulse_eth4),
+        .tx_data_sent_uart1(tx_data_sent_uart1),
+        .tx_data_sent_uart2(tx_data_sent_uart2),
+        .tx_data_sent_uart3(tx_data_sent_uart3)
+    );
+
+
+kernel_read u_kernel_read (
+        .clk(clk),
+		.clk_uart(clk_uart),
+		.rx_clk_eth1(rx_clk_eth1),
+		.rx_clk_eth2(rx_clk_eth2),
+		.rx_clk_eth3(rx_clk_eth3),
+		.rx_clk_eth4(rx_clk_eth4),
+        .rst_n(rst_n),
+        .bkp_card_id(bkp_card_id),
+        .fpga_card_id(fpga_card_id),
+        .bkp_data_dir(bkp_data_dir),
+        .bkp_address(bkp_address),
+        .bkp_data(bkp_data_bus),
+        .word_start_strobe_pulse(word_start_strobe_pulse),
+        .rx_fifo_data_out_uart1(rx_fifo_data_out_uart1),
+        .rx_fifo_data_out_uart2(rx_fifo_data_out_uart2),
+        .rx_fifo_data_out_uart3(rx_fifo_data_out_uart3),
+        .rx_fifo_data_out_eth1(rx_fifo_data_out_eth1),
+        .rx_fifo_data_out_eth2(rx_fifo_data_out_eth2),
+        .rx_fifo_data_out_eth3(rx_fifo_data_out_eth3),
+        .rx_fifo_data_out_eth4(rx_fifo_data_out_eth4),
+        .rx_valid_byte_count_uart1(uart1_rx_valid_count),
+        .rx_valid_byte_count_uart2(uart2_rx_valid_count),
+        .rx_valid_byte_count_uart3(uart3_rx_valid_count),
+        .rx_eth_valid_bytes_eth1(rx_eth_valid_bytes_eth1),
+        .rx_eth_valid_bytes_eth2(rx_eth_valid_bytes_eth2),
+        .rx_eth_valid_bytes_eth3(rx_eth_valid_bytes_eth3),
+        .rx_eth_valid_bytes_eth4(rx_eth_valid_bytes_eth4),
+        .rx_corrupt_byte_count_uart1(uart1_rx_corrupt_count),
+        .rx_corrupt_byte_count_uart2(uart2_rx_corrupt_count),
+        .rx_corrupt_byte_count_uart3(uart3_rx_corrupt_count),
+        .rx_eth_corrupt_frame_count_eth1(rx_eth_corrupt_frame_count_eth1),
+        .rx_eth_corrupt_frame_count_eth2(rx_eth_corrupt_frame_count_eth2),
+        .rx_eth_corrupt_frame_count_eth3(rx_eth_corrupt_frame_count_eth3),
+        .rx_eth_corrupt_frame_count_eth4(rx_eth_corrupt_frame_count_eth4),
+        .tx_fifo_full_uart1(tx_fifo_full_uart1),
+        .tx_fifo_full_uart2(tx_fifo_full_uart2),
+        .tx_fifo_full_uart3(tx_fifo_full_uart3),
+        .tx_fifo_full_eth1(tx_fifo_full_eth1),
+        .tx_fifo_full_eth2(tx_fifo_full_eth2),
+        .tx_fifo_full_eth3(tx_fifo_full_eth3),
+        .tx_fifo_full_eth4(tx_fifo_full_eth4),
+        .tx_fifo_full_eth_nrz(tx_fifo_full_eth_nrz),
+        .rx_fifo_full_uart1(rx_fifo_full_uart1),
+        .rx_fifo_full_uart2(rx_fifo_full_uart2),
+        .rx_fifo_full_uart3(rx_fifo_full_uart3),
+        .rx_fifo_full_eth1(rx_fifo_full_eth1),
+        .rx_fifo_full_eth2(rx_fifo_full_eth2),
+        .rx_fifo_full_eth3(rx_fifo_full_eth3),
+        .rx_fifo_full_eth4(rx_fifo_full_eth4),
+        .tx_fifo_empty_uart1(tx_fifo_empty_uart1),
+        .tx_fifo_empty_uart2(tx_fifo_empty_uart2),
+        .tx_fifo_empty_uart3(tx_fifo_empty_uart3),
+        .tx_fifo_empty_eth1(tx_fifo_empty_eth1),
+        .tx_fifo_empty_eth2(tx_fifo_empty_eth2),
+        .tx_fifo_empty_eth3(tx_fifo_empty_eth3),
+        .tx_fifo_empty_eth4(tx_fifo_empty_eth4),
+        .tx_fifo_empty_eth_nrz(tx_fifo_empty_eth_nrz),
+        .rx_fifo_empty_uart1(rx_fifo_empty_uart1),
+        .rx_fifo_empty_uart2(rx_fifo_empty_uart2),
+        .rx_fifo_empty_uart3(rx_fifo_empty_uart3),
+        .rx_fifo_empty_eth1(rx_fifo_empty_eth1),
+        .rx_fifo_empty_eth2(rx_fifo_empty_eth2),
+        .rx_fifo_empty_eth3(rx_fifo_empty_eth3),
+        .rx_fifo_empty_eth4(rx_fifo_empty_eth4),
+        .rx_fifo_rd_en_uart1(rx_fifo_rd_en_uart1),
+        .rx_fifo_rd_en_uart2(rx_fifo_rd_en_uart2),
+        .rx_fifo_rd_en_uart3(rx_fifo_rd_en_uart3),
+        .rx_fifo_rd_en_eth1(rx_fifo_rd_en_eth1),
+        .rx_fifo_rd_en_eth2(rx_fifo_rd_en_eth2),
+        .rx_fifo_rd_en_eth3(rx_fifo_rd_en_eth3),
+        .rx_fifo_rd_en_eth4(rx_fifo_rd_en_eth4),
+		.tx_data_sent_uart1(tx_data_sent_uart1),
+		.tx_data_sent_uart2(tx_data_sent_uart2),
+		.tx_data_sent_uart3(tx_data_sent_uart3),
+		.tx_data_sent_eth1(eth_tx_data_sent_eth1),
+		.tx_data_sent_eth2(eth_tx_data_sent_eth2),
+		.tx_data_sent_eth3(eth_tx_data_sent_eth3),
+		.tx_data_sent_eth4(eth_tx_data_sent_eth4),
+		.tx_data_sent_eth_nrz(eth_tx_data_sent_eth_nrz)
+    );
+
+
+kernel_nrz u_kernel_nrz(
+
+		.clk							(clk),
+		.clk_eth						(clk_eth_nrz),
+		.rst_n							(rst_n),
+		
+		.bkp_prg_mode_on				(bkp_prg_mode_on),
+		.clk_20MHz						(clk_20MHz),
+		.data_in_nrz					(data_in_nrz),
+		
+		.config_done_pulse_eth_nrz		(config_done_eth_nrz),
+		.config_done_pulse				(config_done_pulse),
+		.tx_bpw_eth_nrz					(tx_bpw_eth_nrz),
+		.tx_payload_length_eth_nrz		(tx_payload_length_eth_nrz_raw),
+		.tx_zero_endian_eth_nrz			(tx_zero_endian_eth_nrz),
+		.tx_sync_word1_eth_nrz			(tx_sync_word1_eth_nrz),
+		.tx_sync_word2_eth_nrz			(tx_sync_word2_eth_nrz),
+		
+		.tx_payload_length_actual		(tx_payload_length_eth_nrz),
+		
+		.eth_tx_start_pulse_eth_nrz		(eth_tx_start_pulse_eth_nrz),
+		.tx_fifo_wr_en_eth_nrz			(fifo_wr_en_eth_nrz),
+		.tx_fifo_data_in_eth_nrz		(fifo_data_in_eth_nrz)
+
+);
+
+endmodule
