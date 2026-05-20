@@ -62,4 +62,12 @@ IDDR #(
 		   .S(1'b0)    // 1-bit set
 		);
 
+		// --- DEBUG SNIPPET 1 ---
+always @(posedge clk) begin
+    // Replace 'iddr_out' and 'rx_dv_out' with your actual output wire names
+    if (rx_dv) begin 
+        $display("[RTL_IDDR] @%0t: Reconstructed Byte = %h", $time, iddr_out);
+    end
+end
+
 endmodule

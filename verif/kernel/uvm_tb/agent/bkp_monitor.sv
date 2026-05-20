@@ -20,21 +20,62 @@ class bkp_monitor extends uvm_monitor;
     endfunction
 
     task run_phase(uvm_phase phase);
+        fork
+            watch_writes();
+            watch_reads();
+        join
+    endtask
+
+    // Thread 1: Sniffing Config/Data Writes
+    task watch_writes();
         forever begin
             @(posedge vif.clk);
-            if (vif.rst_n && vif.bkp_config_wr_pulse) begin
+            // ---> FIXED: Catch Config Pulses OR Data Write Strobes (data_dir == 1) <---
+            if (vif.rst_n && (vif.bkp_config_wr_pulse || (vif.word_start_strobe && vif.bkp_data_dir == 1'b1))) begin
                 bkp_item item = bkp_item::type_id::create("item");
-                
+                item.trans_type   = (vif.program_mode) ? BKP_CFG_WRITE : BKP_DATA_WRITE;
                 item.bkp_card_id  = vif.bkp_card_id;
                 item.fpga_card_id = vif.fpga_card_id;
                 item.bkp_data_dir = vif.bkp_data_dir;
+                item.program_mode = vif.program_mode;
                 item.bkp_address  = vif.bkp_address;
-                item.bkp_data     = vif.bkp_data;
+                item.bkp_data     = vif.bkp_data; 
                 
+                `uvm_info("BKP_MON_WRITE", $sformatf("Captured Write: Addr=%0d, Data='h%0x", item.bkp_address, item.bkp_data), UVM_HIGH)
                 ap.write(item);
             end
         end
     endtask
+
+    // Thread 2: Sniffing Status/Data Reads
+    task watch_reads();
+        forever begin
+            @(posedge vif.clk);
+            // ---> FIXED: Ensure we only trigger Reads when data_dir == 0 <---
+            if (vif.rst_n && vif.word_start_strobe && vif.bkp_data_dir == 1'b0) begin
+                fork
+                    begin
+                        bkp_item item = bkp_item::type_id::create("item");
+                        item.trans_type   = BKP_READ;
+                        item.bkp_card_id  = vif.bkp_card_id;
+                        item.fpga_card_id = vif.fpga_card_id;
+                        item.bkp_data_dir = vif.bkp_data_dir;
+                        item.program_mode = vif.program_mode;
+                        item.bkp_address  = vif.bkp_address;
+                        
+                        // Match the driver's wait time for CDC resolution
+                        repeat(2) @(posedge vif.clk);
+                        
+                        item.bkp_data = vif.bkp_data; // Sample what the EIU is outputting
+                        
+                        `uvm_info("BKP_MON_READ", $sformatf("Captured Read: Addr=%0d, Data='h%0x", item.bkp_address, item.bkp_data), UVM_HIGH)
+                        ap.write(item);
+                    end
+                join_none
+            end
+        end
+    endtask
+
 endclass
 
 `endif

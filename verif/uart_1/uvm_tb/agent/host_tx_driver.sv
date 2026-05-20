@@ -1,3 +1,6 @@
+`ifndef HOST_TX_DRIVER_SV
+`define HOST_TX_DRIVER_SV
+
 class host_tx_driver extends uvm_driver #(tx_uart);
   `uvm_component_utils(host_tx_driver)
 
@@ -15,71 +18,50 @@ class host_tx_driver extends uvm_driver #(tx_uart);
 
   virtual task main_phase(uvm_phase phase);
     super.main_phase(phase);
+    
+    vif.tx <= 1'b1; // Idle state
 
-    vif.send_data_tx    <= 1'b0;
-    vif.baudrate        <= 32'd115200;
-    vif.data_width      <= 4'd8;
-    vif.parity_en       <= 1'b0;
-    vif.parity_odd_even <= 1'b0;
-    vif.data_in_TX      <= 0;
-
-    wait(vif.rst_n == 1'b1);
+    `uvm_info("DRV_PROBE", "Driver started. Waiting for rst_n == 1...", UVM_NONE)
+    wait(vif.rst_n === 1'b1);
+    `uvm_info("DRV_PROBE", "Reset cleared! Entering main loop.", UVM_NONE)
 
     forever begin
+      `uvm_info("DRV_PROBE", "Calling get_next_item()...", UVM_NONE)
       seq_item_port.get_next_item(req); 
+      
+      `uvm_info("DRV_PROBE", $sformatf("Got Packet! Width: %0d, Baud: %0d", req.data_width, req.baudrate), UVM_NONE)
       drive_item(req);
+      
       seq_item_port.item_done();
+      `uvm_info("DRV_PROBE", "Packet drive complete.", UVM_NONE)
     end
   endtask 
 
   virtual task drive_item(tx_uart drv_pkt); 
+    int clock_delay;
     
-    // ========================================================
-    // CPU Write
-    // ========================================================
-    @(posedge vif.clk);
-    vif.baudrate        <= drv_pkt.baudrate;
-    vif.data_width      <= drv_pkt.data_width;
-    vif.parity_en       <= drv_pkt.parity_en;
-    vif.parity_odd_even <= drv_pkt.parity_odd_even;
-    vif.data_in_TX      <= drv_pkt.data_in; 
+    // Prevent divide-by-zero if sequence passes bad baudrate
+    if (drv_pkt.baudrate == 0) drv_pkt.baudrate = 115200;
+    
+    clock_delay = 44236800 / drv_pkt.baudrate;
+    
+    // 1. Start Bit
+    vif.tx <= 1'b0;
+    repeat(clock_delay) @(posedge vif.clk);
 
-    repeat(20) @(posedge vif.clk);
-    
-    // ========================================================
-    // COMMAND PULSE
-    // ========================================================
-    vif.send_data_tx <= 1'b1; 
-    
-    @(posedge vif.clk);
-    vif.send_data_tx <= 1'b0;  
-    
-    // ========================================================
-    // WAIT FOR HARDWARE TO COMPLETE
-    // ========================================================
-    wait(vif.uart_tx_busy == 1'b1);
-    
-    wait(vif.uart_tx_busy == 1'b0);
-
-    repeat(50) @(posedge vif.clk);
-    
-    begin
-      string frame_str = "[0]_"; 
-      frame_str = {frame_str, "["};
-      for (int i = 0; i < drv_pkt.data_width; i++) begin
-        frame_str = {frame_str, $sformatf("%b", drv_pkt.data_in[i])}; 
-      end
-      frame_str = {frame_str, "]"};
-
-      if (drv_pkt.parity_en == 1'b1) begin
-        frame_str = {frame_str, "_[", $sformatf("%b", drv_pkt.expected_parity), "]"}; 
-      end
-      frame_str = {frame_str, "_[1]"}; 
-
-      `uvm_info("HOST_TX_DRIVER", $sformatf("Injected via CPU Bus: Width=%0d, Baud=%0d | Expected Wire Frame: %s", 
-                drv_pkt.data_width, drv_pkt.baudrate, frame_str), UVM_HIGH)
+    // 2. Data Bits
+    for (int i = 0; i < drv_pkt.data_width; i++) begin
+      vif.tx <= drv_pkt.data_in[i];
+      repeat(clock_delay) @(posedge vif.clk);
     end
-    
-  endtask 
 
+    // 3. Stop Bit
+    vif.tx <= 1'b1;
+    repeat(clock_delay) @(posedge vif.clk);
+    
+    // Gap
+    repeat(100) @(posedge vif.clk);
+  endtask
 endclass
+
+`endif

@@ -5,6 +5,11 @@ package kernel_pkg;
   import uvm_pkg::*;
   `include "uvm_macros.svh"
 
+  // ---> NEW: Import Peripheral Packages <---
+  // This allows the kernel env to instantiate uart_agents and eth_agents
+  // import uart_pkg::*;
+  // import eth_pkg::*;
+
   // ==========================================
   // 1. Configurations & Sequence Items
   // ==========================================
@@ -14,8 +19,6 @@ package kernel_pkg;
   `include "kwr_item.sv"    
   `include "kst_item.sv"     
   `include "krd_item.sv"       
-  
-  // ---> NEW: NRZ Sequence Items <---
   `include "nrz_item.sv"
   `include "nrz_out_item.sv"
 
@@ -27,8 +30,6 @@ package kernel_pkg;
   `include "krd_sequence.sv"   
   `include "bkp_read_seq.sv"   
   `include "bkp_smart_seq.sv"
-  
-  // ---> NEW: NRZ Sequence <---
   `include "nrz_sequence.sv"
 
   // ==========================================
@@ -52,10 +53,9 @@ package kernel_pkg;
   `include "kst_agent.sv"    
 
   `include "krd_driver.sv"     
-  `include "krd_monitor.sv"    
+  `include "krd_monitor.sv"   
   `include "krd_agent.sv"      
   
-  // ---> NEW: NRZ Agent Components <---
   `include "nrz_driver.sv"
   `include "nrz_monitor.sv"
   `include "nrz_agent.sv"
@@ -67,8 +67,6 @@ package kernel_pkg;
   `include "kwr_scoreboard.sv" 
   `include "kst_scoreboard.sv" 
   `include "krd_scoreboard.sv" 
-  
-  // ---> NEW: NRZ Scoreboard <---
   `include "nrz_scoreboard.sv"
   
   `include "kernel_env.sv"

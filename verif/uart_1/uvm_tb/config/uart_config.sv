@@ -19,6 +19,11 @@ class uart_config extends uvm_object;
   bit has_uart_rx;
   bit has_ethernet;
 
+  int baudrate;
+    int data_width;
+    bit parity_en;
+    bit parity_odd_even;
+
   // ========================================
   // Constructor & Command Line Parsing
   // ========================================
@@ -32,7 +37,13 @@ class uart_config extends uvm_object;
     has_uart_rx      = 1'b0; // Disabled by default
     has_ethernet     = 1'b0; // Disabled by default
 
-    if (clp.get_arg_value("+num_uart_packets=", arg_value)) begin
+    baudrate = 115200;
+    data_width = 8;
+    parity_en = 0;
+    parity_odd_even = 0;
+
+    // Accept either +NUM_PKTS or +num_uart_packets
+    if (clp.get_arg_value("+NUM_PKTS=", arg_value) || clp.get_arg_value("+num_uart_packets=", arg_value)) begin
       num_uart_packets = arg_value.atoi();
       `uvm_info("UART_CFG", $sformatf("CLI Override: num_uart_packets = %0d", num_uart_packets), UVM_NONE)
     end

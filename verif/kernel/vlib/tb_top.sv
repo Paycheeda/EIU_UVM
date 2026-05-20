@@ -407,7 +407,8 @@ module tb_top;
         .clk_64mhz(clk)
     );
 
-    wire strobe_pulse = bkp_if.bkp_config_wr_pulse;
+    // ---> FIXED: Read Strobe is strictly isolated from Write Pulse! <---
+    wire strobe_pulse = bkp_if.word_start_strobe;
     
     wire data_width_uart1_raw;
     wire data_width_uart2_raw;
@@ -436,18 +437,18 @@ module tb_top;
         .dest_mac_eth3(out_if.dest_mac_eth3), .source_mac_eth3(out_if.source_mac_eth3), .source_ip_eth3(out_if.source_ip_eth3), .dest_ip_eth3(out_if.dest_ip_eth3), .source_port_eth3(out_if.source_port_eth3), .dest_port_eth3(out_if.dest_port_eth3), .tx_payload_length_eth3(out_if.tx_payload_length_eth3),
         .dest_mac_eth4(out_if.dest_mac_eth4), .source_mac_eth4(out_if.source_mac_eth4), .source_ip_eth4(out_if.source_ip_eth4), .dest_ip_eth4(out_if.dest_ip_eth4), .source_port_eth4(out_if.source_port_eth4), .dest_port_eth4(out_if.dest_port_eth4), .tx_payload_length_eth4(out_if.tx_payload_length_eth4),
         
-        // ---> FIXED: Floated the NRZ parameters to prevent Driver Collision! <---
-        .dest_mac_eth_nrz(), 
-        .source_mac_eth_nrz(), 
-        .source_ip_eth_nrz(), 
-        .dest_ip_eth_nrz(), 
-        .source_port_eth_nrz(), 
-        .dest_port_eth_nrz(), 
-        .tx_payload_length_eth_nrz(), 
-        .tx_zero_endian_eth_nrz(), 
-        .tx_bpw_eth_nrz(), 
-        .tx_sync_word1_eth_nrz(), 
-        .tx_sync_word2_eth_nrz()
+        // ---> FIXED: NRZ Parameters reconnected to out_if! <---
+        .dest_mac_eth_nrz           (), // Leave MACs/IPs floated if unused by NRZ RTL 
+        .source_mac_eth_nrz         (), 
+        .source_ip_eth_nrz          (), 
+        .dest_ip_eth_nrz            (), 
+        .source_port_eth_nrz        (), 
+        .dest_port_eth_nrz          (), 
+        .tx_payload_length_eth_nrz  (out_if.tx_payload_length_eth_nrz), 
+        .tx_zero_endian_eth_nrz     (out_if.tx_zero_endian_eth_nrz), 
+        .tx_bpw_eth_nrz             (out_if.tx_bpw_eth_nrz), 
+        .tx_sync_word1_eth_nrz      (out_if.tx_sync_word1_eth_nrz), 
+        .tx_sync_word2_eth_nrz      (out_if.tx_sync_word2_eth_nrz)
     );
 
     // =========================================================
@@ -595,17 +596,19 @@ module tb_top;
         .data_in_nrz                 (nrz_if.data_in_nrz),
         .config_done_pulse_eth_nrz   (out_if.config_done_eth_nrz),
         .config_done_pulse           (out_if.config_done_pulse),
+        
+        // ---> These now receive live data from CONFIG_DUT! <---
         .tx_bpw_eth_nrz              (out_if.tx_bpw_eth_nrz),
         .tx_payload_length_eth_nrz   (out_if.tx_payload_length_eth_nrz),
         .tx_zero_endian_eth_nrz      (out_if.tx_zero_endian_eth_nrz),
         .tx_sync_word1_eth_nrz       (out_if.tx_sync_word1_eth_nrz),
         .tx_sync_word2_eth_nrz       (out_if.tx_sync_word2_eth_nrz),
+        
         .tx_payload_length_actual    (), 
         .eth_tx_start_pulse_eth_nrz  (nrz_if.eth_tx_start_pulse),
         .tx_fifo_wr_en_eth_nrz       (nrz_if.fifo_wr_en),
         .tx_fifo_data_in_eth_nrz     (nrz_if.fifo_data_in)
     );
-
     // =========================================================
     // 10. Start UVM Test
     // =========================================================
@@ -618,6 +621,24 @@ module tb_top;
         uvm_config_db#(virtual nrz_intf)::set(null, "*", "nrz_vif", nrz_if);
 
         run_test();
+    end
+    // =========================================================
+    // PHYSICAL HARDWARE PROBES (WIRETAPS)
+    // =========================================================
+    
+    // Wiretap 1: Does the UVM interface wire actually toggle?
+    always @(uart_rx_if[0].tx) begin
+        $display("HW_PROBE @ %0t: uart_rx_if[0].tx flipped to %b", $time, uart_rx_if[0].tx);
+    end
+
+    // Wiretap 2: Does the EIU_TOP input pin actually see the toggle?
+    always @(DUT.uart1_rx) begin
+        $display("HW_PROBE @ %0t: EIU_TOP.uart1_rx pin saw a transition to %b", $time, DUT.uart1_rx);
+    end
+
+    // Wiretap 3: What is the reset state actually doing?
+    always @(rst_n or uart_rx_if[0].rst_n) begin
+        $display("HW_PROBE @ %0t: Global rst_n = %b | Interface rst_n = %b", $time, rst_n, uart_rx_if[0].rst_n);
     end
 
 endmodule

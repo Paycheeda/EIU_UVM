@@ -5,7 +5,7 @@ class nrz_monitor extends uvm_monitor;
     `uvm_component_utils(nrz_monitor)
 
     virtual nrz_intf vif;
-    uvm_analysis_port #(nrz_out_item) ap;
+    uvm_analysis_port #(nrz_out_item) ap; // Ensure nrz_out_item is defined in your sequence_item folder
     
     bit [7:0] byte_queue[$];
 
@@ -21,8 +21,6 @@ class nrz_monitor extends uvm_monitor;
     endfunction
 
     task run_phase(uvm_phase phase);
-        // We use a fork-join to run two independent, asynchronous threads.
-        // One thread watches the 64MHz FIFO writes. The other thread watches the 125MHz pulse.
         fork
             // THREAD 1: Capture Data into the FIFO (64MHz Domain)
             begin
@@ -34,23 +32,25 @@ class nrz_monitor extends uvm_monitor;
                 end
             end
             
-            // THREAD 2: Event-Driven Pulse Catcher (Asynchronous)
-            // This is immune to CDC dropping because it triggers on the physical edge of the wire!
+            // THREAD 2: Packet Trigger (ETH TX Start Pulse)
             begin
                 nrz_out_item out_item;
                 forever begin
                     @(posedge vif.eth_tx_start_pulse);
                     
-                    // Small physical delay to ensure the 64MHz thread finished pushing the last byte
-                    #1ns; 
+                    // FIXED: Wait exactly 1 clock cycle to avoid delta-cycle race conditions
+                    @(posedge vif.clk_64mhz); 
                     
                     out_item = nrz_out_item::type_id::create("out_item");
                     out_item.unpacked_bytes = new[byte_queue.size()];
+                    
                     foreach(byte_queue[i]) begin
                         out_item.unpacked_bytes[i] = byte_queue[i];
                     end
                     
+                    `uvm_info("NRZ_MON", $sformatf("Captured NRZ Packet of %0d bytes.", byte_queue.size()), UVM_HIGH)
                     ap.write(out_item);
+                    
                     byte_queue.delete();
                 end
             end

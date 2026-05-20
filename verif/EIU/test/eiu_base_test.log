@@ -1,0 +1,158 @@
+# vsim -c tb_top glbl -modelsimini /home/ahmed/modelsim_2020_libs/modelsim.ini -L unisims_ver -L unimacro_ver -L secureip -L xpm -sv_lib /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/lib/uvm_dpi -work /home/ahmed/uvm_training/verif/EIU/test/work "+NUM_PKTS=1" "+EN_UART1=0" "+EN_UART2=0" "+EN_UART3=0" "+UART_WIDTH=8" "+UART_PARITY_EN=1" "+UART_PARITY_OE=0" "+EN_ETH1=1" "+NRZ_BPW=1" "+EN_NRZ=1" "+UVM_TESTNAME=eiu_base_test" "+UVM_CONFIG_DB_TRACE" -classdebug -l eiu_base_test.log -do "run -a; q" 
+# Start time: 11:44:48 on May 20,2026
+# Loading /tmp/root@ahmedpc_dpi_9830/linuxaloem_gcc-7.4.0/export_tramp.so
+# ** Note: (vsim-8785) UVM-aware debugging capabilities will be disabled since no compiled "questa_uvm_pkg" can be found.
+# This also means that later if you turn on UVM-aware debugging your debug simulations may have
+# different random seeds from your non-debug simulations.
+# Loading sv_std.std
+# Loading work.eth_rx_fifo_if
+# Loading work.uvm_pkg
+# Loading work.rx_fifo_pkg
+# Loading work.mac_rx_if
+# Loading work.mac_rx_pkg
+# Loading work.eth_rx_if
+# Loading work.eth_rx_pkg
+# Loading work.eth_pkg
+# Loading work.uart_unified_intf
+# Loading work.uart_pkg
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /uart_pkg::uart_tx_sequence::body File: /home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence/uart_tx_sequence.sv Line: 20
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /uart_pkg::uart_tx_sequence::body File: /home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence/uart_tx_sequence.sv Line: 21
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /uart_pkg::uart_tx_sequence::body File: /home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence/uart_tx_sequence.sv Line: 22
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /uart_pkg::uart_tx_sequence::body File: /home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence/uart_tx_sequence.sv Line: 23
+# Loading work.kernel_pkg
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /kernel_pkg::bkp_sequence::body File: /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_sequence.sv Line: 49
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /kernel_pkg::bkp_sequence::body File: /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_sequence.sv Line: 50
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /kernel_pkg::bkp_sequence::body File: /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_sequence.sv Line: 51
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /kernel_pkg::bkp_sequence::body File: /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_sequence.sv Line: 52
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /kernel_pkg::kwr_routing_seq::body File: /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/kwr_sequence.sv Line: 24
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /kernel_pkg::kwr_routing_seq::body File: /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/kwr_sequence.sv Line: 25
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /kernel_pkg::kwr_routing_seq::body File: /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/kwr_sequence.sv Line: 27
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /kernel_pkg::kwr_routing_seq::body File: /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/kwr_sequence.sv Line: 28
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /kernel_pkg::kwr_routing_seq::body File: /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/kwr_sequence.sv Line: 29
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /kernel_pkg::kwr_routing_seq::body File: /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/kwr_sequence.sv Line: 31
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /kernel_pkg::kwr_routing_seq::body File: /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/kwr_sequence.sv Line: 32
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /kernel_pkg::kwr_routing_seq::body File: /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/kwr_sequence.sv Line: 33
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /kernel_pkg::kwr_routing_seq::body File: /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/kwr_sequence.sv Line: 34
+# Loading work.eiu_pkg
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /eiu_pkg::eiu_env::build_phase/#ublk#202073975#121 File: /home/ahmed/uvm_training/verif/EIU/uvm_tb/env/eiu_env.sv Line: 131
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /eiu_pkg::eiu_env::build_phase/#ublk#202073975#121 File: /home/ahmed/uvm_training/verif/EIU/uvm_tb/env/eiu_env.sv Line: 132
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /eiu_pkg::eiu_env::build_phase/#ublk#202073975#121 File: /home/ahmed/uvm_training/verif/EIU/uvm_tb/env/eiu_env.sv Line: 133
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /eiu_pkg::eiu_env::connect_phase/#ublk#202073975#189 File: /home/ahmed/uvm_training/verif/EIU/uvm_tb/env/eiu_env.sv Line: 199
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /eiu_pkg::eiu_env::connect_phase/#ublk#202073975#189 File: /home/ahmed/uvm_training/verif/EIU/uvm_tb/env/eiu_env.sv Line: 200
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /eiu_pkg::eiu_env::connect_phase/#ublk#202073975#189 File: /home/ahmed/uvm_training/verif/EIU/uvm_tb/env/eiu_env.sv Line: 201
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /eiu_pkg::eiu_env::connect_phase/#ublk#202073975#189 File: /home/ahmed/uvm_training/verif/EIU/uvm_tb/env/eiu_env.sv Line: 202
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /eiu_pkg::eiu_vseq::body File: /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv Line: 88
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /eiu_pkg::eiu_vseq::body File: /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv Line: 89
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /eiu_pkg::eiu_vseq::body File: /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv Line: 90
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /eiu_pkg::eiu_vseq::body File: /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv Line: 91
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /eiu_pkg::eiu_vseq::body File: /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv Line: 92
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /eiu_pkg::eiu_vseq::body File: /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv Line: 93
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /eiu_pkg::eiu_vseq::body File: /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv Line: 94
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /eiu_pkg::eiu_vseq::body File: /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv Line: 95
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /eiu_pkg::eiu_vseq::body File: /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv Line: 98
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /eiu_pkg::eiu_vseq::body File: /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv Line: 99
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /eiu_pkg::eiu_vseq::body File: /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv Line: 100
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /eiu_pkg::eiu_vseq::body File: /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv Line: 101
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /eiu_pkg::eiu_vseq::body File: /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv Line: 102
+# ** Warning: (vsim-PLI-3691) Expected a system task, not a system function '$value$plusargs'.
+#    Time: 0 fs  Iteration: 0  Region: /eiu_pkg::eiu_vseq::body File: /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv Line: 103
+# Loading work.counter_8bit_sv_unit
+# Loading work.tb_top
+# Loading work.bkp_intf
+# Loading work.nrz_intf
+# Loading work.EIU_TOP
+# Loading work.counter_8bit
+# Loading work.uart
+# Loading work.uart_IF
+# Loading work.uart_TX
+# Loading work.uart_RX
+# Loading work.dual_port_FIFO
+# Loading unimacro_ver.FIFO_DUALCLOCK_MACRO
+# Loading work.eth
+# Loading work.eth_mac_rx
+# Loading work.iddr_rx
+# Loading unisims_ver.IDDR
+# Loading work.eth_rx_IF
+# Loading work.crc32_data8
+# Loading work.eth_rx_fifo_IF
+# Loading work.eth_rx_metadata
+# Loading work.eth_mac_tx
+# Loading work.udp_checksum_calculator
+# Loading work.eth_tx_frame_maker
+# Loading work.eth_tx_IF
+# Loading work.oddr_tx
+# Loading unisims_ver.ODDR
+# Loading work.kernel
+# Loading work.kernel_config
+# Loading work.kernel_write
+# Loading work.kernel_start_tx
+# Loading work.cdc_pulse_toggle_sync
+# Loading work.cdc_bit_sync
+# Loading work.kernel_read
+# Loading work.cdc_count_11bit_toggle
+# Loading work.kernel_nrz
+# Loading work.eth_rx_app_if
+# Loading work.eth_if
+# Loading work.fifo_intf
+# Loading work.fifo_intf_uart
+# Loading work.uart_config_intf
+# Loading work.uart_out_intf
+# Loading work.uart_rx_in_intf
+# Loading work.uart_rx_out_intf
+# Loading work.uart_tx_intf
+# Loading work.out_intf
+# Loading work.kwr_intf
+# Loading work.krd_intf
+# Loading work.kst_intf
+# Loading work.glbl
+# Loading work.eth_tx_if
+# Loading work.fault_inject_if
+# Loading unisims_ver.FIFO18E1
+# Loading unisims_ver.FF18_INTERNAL_VLOG
+# Loading unisims_ver.FIFO36E1
+# Loading unisims_ver.FF36_INTERNAL_VLOG
+# ** Warning: (vsim-8311) System Verilog assertions are supported only in Questasim.
+# ** Error: (vsim-7065) Illegal assignment to class work.kernel_pkg::nrz_item from class work.kernel_pkg::nrz_out_item
+#    Time: 0 fs  Iteration: 0  Region: /eiu_pkg File: /home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv Line: 104
+# ** Error: (vsim-8754) Actual output arg. of type 'class work.kernel_pkg::nrz_item' for formal 't' of 'get' is not compatible with the formal's type 'class work.kernel_pkg::nrz_out_item'.
+#    Time: 0 fs  Iteration: 0  Region: /eiu_pkg File: /home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv Line: 104
+# Error loading design
+# End time: 11:44:49 on May 20,2026, Elapsed time: 0:00:01
+# Errors: 2, Warnings: 39

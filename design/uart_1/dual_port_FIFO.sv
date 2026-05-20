@@ -8,8 +8,9 @@
 	whenever WREN is active one setup time before the rising WRCLK edge.
 */
 module dual_port_FIFO#(
-				parameter integer PARAM_DATA_WIDTH = 16,
-				parameter PARAM_FIFO_SIZE = "18Kb"
+				parameter integer PARAM_DATA_WIDTH = 9,
+				parameter PARAM_FIFO_SIZE = "18Kb",
+				parameter PARAM_FIRST_WORD_FALL_THROUGH  = "FALSE"
 		)(
 			input 							rst_n,
 			
@@ -51,7 +52,7 @@ FIFO_DUALCLOCK_MACRO  #(
    .DATA_WIDTH(PARAM_DATA_WIDTH),   // Valid values are 1-72 (37-72 only valid when FIFO_SIZE="36Kb")
    .DEVICE("7SERIES"),  // Target device: "7SERIES"
    .FIFO_SIZE (PARAM_FIFO_SIZE), // Target BRAM: "18Kb" or "36Kb"
-   .FIRST_WORD_FALL_THROUGH ("FALSE") // Sets the FIFO FWFT to "TRUE" or "FALSE"
+   .FIRST_WORD_FALL_THROUGH (PARAM_FIRST_WORD_FALL_THROUGH) // Sets the FIFO FWFT to "TRUE" or "FALSE"
 ) FIFO_DUALCLOCK_MACRO_inst (
    .ALMOSTEMPTY(), // 1-bit output almost empty
    .ALMOSTFULL(),   // 1-bit output almost full

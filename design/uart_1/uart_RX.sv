@@ -157,17 +157,14 @@ begin
 				// 1 = Odd parity, 0 = Even parity //
 				parity_calc <= (parity_odd_even_buff) ? ~(^ (rx_fifo_data & ((1<<data_width_buff)-1))) :
 														^(rx_fifo_data & ((1<<data_width_buff)-1));	
+				state <= DATA_READY_STATE;
 				if(data_rx_buf2 == 1)
 				begin
 					stop_bit_error <= 0;
-					clock_counter <= (clock_delay_param_buff/2) - 1;
-					state <= DELAY_STATE;
-					next_state <= DATA_READY_STATE;
 				end
 				else
 				begin
 					stop_bit_error <= 1;
-					state <= DATA_READY_STATE;
 				end
 			end
 			

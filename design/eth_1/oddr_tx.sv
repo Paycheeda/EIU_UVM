@@ -17,6 +17,8 @@ reg tx_en_reg;
 wire tx_er;
 assign tx_er = 1'b0;
 
+
+
 always @(posedge clk or negedge rst_n)
 begin
     if (!rst_n)
@@ -26,7 +28,7 @@ begin
     end
 	else
 	begin
-        data_reg <= data_in;
+        data_reg <= (tx_en) ? data_in : 8'd0;
 		tx_en_reg <= tx_en;
 	end
 end

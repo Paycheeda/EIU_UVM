@@ -1,0 +1,11 @@
+#  onerror {resume}
+#  Warning: onerror command for use within macro
+#  add wave -noupdate -divider {=== EIU TOP PINS ===}
+#  add wave -noupdate /tb_top/DUT/*
+#  add wave -noupdate -divider {=== KERNEL (Config/Write/Read) ===}
+#  add wave -noupdate -r /tb_top/DUT/*kernel*/*
+#  add wave -noupdate -divider {=== UART TX / RX & FIFOs ===}
+#  add wave -noupdate -r /tb_top/DUT/*uart*/*
+#  run -a
+# No Design Loaded!
+# 

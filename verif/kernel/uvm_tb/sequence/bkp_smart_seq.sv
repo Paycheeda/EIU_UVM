@@ -4,67 +4,66 @@
 class bkp_smart_seq extends uvm_sequence #(bkp_item);
     `uvm_object_utils(bkp_smart_seq)
 
-    // Maintain tracking counts for all 7 modules
-    int prev_uart1_cnt = 0, prev_uart2_cnt = 0, prev_uart3_cnt = 0;
-    int prev_eth1_cnt  = 0, prev_eth2_cnt  = 0, prev_eth3_cnt  = 0, prev_eth4_cnt  = 0;
+    bit [3:0] target_card_id;
 
-    function new(string name = "bkp_smart_seq"); super.new(name); endfunction
+    function new(string name = "bkp_smart_seq"); 
+        super.new(name); 
+        target_card_id = 4'h0;
+    endfunction
 
     task body();
-        `uvm_info("SMART_SEQ", ">>> WAKING UP: CPU Backplane Polling Routine Started...", UVM_LOW)
+        // `uvm_info("SMART_SEQ", ">>> WAKING UP: CPU Backplane Polling Routine Started...", UVM_LOW)
 
-        poll_and_read(1, 0, prev_uart1_cnt, "UART1");
-        // poll_and_read(4, 3, prev_uart2_cnt, "UART2");
-        // poll_and_read(7, 6, prev_uart3_cnt, "UART3");
-
-        poll_and_read(10, 9, prev_eth1_cnt, "ETH1");
-        // poll_and_read(13, 12, prev_eth2_cnt, "ETH2");
-        // poll_and_read(16, 15, prev_eth3_cnt, "ETH3");
-        // poll_and_read(19, 18, prev_eth4_cnt, "ETH4");
+        // Poll UARTs
+        poll_and_read(6'd1, 6'd0, "UART1");
+        poll_and_read(6'd4, 6'd3, "UART2");
+        poll_and_read(6'd7, 6'd6, "UART3");
         
-        `uvm_info("SMART_SEQ", "<<< SLEEPING: Polling Routine Complete.\n", UVM_LOW)
+        // Poll ALL Ethernet Ports
+        poll_and_read(6'd10, 6'd9,  "ETH1");
+        poll_and_read(6'd13, 6'd12, "ETH2");
+        poll_and_read(6'd16, 6'd15, "ETH3");
+        poll_and_read(6'd19, 6'd18, "ETH4");
+
+        // `uvm_info("SMART_SEQ", "<<< SLEEPING: Polling Routine Complete.\n", UVM_LOW)
     endtask
 
-    task poll_and_read(input int count_addr, input int fifo_addr, ref int prev_cnt, input string name);
-        bkp_item rsp_item;
-        int current_cnt, new_packets;
+    task poll_and_read(input bit [5:0] count_addr, input bit [5:0] data_addr, input string intf_name);
+        int curr_cnt;
+        bkp_item req_item;
 
-        // 1. Read the Count Register
-        req = bkp_item::type_id::create("req");
-        start_item(req);
-        req.bkp_card_id  = 4'hA; // <--- THE FIX: Unlock the hardware!
-        req.fpga_card_id = 4'hA; // <--- THE FIX: Unlock the hardware!
-        req.bkp_data_dir = 0;    // Read
-        req.bkp_address  = count_addr;
-        finish_item(req);
+        req_item = bkp_item::type_id::create("req_item");
+        start_item(req_item);
+        req_item.randomize_item();
+        req_item.trans_type = BKP_READ; 
+        req_item.bkp_address = count_addr;
+        req_item.bkp_card_id = target_card_id;
+        req_item.fpga_card_id = target_card_id;
+        req_item.apply_trans_type_rules();
+        finish_item(req_item);
         
-        get_response(rsp_item); 
+        curr_cnt = req_item.bkp_data;
         
-        current_cnt = rsp_item.bkp_data[10:0];
-        new_packets = current_cnt - prev_cnt;
-
-        `uvm_info("SMART_SEQ", $sformatf("[POLL] %s (Addr %0d) -> Prev: %0d | Curr: %0d", name, count_addr, prev_cnt, current_cnt), UVM_LOW)
-
-        if (new_packets > 0) begin
-            `uvm_info("SMART_SEQ", $sformatf("       *** %0d NEW PACKETS DETECTED ON %s! Initiating Burst Read at Addr %0d ***", new_packets, name, fifo_addr), UVM_LOW)
+        // [FIXED] Increased the limit to safely accommodate full MTU standard Ethernet frames (up to 2048 bytes)
+        if (curr_cnt > 0 && curr_cnt <= 2048) begin
+            `uvm_info("SMART_SEQ", $sformatf("\t*** %0d BYTES WAITING ON %s! Initiating Burst Read ***", curr_cnt, intf_name), UVM_LOW)
             
-            // 2. Loop and physically pull the exact number of new packets!
-            for (int i = 0; i < new_packets; i++) begin
-                req = bkp_item::type_id::create("req");
-                start_item(req);
-                req.bkp_card_id  = 4'hA; // <--- THE FIX
-                req.fpga_card_id = 4'hA; // <--- THE FIX
-                req.bkp_data_dir = 0;
-                req.bkp_address  = fifo_addr;
-                finish_item(req);
+            for (int i = 0; i < curr_cnt; i++) begin
+                req_item = bkp_item::type_id::create("req_item");
+                start_item(req_item);
+                req_item.randomize_item();
+                req_item.trans_type = BKP_READ; 
+                req_item.bkp_address = data_addr;
+                req_item.bkp_card_id = target_card_id;
+                req_item.fpga_card_id = target_card_id;
+                req_item.apply_trans_type_rules();
+                finish_item(req_item);
                 
-                get_response(rsp_item); 
-                `uvm_info("SMART_SEQ", $sformatf("       -> %s Burst [%0d/%0d] Data Extracted: 'h%0h", name, i+1, new_packets, rsp_item.bkp_data), UVM_LOW)
+                // Keep this UVM_HIGH so it doesn't flood the terminal
+                `uvm_info("SMART_SEQ", $sformatf("\t\t-> %s Burst [%0d/%0d] Data Extracted: 'h%0h", intf_name, i+1, curr_cnt, req_item.bkp_data), UVM_HIGH)
             end
-            
-            prev_cnt = current_cnt;
-            `uvm_info("SMART_SEQ", $sformatf("       *** %s BURST COMPLETE. State updated. ***", name), UVM_LOW)
-        end 
+        end
     endtask
 endclass
+
 `endif
