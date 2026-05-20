@@ -263,7 +263,7 @@ class eiu_scoreboard extends uvm_scoreboard;
 
     function void compare_data(string path, int exp, int act);
         if (exp == act) begin
-            // `uvm_info("SCB_PASS", $sformatf("[%s] Match! Expected: %0h | Actual: %0h", path, exp, act), UVM_HIGH) 
+            `uvm_info("SCB_PASS", $sformatf("[%s] Match! Expected: %0h | Actual: %0h", path, exp, act), UVM_LOW) 
         end else begin
             `uvm_error("SCB_FAIL", $sformatf("[%s] MISMATCH! Expected: %0h | Actual: %0h", path, exp, act))
         end
