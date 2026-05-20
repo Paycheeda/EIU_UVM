@@ -90,60 +90,67 @@ class bkp_sequence extends uvm_sequence #(bkp_item);
                 // ----------------------------------------------------
                 // ETHERNET 1 CONFIGURATION (Addresses 3-9)
                 // ----------------------------------------------------
-                else if (addr >= 6'd3 && addr <= 6'd9) begin
-                    // Standard Config Values for ETH1
-                    bit [47:0] eth1_dest_mac = 48'hFF_FF_FF_FF_FF_FF; // Broadcast
-                    bit [47:0] eth1_src_mac  = 48'h02_00_00_00_00_01; // Private MAC
-                    bit [31:0] eth1_dest_ip  = 32'hC0A8_0164;         // 192.168.1.100
-                    bit [31:0] eth1_src_ip   = 32'hC0A8_010A;         // 192.168.1.10
-                    bit [15:0] eth1_dest_port= 16'h0FA0;              // 4000
-                    bit [15:0] eth1_src_port = 16'h1388;              // 5000
-                    bit [11:0] eth1_payload_len = 12'd100;            // 100 bytes
-
-                    case (addr)
-                        6'd3: begin // Dest MAC (4 Writes x 12 bits = 48 bits)
-                            if (w == 0)      data_to_send = (eth1_dest_mac >> 36) & 12'hFFF;
-                            else if (w == 1) data_to_send = (eth1_dest_mac >> 24) & 12'hFFF;
-                            else if (w == 2) data_to_send = (eth1_dest_mac >> 12) & 12'hFFF;
-                            else if (w == 3) data_to_send = (eth1_dest_mac)       & 12'hFFF;
-                        end
-                        6'd4: begin // Src MAC (4 Writes x 12 bits = 48 bits)
-                            if (w == 0)      data_to_send = (eth1_src_mac >> 36) & 12'hFFF;
-                            else if (w == 1) data_to_send = (eth1_src_mac >> 24) & 12'hFFF;
-                            else if (w == 2) data_to_send = (eth1_src_mac >> 12) & 12'hFFF;
-                            else if (w == 3) data_to_send = (eth1_src_mac)       & 12'hFFF;
-                        end
-                        6'd5: begin // Dest IP (4 Writes, Top 16 bits padded 0)
-                            if (w == 0)      data_to_send = 12'h000;
-                            else if (w == 1) data_to_send = (eth1_dest_ip >> 24) & 12'hFFF;
-                            else if (w == 2) data_to_send = (eth1_dest_ip >> 12) & 12'hFFF;
-                            else if (w == 3) data_to_send = (eth1_dest_ip)       & 12'hFFF;
-                        end
-                        6'd6: begin // Src IP (4 Writes, Top 16 bits padded 0)
-                            if (w == 0)      data_to_send = 12'h000;
-                            else if (w == 1) data_to_send = (eth1_src_ip >> 24) & 12'hFFF;
-                            else if (w == 2) data_to_send = (eth1_src_ip >> 12) & 12'hFFF;
-                            else if (w == 3) data_to_send = (eth1_src_ip)       & 12'hFFF;
-                        end
-                        6'd7: begin // Dest Port (2 Writes x 12 bits)
-                            if (w == 0)      data_to_send = (eth1_dest_port >> 12) & 12'hFFF;
-                            else if (w == 1) data_to_send = (eth1_dest_port)       & 12'hFFF;
-                        end
-                        6'd8: begin // Src Port (2 Writes x 12 bits)
-                            if (w == 0)      data_to_send = (eth1_src_port >> 12) & 12'hFFF;
-                            else if (w == 1) data_to_send = (eth1_src_port)       & 12'hFFF;
-                        end
-                        6'd9: begin // Payload Length (1 Write)
-                            data_to_send = eth1_payload_len;
-                        end
-                    endcase
-                end
-                
-                // ----------------------------------------------------
-                // STEP 3: Dummy Writes for all other ETH ports to satisfy global lockout
-                // ----------------------------------------------------
-                else begin
-                    data_to_send = 12'h000; 
+                else if (addr >= 6'd3 && addr <= 6'd30) begin
+                        int eth_idx;
+                        int eth_field;
+                        bit [47:0] eth_dest_mac;
+                        bit [47:0] eth_src_mac;
+                        bit [31:0] eth_dest_ip;
+                        bit [31:0] eth_src_ip;
+                        bit [15:0] eth_dest_port;
+                        bit [15:0] eth_src_port;
+                        bit [10:0] eth_payload_len;
+                        eth_idx   = (addr - 3) / 7; // 0=ETH1, 1=ETH2, 2=ETH3, 3=ETH4
+                        eth_field = (addr - 3) % 7;
+                        eth_dest_mac    = 48'hFF_FF_FF_FF_FF_FF;
+                        eth_src_mac     = 48'h02_00_00_00_00_01 + eth_idx;
+                        eth_dest_ip     = 32'hC0A8_0164 + eth_idx; // 192.168.1.100+
+                        eth_src_ip      = 32'hC0A8_010A + eth_idx; // 192.168.1.10+
+                        eth_dest_port   = 16'h0FA0 + eth_idx;
+                        eth_src_port    = 16'h1388 + eth_idx;
+                        eth_payload_len = 11'd100;
+                        case (eth_field)
+                            0: begin // Dest MAC
+                                if (w == 0)      data_to_send = (eth_dest_mac >> 36) & 12'hFFF;
+                                else if (w == 1) data_to_send = (eth_dest_mac >> 24) & 12'hFFF;
+                                else if (w == 2) data_to_send = (eth_dest_mac >> 12) & 12'hFFF;
+                                else             data_to_send = eth_dest_mac & 12'hFFF;
+                            end
+                            1: begin // Source MAC
+                                if (w == 0)      data_to_send = (eth_src_mac >> 36) & 12'hFFF;
+                                else if (w == 1) data_to_send = (eth_src_mac >> 24) & 12'hFFF;
+                                else if (w == 2) data_to_send = (eth_src_mac >> 12) & 12'hFFF;
+                                else             data_to_send = eth_src_mac & 12'hFFF;
+                            end
+                            2: begin // Source IP
+                                if (w == 0)      data_to_send = 12'h000;
+                                else if (w == 1) data_to_send = (eth_src_ip >> 24) & 12'hFFF;
+                                else if (w == 2) data_to_send = (eth_src_ip >> 12) & 12'hFFF;
+                                else             data_to_send = eth_src_ip & 12'hFFF;
+                            end
+                            3: begin // Dest IP
+                                if (w == 0)      data_to_send = 12'h000;
+                                else if (w == 1) data_to_send = (eth_dest_ip >> 24) & 12'hFFF;
+                                else if (w == 2) data_to_send = (eth_dest_ip >> 12) & 12'hFFF;
+                                else             data_to_send = eth_dest_ip & 12'hFFF;
+                            end
+                            4: begin // Source Port
+                                if (w == 0)      data_to_send = (eth_src_port >> 12) & 12'hFFF;
+                                else             data_to_send = eth_src_port & 12'hFFF;
+                            end
+                            5: begin // Dest Port
+                                if (w == 0)      data_to_send = (eth_dest_port >> 12) & 12'hFFF;
+                                else             data_to_send = eth_dest_port & 12'hFFF;
+                            end
+                            6: begin // Payload Length
+                                data_to_send = eth_payload_len;
+                            end
+                        endcase
+                    end
+                    else begin
+                        // Keep dummy writes for unused ETH5/NRZ config and NRZ-specific config
+                        // so all_config_received still becomes true.
+                        data_to_send = 12'h000;
                 end
                 
                 // Apply the calculated data and standard routing variables
