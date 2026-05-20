@@ -4,7 +4,7 @@
 class eiu_phy_rx_seq extends uvm_sequence #(phy_rx_seq_item);
     `uvm_object_utils(eiu_phy_rx_seq)
     
-    int port_id = 0; 
+    int port_id = 0; // Identifies which ETH port this sequence is driving
     
     function new(string name="eiu_phy_rx_seq"); 
         super.new(name); 
@@ -12,7 +12,7 @@ class eiu_phy_rx_seq extends uvm_sequence #(phy_rx_seq_item);
     
     task body();
         int p_size;
-        uvm_queue #(phy_rx_seq_item) g_q; 
+        uvm_queue #(phy_rx_seq_item) g_q; // UVM Built-in Queue
         
         req = phy_rx_seq_item::type_id::create("req");
         start_item(req);
@@ -43,10 +43,14 @@ class eiu_phy_rx_seq extends uvm_sequence #(phy_rx_seq_item);
         req.payload = new[p_size];
         foreach(req.payload[k]) req.payload[k] = $urandom_range(0, 255);
         
+        // Calculate exact lengths for the hardware check
         req.total_length = 16'(p_size + 28);
         
         finish_item(req);
         
+        // =================================================================
+        // BACKDOOR INJECTION: Push the Golden Expected Packet via ConfigDB
+        // =================================================================
         if (uvm_config_db#(uvm_queue#(phy_rx_seq_item))::get(null, "", $sformatf("golden_eth_rx_q_%0d", port_id), g_q)) begin
             g_q.push_back(req);
         end else begin
@@ -70,20 +74,9 @@ class eiu_vseq extends uvm_sequence;
         uart_main_sequence   uart_seq[3];
         eiu_phy_rx_seq       eth_rx_seq[4]; 
         
-        // [NEW] NRZ Sequences
-        nrz_sequence         nrz_seq;
-        
         int num_packets = 10; 
         int en_uart[3] = '{1, 1, 1};
         int en_eth[4]  = '{1, 1, 1, 1}; 
-        
-        // [NEW] NRZ Configuration Variables
-        int nrz_en = 1;
-        int nrz_bpw = 1; // Default 1 (8-bits)
-        int nrz_endian = 0;
-        int nrz_sync1 = 'hFAF;
-        int nrz_sync2 = 'h320;
-        int nrz_payload_len = 50;
         
         $value$plusargs("NUM_PKTS=%d", num_packets);
         $value$plusargs("EN_UART1=%d", en_uart[0]);
@@ -94,25 +87,9 @@ class eiu_vseq extends uvm_sequence;
         $value$plusargs("EN_ETH3=%d", en_eth[2]);
         $value$plusargs("EN_ETH4=%d", en_eth[3]);
 
-        // [NEW] Plusargs for NRZ
-        $value$plusargs("EN_NRZ=%d", nrz_en);
-        $value$plusargs("NRZ_BPW=%d", nrz_bpw); 
-        $value$plusargs("NRZ_ENDIAN=%d", nrz_endian);
-        $value$plusargs("NRZ_SYNC1=%h", nrz_sync1);
-        $value$plusargs("NRZ_SYNC2=%h", nrz_sync2);
-        $value$plusargs("NRZ_PLEN=%d", nrz_payload_len);
-
         `uvm_info("VSEQ", "=== STAGE 1: HARDWARE CONFIGURATION ===", UVM_LOW)
         cfg_seq = bkp_sequence::type_id::create("cfg_seq");
         cfg_seq.target_card_id = 4'h0;
-        
-        // [NEW] Program the exact NRZ parameters requested by the user into the Kernel Configuration
-        cfg_seq.nrz_bpw         = nrz_bpw;
-        cfg_seq.nrz_zero_endian = nrz_endian;
-        cfg_seq.nrz_sync_word1  = nrz_sync1;
-        cfg_seq.nrz_sync_word2  = nrz_sync2;
-        cfg_seq.nrz_payload_len = nrz_payload_len;
-        
         cfg_seq.start(p_sequencer.bkp_sqr); 
 
         #100us; 
@@ -133,20 +110,6 @@ class eiu_vseq extends uvm_sequence;
                     uart_seq[j].start(p_sequencer.uart_rx_sqr[j]);
                 end
             end
-            
-            // [NEW] Start the NRZ Generation Sequence
-            if (nrz_en == 1) begin
-                begin
-                    `uvm_info("VSEQ", "Enabling Telemetry Traffic on ETH5 (NRZ)", UVM_LOW)
-                    nrz_seq = nrz_sequence::type_id::create("nrz_seq");
-                    nrz_seq.cfg_bpw         = nrz_bpw;
-                    nrz_seq.cfg_zero_endian = nrz_endian;
-                    nrz_seq.cfg_sync_word1  = nrz_sync1;
-                    nrz_seq.cfg_sync_word2  = nrz_sync2;
-                    nrz_seq.cfg_payload_len = nrz_payload_len; // Custom addition to match the config
-                    nrz_seq.start(p_sequencer.nrz_sqr);
-                end
-            end
         join_none 
 
         poll_seq = bkp_smart_seq::type_id::create("poll_seq");
@@ -160,7 +123,7 @@ class eiu_vseq extends uvm_sequence;
                     automatic int j = i;
                     if (en_eth[j] == 1) begin
                         eth_rx_seq[j] = eiu_phy_rx_seq::type_id::create($sformatf("eth_rx_seq[%0d]", j));
-                        eth_rx_seq[j].port_id = j; 
+                        eth_rx_seq[j].port_id = j; // Connects to the specific Golden Queue
                         eth_rx_seq[j].start(p_sequencer.eth_rx_sqr[j]);
                     end
                 end
