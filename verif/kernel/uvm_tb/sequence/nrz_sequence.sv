@@ -11,6 +11,8 @@ class nrz_sequence extends uvm_sequence #(nrz_item);
     bit [11:0] cfg_sync_word2;
     int        cfg_payload_len; // Add this to control packet sizes
 
+    int cfg_num_packets = 1;
+    
     function new(string name = "nrz_sequence");
         super.new(name);
     endfunction
@@ -25,7 +27,7 @@ class nrz_sequence extends uvm_sequence #(nrz_item);
             `uvm_error("NRZ_SEQ", "CRITICAL: Could not find golden_nrz_q in config DB!")
         end
 
-        repeat(5) begin
+        repeat(cfg_num_packets) begin
             req = nrz_item::type_id::create("req");
             start_item(req);
             

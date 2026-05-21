@@ -43,6 +43,12 @@ class bkp_sequence extends uvm_sequence #(bkp_item);
         
         int baud_div, ctrl_bits, b0, b1, b2, b3;
 
+        int        nrz_bpw_bits      = 8;
+        bit        nrz_zero_endian   = 0;
+        bit [11:0] nrz_sync_word1    = 12'h0EB;
+        bit [11:0] nrz_sync_word2    = 12'h090;
+        int        nrz_payload_len   = 50;
+
         `uvm_info("BKP_SEQ", ">>> Starting FULL Hardware Initialization Sequence...", UVM_LOW)
         
         // Fetch terminal Plusargs!

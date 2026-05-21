@@ -95,6 +95,8 @@ class eiu_vseq extends uvm_sequence;
         #100us; 
 
         `uvm_info("VSEQ", $sformatf("=== STAGE 2: EVENT-DRIVEN PING-PONG TRAFFIC (%0d Packets) ===", num_packets), UVM_LOW)
+
+        nrz_seq.cfg_num_packets = num_packets;
         
         fork
             begin
@@ -139,5 +141,28 @@ class eiu_vseq extends uvm_sequence;
         disable fork;
         `uvm_info("VSEQ", "=== ALL DUPLEX STAGES COMPLETE ===", UVM_LOW)
     endtask
+
+    function automatic bit [1:0] nrz_bpw_code(int bpw_bits);
+    case (bpw_bits)
+        8 : return 2'd0;
+        9 : return 2'd1;
+        10: return 2'd2;
+        12: return 2'd3;
+        default: `uvm_fatal("NRZ_CFG", $sformatf("Unsupported NRZ_BPW=%0d", bpw_bits))
+    endcase
+endfunction
+function automatic void get_default_nrz_syncs(
+    input  int bpw_bits,
+    output bit [11:0] s1,
+    output bit [11:0] s2
+);
+    case (bpw_bits)
+        8 : begin s1 = 12'h0EB; s2 = 12'h090; end
+        9 : begin s1 = 12'h1E6; s2 = 12'h140; end
+        10: begin s1 = 12'h3B7; s2 = 12'h220; end
+        12: begin s1 = 12'hFAF; s2 = 12'h320; end
+        default: `uvm_fatal("NRZ_CFG", $sformatf("Unsupported NRZ_BPW=%0d", bpw_bits))
+    endcase
+endfunction
 endclass
 `endif

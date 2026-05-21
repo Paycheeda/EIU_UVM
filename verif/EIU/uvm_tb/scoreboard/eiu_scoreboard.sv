@@ -139,6 +139,50 @@ class eiu_scoreboard extends uvm_scoreboard;
         end
     endtask
 
+    function void pack_nrz_word(bit [11:0] word, bit [1:0] bpw, bit zero_endian, ref bit [7:0] exp_q[$]);
+        case (bpw)
+            2'd0: begin // 8 BITS
+                exp_q.push_back(word[7:0]);
+            end
+            2'd1: begin // 9 BITS
+                if (!zero_endian) begin
+                    exp_q.push_back({7'd0, word[8]});
+                    exp_q.push_back(word[7:0]);
+                end else begin
+                    exp_q.push_back(word[8:1]);
+                    exp_q.push_back({word[0], 7'd0});
+                end
+            end
+            2'd2: begin // 10 BITS
+                if (!zero_endian) begin
+                    exp_q.push_back({6'd0, word[9:8]});
+                    exp_q.push_back(word[7:0]);
+                end else begin
+                    exp_q.push_back(word[9:2]);
+                    exp_q.push_back({word[1:0], 6'd0});
+                end
+            end
+            2'd3: begin // 12 BITS
+                if (!zero_endian) begin
+                    exp_q.push_back({4'd0, word[11:8]});
+                    exp_q.push_back(word[7:0]);
+                end else begin
+                    exp_q.push_back(word[11:4]);
+                    exp_q.push_back({word[3:0], 4'd0});
+                end
+            end
+        endcase
+    endfunction
+
+
+    task process_nrz_word();
+        pack_nrz_word(inj_item.sync_word1, inj_item.bpw, inj_item.zero_endian, exp_eth_nrz_q);
+        pack_nrz_word(inj_item.sync_word2, inj_item.bpw, inj_item.zero_endian, exp_eth_nrz_q);
+        foreach (inj_item.payload[i]) begin
+            pack_nrz_word(inj_item.payload[i], inj_item.bpw, inj_item.zero_endian, exp_eth_nrz_q);
+        end
+    endtask : process_nrz_word
+    
     task process_bkp_traffic();
         bkp_item item;
         bit is_send_cmd;
@@ -255,7 +299,11 @@ class eiu_scoreboard extends uvm_scoreboard;
         tx_uart inj_item; 
         forever begin
             uart_rx_fifo[id].get(inj_item); 
-            exp_uart_rx_q[id].push_back(inj_item.data_in[8:0]); 
+            exp_uart_rx_q[id].push_back(inj_item.data_in[8:0]); pack_nrz_word(inj_item.sync_word1, inj_item.bpw, inj_item.zero_endian, exp_eth_nrz_q);
+pack_nrz_word(inj_item.sync_word2, inj_item.bpw, inj_item.zero_endian, exp_eth_nrz_q);
+foreach (inj_item.payload[i]) begin
+    pack_nrz_word(inj_item.payload[i], inj_item.bpw, inj_item.zero_endian, exp_eth_nrz_q);
+end
             uart_rx_inj_cnt[id]++;
             print_counts(id, "UART");
         end
