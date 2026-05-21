@@ -46,7 +46,9 @@ class nrz_driver extends uvm_driver #(nrz_item);
         end
     endtask
 
-    // FIXED: Properly handles zero_endian for MSB vs LSB first shifting
+    // FIXED: The RTL shifts left continuously: {word_in_buff[10:0], data_in_nrz}
+    // This means the FIRST bit sent mathematically becomes the MSB.
+    // The driver MUST always transmit MSB -> LSB sequentially!
     task send_word(bit [11:0] word, bit [1:0] bpw, bit zero_endian);
         int num_bits;
         
@@ -60,11 +62,7 @@ class nrz_driver extends uvm_driver #(nrz_item);
 
         for (int i = 0; i < num_bits; i++) begin
             @(posedge vif.clk_20mhz);
-            if (zero_endian) begin
-                vif.data_in_nrz <= word[i];               // LSB First
-            end else begin
-                vif.data_in_nrz <= word[num_bits - 1 - i]; // MSB First
-            end
+            vif.data_in_nrz <= word[num_bits - 1 - i]; // Always MSB First
         end
     endtask
 
