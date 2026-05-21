@@ -1,4 +1,0 @@
-  CREATE_STREAM @3000000 {NAME:vseq T:Transactions SCOPE:uvm_test_top.vsqr STREAM:6002}
-  CREATE_STREAM @3000000 {NAME:cfg_seq T:Transactions SCOPE:uvm_test_top.env.bkp_agt.sqr STREAM:6021}
-  CREATE_STREAM @3000000 {NAME:vseq T:Transactions SCOPE:uvm_test_top.vsqr STREAM:6002}
-  CREATE_STREAM @3000000 {NAME:cfg_seq T:Transactions SCOPE:uvm_test_top.env.bkp_agt.sqr STREAM:6013}

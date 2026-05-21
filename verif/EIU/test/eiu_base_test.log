@@ -1,6 +1,6 @@
 # vsim -c tb_top glbl -modelsimini /home/ahmed/modelsim_2020_libs/modelsim.ini -L unisims_ver -L unimacro_ver -L secureip -L xpm -sv_lib /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/lib/uvm_dpi -work /home/ahmed/uvm_training/verif/EIU/test/work "+NUM_PKTS=1" "+EN_UART1=0" "+EN_UART2=0" "+EN_UART3=0" "+UART_WIDTH=8" "+UART_PARITY_EN=1" "+UART_PARITY_OE=0" "+EN_ETH1=1" "+EN_ETH2=1" "+EN_ETH3=1" "+EN_ETH4=1" "+EN_NRZ=1" "+NRZ_BPW=12" "+NRZ_PLEN=50" "+NRZ_ENDIAN=0" "+UVM_TESTNAME=eiu_base_test" "+UVM_CONFIG_DB_TRACE" -classdebug -l eiu_base_test.log -do "run -a; q" 
-# Start time: 16:25:28 on May 21,2026
-# Loading /tmp/root@ahmedpc_dpi_26041/linuxaloem_gcc-7.4.0/export_tramp.so
+# Start time: 16:36:14 on May 21,2026
+# Loading /tmp/root@ahmedpc_dpi_26945/linuxaloem_gcc-7.4.0/export_tramp.so
 # ** Note: (vsim-8785) UVM-aware debugging capabilities will be disabled since no compiled "questa_uvm_pkg" can be found.
 # This also means that later if you turn on UVM-aware debugging your debug simulations may have
 # different random seeds from your non-debug simulations.
@@ -217,8 +217,8 @@
 # ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(234): [TFMPC] - Missing connection for port 'clk_eth3'.
 # ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(234): [TFMPC] - Missing connection for port 'clk_eth4'.
 # ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(234): [TFMPC] - Missing connection for port 'rst_n'.
-# Compiling /tmp/root@ahmedpc_dpi_26041/linuxaloem_gcc-7.4.0/exportwrapper.c
-# Loading /tmp/root@ahmedpc_dpi_26041/linuxaloem_gcc-7.4.0/vsim_auto_compile.so
+# Compiling /tmp/root@ahmedpc_dpi_26945/linuxaloem_gcc-7.4.0/exportwrapper.c
+# Loading /tmp/root@ahmedpc_dpi_26945/linuxaloem_gcc-7.4.0/vsim_auto_compile.so
 # Loading /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/lib/uvm_dpi.so
 # ** Warning: Design size of 82906 statements exceeds ModelSim-Intel FPGA Starter Edition recommended capacity.
 # Expect performance to be adversely affected.
@@ -1301,22 +1301,19 @@
 # UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(19) @ 0: uvm_test_top.env.eth_rx_agts[2].drv [RX_DRV] Driver starting... Waiting for reset.
 # UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(19) @ 0: uvm_test_top.env.eth_rx_agts[1].drv [RX_DRV] Driver starting... Waiting for reset.
 # UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(19) @ 0: uvm_test_top.env.eth_rx_agts[0].drv [RX_DRV] Driver starting... Waiting for reset.
-# UVM_INFO /home/ahmed/uvm_training/verif/EIU/test/eiu_base_test.sv(167) @ 3000000: uvm_test_top [TEST] === BOOTING EIU_TOP SYSTEM TEST ===
-# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(133) @ 3000000: uvm_test_top.vsqr@@vseq [VSEQ] === STAGE 1: HARDWARE CONFIGURATION ===
-# UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_sequence.sv(53) @ 3000000: uvm_test_top.env.bkp_agt.sqr@@cfg_seq [BKP_SEQ] >>> Starting FULL Hardware Initialization Sequence...
-# DRC Error : Reset is unsuccessful at time              5000000.  RST must be held high for at least five RDCLK clock cycles, and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
-# DRC Error : Reset is unsuccessful at time              5000000.  RST must be held high for at least five RDCLK clock cycles, and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
-# DRC Error : Reset is unsuccessful at time              5000000.  RST must be held high for at least five RDCLK clock cycles, and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
-# DRC Error : Reset is unsuccessful at time              5000000.  RST must be held high for at least five RDCLK clock cycles, and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
-# DRC Error : Reset is unsuccessful at time              5000000.  RST must be held high for at least five RDCLK clock cycles, and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
-# DRC Error : Reset is unsuccessful at time              5000000.  RST must be held high for at least five RDCLK clock cycles, and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
-# DRC Error : Reset is unsuccessful at time              5000000.  RST must be held high for at least five RDCLK clock cycles, and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
-# DRC Error : Reset is unsuccessful at time              5000000.  RST must be held high for at least five RDCLK clock cycles, and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(22) @ 5000000: uvm_test_top.env.eth_rx_agts[0].drv [RX_DRV] Reset cleared! Entering main loop.
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(22) @ 5000000: uvm_test_top.env.eth_rx_agts[1].drv [RX_DRV] Reset cleared! Entering main loop.
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(22) @ 5000000: uvm_test_top.env.eth_rx_agts[2].drv [RX_DRV] Reset cleared! Entering main loop.
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(22) @ 5000000: uvm_test_top.env.eth_rx_agts[3].drv [RX_DRV] Reset cleared! Entering main loop.
+# DRC Error : Reset is unsuccessful at time              2000000.  RST must be held high for at least five RDCLK clock cycles, and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
+# DRC Error : Reset is unsuccessful at time              2000000.  RST must be held high for at least five RDCLK clock cycles, and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
+# DRC Error : Reset is unsuccessful at time              2000000.  RST must be held high for at least five RDCLK clock cycles, and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
+# DRC Error : Reset is unsuccessful at time              2000000.  RST must be held high for at least five RDCLK clock cycles, and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
+# DRC Error : Reset is unsuccessful at time              2000000.  RST must be held high for at least five RDCLK clock cycles, and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
+# DRC Error : Reset is unsuccessful at time              2000000.  RST must be held high for at least five RDCLK clock cycles, and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
+# DRC Error : Reset is unsuccessful at time              2000000.  RST must be held high for at least five RDCLK clock cycles, and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
+# DRC Error : Reset is unsuccessful at time              2000000.  RST must be held high for at least five RDCLK clock cycles, and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
+# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(22) @ 2000000: uvm_test_top.env.eth_rx_agts[0].drv [RX_DRV] Reset cleared! Entering main loop.
+# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(22) @ 2000000: uvm_test_top.env.eth_rx_agts[1].drv [RX_DRV] Reset cleared! Entering main loop.
+# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(22) @ 2000000: uvm_test_top.env.eth_rx_agts[2].drv [RX_DRV] Reset cleared! Entering main loop.
+# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(22) @ 2000000: uvm_test_top.env.eth_rx_agts[3].drv [RX_DRV] Reset cleared! Entering main loop.
 # ** Note: $finish    : /media/ahmed/Transcend/ahmed_avantlabs/2025.1.1/data/verilog/src/unisims/FIFO18E1.v(1183)
-#    Time: 500001 ps  Iteration: 0  Region: /tb_top/DUT/u_eth4/GEN_ETH_RX/u_eth_mac_rx/u_eth_rx_metadata/metadata_fifo/FIFO_DUALCLOCK_MACRO_inst/genblk5/fifo_18_bl_1/fifo_18_bl_1/INT_FIFO/genblk1
-# End time: 16:25:32 on May 21,2026, Elapsed time: 0:00:04
+#    Time: 200001 ps  Iteration: 0  Region: /tb_top/DUT/u_eth4/GEN_ETH_RX/u_eth_mac_rx/u_eth_rx_metadata/metadata_fifo/FIFO_DUALCLOCK_MACRO_inst/genblk5/fifo_18_bl_1/fifo_18_bl_1/INT_FIFO/genblk1
+# End time: 16:36:17 on May 21,2026, Elapsed time: 0:00:03
 # Errors: 0, Warnings: 87

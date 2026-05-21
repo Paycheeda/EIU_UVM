@@ -159,7 +159,7 @@ module tb_top;
         .tx_c_eth_nrz                 (tx_c_eth[4]),
 
         // Backplane CPU Interface
-        .rst_n              (bkp_if.rst_n),
+        .rst_n                  (rst_n),
         .bkp_config_wr_pulse    (bkp_if.bkp_config_wr_pulse),
         .word_start_strobe_pulse(bkp_if.word_start_strobe),
         .bkp_address            (bkp_if.bkp_address),
