@@ -1,4 +1,3 @@
-
 module eth_rx_fifo_IF(
 
 			input clk,
@@ -229,7 +228,5 @@ begin
 		endcase
 	end
 end
-
-
 
 endmodule

@@ -17,8 +17,6 @@ reg tx_en_reg;
 wire tx_er;
 assign tx_er = 1'b0;
 
-
-
 always @(posedge clk or negedge rst_n)
 begin
     if (!rst_n)

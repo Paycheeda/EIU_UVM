@@ -130,23 +130,33 @@ class eiu_scoreboard extends uvm_scoreboard;
     // ----------------------------------------------------
     // [NEW] NRZ Bit-Packing Helper Function
     // ----------------------------------------------------
-    function void pack_nrz_word(bit [11:0] word, bit [1:0] bpw, bit zero_endian, ref bit [7:0] q[$]);
-        byte unsigned calc_byte;
-        
-        // Exact replica of kernel_nrz.sv Truncation
+    function int pack_nrz_word(bit [11:0] word, bit [1:0] bpw, bit zero_endian, ref bit [7:0] q[$]);
+        // Exact replica of kernel_nrz.sv payload/header FIFO packing.
+        // 8-bit mode emits one byte; 9/10/12-bit modes emit two bytes.
         case (bpw)
-            2'b00: calc_byte = word[7:0];  // 8 bits
-            2'b01: calc_byte = word[8:1];  // 9 bits
-            2'b10: calc_byte = word[9:2];  // 10 bits
-            2'b11: calc_byte = word[11:4]; // 12 bits
+            2'b00: begin
+                q.push_back(word[7:0]);
+                return 1;
+            end
+            2'b01: begin
+                q.push_back((!zero_endian) ? {7'd0, word[8]}   : word[8:1]);
+                q.push_back((!zero_endian) ? word[7:0]          : {word[0], 7'd0});
+                return 2;
+            end
+            2'b10: begin
+                q.push_back((!zero_endian) ? {6'd0, word[9:8]} : word[9:2]);
+                q.push_back((!zero_endian) ? word[7:0]          : {word[1:0], 6'd0});
+                return 2;
+            end
+            2'b11: begin
+                q.push_back((!zero_endian) ? {4'd0, word[11:8]} : word[11:4]);
+                q.push_back((!zero_endian) ? word[7:0]           : {word[3:0], 4'd0});
+                return 2;
+            end
+            default: begin
+                return 0;
+            end
         endcase
-        
-        // Exact replica of kernel_nrz.sv Endian Swap
-        if (zero_endian == 1'b1) begin
-            calc_byte = {calc_byte[3:0], 4'h0}; 
-        end
-        
-        q.push_back(calc_byte);
     endfunction
 
     task run_phase(uvm_phase phase);
@@ -174,16 +184,12 @@ class eiu_scoreboard extends uvm_scoreboard;
                 inj_item = golden_nrz_q.pop_front();
                 
                 // Pack Sync Words first, just like the Hardware!
-                pack_nrz_word(inj_item.sync_word1, inj_item.bpw, inj_item.zero_endian, exp_eth_nrz_q);
-                nrz_inj_cnt++;
-                
-                pack_nrz_word(inj_item.sync_word2, inj_item.bpw, inj_item.zero_endian, exp_eth_nrz_q);
-                nrz_inj_cnt++;
+                nrz_inj_cnt += pack_nrz_word(inj_item.sync_word1, inj_item.bpw, inj_item.zero_endian, exp_eth_nrz_q);
+                nrz_inj_cnt += pack_nrz_word(inj_item.sync_word2, inj_item.bpw, inj_item.zero_endian, exp_eth_nrz_q);
                 
                 // Pack Payload Words
                 foreach(inj_item.payload[i]) begin
-                    pack_nrz_word(inj_item.payload[i], inj_item.bpw, inj_item.zero_endian, exp_eth_nrz_q);
-                    nrz_inj_cnt++;
+                    nrz_inj_cnt += pack_nrz_word(inj_item.payload[i], inj_item.bpw, inj_item.zero_endian, exp_eth_nrz_q);
                 end
                 
                 print_counts(0, "NRZ");

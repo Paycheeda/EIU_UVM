@@ -29,7 +29,7 @@ begin
 		data_width_reg <= 4'd8;
 		parity_odd_even_reg <= 0;
 		parity_en_reg <= 0;
-		clock_delay_param <= 13'd384;
+		clock_delay_param <= 13'd480;
 	end
 	else
 	begin
@@ -39,21 +39,19 @@ begin
 			parity_odd_even_reg <= parity_odd_even;
 			data_width_reg <= data_width;
 			case(baudrate)
-				32'd9_600: 		clock_delay_param <= 13'd4608;
-				32'd19_200: 	clock_delay_param <= 13'd2304;
-				32'd28_800: 	clock_delay_param <= 13'd1536;
-				32'd38_400: 	clock_delay_param <= 13'd1152;
-				32'd57_600: 	clock_delay_param <= 13'd768;
-				32'd76_800: 	clock_delay_param <= 13'd576;
-				32'd115_200: 	clock_delay_param <= 13'd384;
-				32'd230_400: 	clock_delay_param <= 13'd192;
-				32'd460_800: 	clock_delay_param <= 13'd96;
-				32'd921_600: 	clock_delay_param <= 13'd48;
-				32'd1_843_200: 	clock_delay_param <= 13'd24;
-				32'd3_686_400: 	clock_delay_param <= 13'd12;
-				32'd7_372_800: 	clock_delay_param <= 13'd6;
-				32'd14_745_600:	clock_delay_param <= 13'd3;
-				default: 		clock_delay_param <= 13'd384;
+				32'd9_600: 		clock_delay_param <= 13'd5760;
+				32'd19_200: 	clock_delay_param <= 13'd2880;
+				32'd28_800: 	clock_delay_param <= 13'd1920;
+				32'd38_400: 	clock_delay_param <= 13'd1440;
+				32'd57_600: 	clock_delay_param <= 13'd960;
+				32'd76_800: 	clock_delay_param <= 13'd720;
+				32'd115_200: 	clock_delay_param <= 13'd480;
+				32'd230_400: 	clock_delay_param <= 13'd240;
+				32'd460_800: 	clock_delay_param <= 13'd120;
+				32'd921_600: 	clock_delay_param <= 13'd60;
+				32'd1_843_200: 	clock_delay_param <= 13'd30;
+				32'd3_686_400: 	clock_delay_param <= 13'd15;
+				default: 		clock_delay_param <= 13'd480;
 			endcase					
 		end
 	end

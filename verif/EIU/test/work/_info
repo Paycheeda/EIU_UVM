@@ -11,7 +11,7 @@ cModel Technology
 Z0 d/home/ahmed/uvm_training/verif/EIU/test
 Ybkp_intf
 Z1 DXx6 sv_std 3 std 0 22 VYECXdT12H8WgbUP_5Y6:3
-Z2 !s110 1779344438
+Z2 !s110 1779359215
 !i10b 1
 !s100 AZg45Q=69QZb8PW`_`<ko3
 Z3 !s11b Dg1SIo80bB@j0V0VzS_@n1
@@ -22,13 +22,13 @@ R0
 w1778431251
 8/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/bkp_intf.sv
 F/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/bkp_intf.sv
-!i122 296
+!i122 379
 Z5 L0 4 0
 Z6 OV;L;2020.1;71
 r1
 !s85 0
 31
-Z7 !s108 1779344438.000000
+Z7 !s108 1779359215.000000
 Z8 !s107 /home/ahmed/uvm_training/verif/kernel/uvm_tb/env/kernel_env.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/scoreboard/nrz_scoreboard.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/scoreboard/krd_scoreboard.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/scoreboard/kst_scoreboard.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/scoreboard/kwr_scoreboard.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/scoreboard/scoreboard.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/agent/nrz_agent.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/agent/nrz_monitor.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/agent/nrz_driver.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/agent/krd_agent.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/agent/krd_monitor.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/agent/krd_driver.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/agent/kst_agent.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/agent/kst_monitor.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/agent/kst_driver.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/agent/kwr_agent.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/agent/kwr_monitor.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/agent/out_agent.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/agent/out_monitor.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/agent/bkp_agent.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/agent/bkp_driver.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/agent/bkp_monitor.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/nrz_sequence.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_smart_seq.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_read_seq.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/krd_sequence.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/kwr_sequence.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_sequence.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence_item/nrz_out_item.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence_item/nrz_item.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence_item/krd_item.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence_item/kst_item.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence_item/kwr_item.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence_item/out_item.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence_item/bkp_item.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/config/kernel_config.sv|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_deprecated_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_reg_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_callback_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_sequence_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_tlm_imps.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_tlm_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_printer_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_object_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_phase_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_message_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_global_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_version_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/uvm_macros.svh|/home/ahmed/uvm_training/verif/kernel/uvm_tb/package/kernel_pkg.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/out_intf.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/nrz_intf.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/kwr_intf.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/kst_intf.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/krd_intf.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/bkp_intf.sv|/home/ahmed/uvm_training/design/kernel/kernel.sv|/home/ahmed/uvm_training/design/kernel/kernel_nrz.sv|/home/ahmed/uvm_training/design/kernel/kernel_start_tx.sv|/home/ahmed/uvm_training/design/kernel/kernel_read.sv|/home/ahmed/uvm_training/design/kernel/kernel_write.sv|/home/ahmed/uvm_training/design/kernel/kernel_config.sv|
 Z9 !s90 -modelsimini|/home/ahmed/modelsim_2020_libs/modelsim.ini|-sv|-mfcu|-work|/home/ahmed/uvm_training/verif/EIU/test/work|+define+VSIM|-timescale=1ns/100fs|+incdir+/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src|-suppress|2388|+incdir+/home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence_item|+incdir+/home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence|+incdir+/home/ahmed/uvm_training/verif/kernel/uvm_tb/config|+incdir+/home/ahmed/uvm_training/verif/kernel/uvm_tb/agent|+incdir+/home/ahmed/uvm_training/verif/kernel/uvm_tb/scoreboard|+incdir+/home/ahmed/uvm_training/verif/kernel/uvm_tb/env|/home/ahmed/uvm_training/design/kernel/kernel_config.sv|/home/ahmed/uvm_training/design/kernel/kernel_write.sv|/home/ahmed/uvm_training/design/kernel/kernel_read.sv|/home/ahmed/uvm_training/design/kernel/kernel_start_tx.sv|/home/ahmed/uvm_training/design/kernel/kernel_nrz.sv|/home/ahmed/uvm_training/design/kernel/kernel.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/bkp_intf.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/krd_intf.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/kst_intf.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/kwr_intf.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/nrz_intf.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/out_intf.sv|/home/ahmed/uvm_training/verif/kernel/uvm_tb/package/kernel_pkg.sv|
 !i113 1
@@ -37,7 +37,7 @@ Z11 !s92 -suppress 2388 -sv -mfcu -work /home/ahmed/uvm_training/verif/EIU/test/
 Z12 tCvgOpt 0
 vcdc_bit_sync
 R1
-Z13 !s110 1779344437
+Z13 !s110 1779359213
 !i10b 1
 !s100 C>JIkzYge`3o][kanV@_o0
 R3
@@ -48,13 +48,13 @@ R0
 w1778320266
 8/home/ahmed/uvm_training/design/kernel/cdc_bit_sync.sv
 F/home/ahmed/uvm_training/design/kernel/cdc_bit_sync.sv
-!i122 293
+!i122 376
 L0 1 30
 R6
 r1
 !s85 0
 31
-Z14 !s108 1779344436.000000
+Z14 !s108 1779359212.000000
 Z15 !s107 /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/sequences/uvm_reg_mem_hdl_paths_seq.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/sequences/uvm_reg_mem_built_in_seq.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/sequences/uvm_reg_mem_shared_access_seq.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/sequences/uvm_reg_access_seq.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/sequences/uvm_mem_access_seq.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/sequences/uvm_mem_walk_seq.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/sequences/uvm_reg_bit_bash_seq.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/sequences/uvm_reg_hw_reset_seq.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/uvm_reg_block.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/uvm_reg_map.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/uvm_mem.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/uvm_vreg.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/uvm_mem_mam.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/uvm_reg_file.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/uvm_reg_fifo.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/uvm_reg_indirect.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/uvm_reg.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/uvm_vreg_field.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/uvm_reg_field.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/uvm_reg_backdoor.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/uvm_reg_cbs.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/uvm_reg_sequence.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/uvm_reg_predictor.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/uvm_reg_adapter.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/uvm_reg_item.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/uvm_reg_model.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm2/uvm_tlm2_sockets.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm2/uvm_tlm2_sockets_base.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm2/uvm_tlm2_exports.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm2/uvm_tlm2_ports.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm2/uvm_tlm2_imps.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm2/uvm_tlm2_ifs.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm2/uvm_tlm2_generic_payload.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm2/uvm_tlm2_time.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm2/uvm_tlm2_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm2/uvm_tlm2.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/seq/uvm_sequence_builtin.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/seq/uvm_sequence_library.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/seq/uvm_sequence.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/seq/uvm_sequence_base.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/seq/uvm_push_sequencer.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/seq/uvm_sequencer.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/seq/uvm_sequencer_param_base.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/seq/uvm_sequencer_analysis_fifo.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/seq/uvm_sequencer_base.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/seq/uvm_sequence_item.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/seq/uvm_seq.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/comps/uvm_test.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/comps/uvm_env.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/comps/uvm_agent.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/comps/uvm_scoreboard.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/comps/uvm_push_driver.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/comps/uvm_driver.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/comps/uvm_monitor.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/comps/uvm_subscriber.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/comps/uvm_random_stimulus.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/comps/uvm_algorithmic_comparator.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/comps/uvm_in_order_comparator.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/comps/uvm_policies.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/comps/uvm_pair.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/comps/uvm_comps.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_sqr_connections.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_tlm_req_rsp.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_tlm_fifos.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_tlm_fifo_base.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_analysis_port.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_exports.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_ports.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_imps.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_port_base.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_sqr_ifs.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_tlm_ifs.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_tlm.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/dap/uvm_set_before_get_dap.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/dap/uvm_get_to_lock_dap.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/dap/uvm_simple_lock_dap.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/dap/uvm_set_get_dap_base.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/dap/uvm_dap.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_traversal.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_cmdline_processor.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_globals.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_heartbeat.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_objection.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_root.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_component.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_runtime_phases.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_common_phases.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_task_phase.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_topdown_phase.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_bottomup_phase.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_domain.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_phase.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_transaction.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_report_object.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_report_handler.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_report_server.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_report_catcher.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_report_message.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_callback.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_barrier.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_event.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_event_callback.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_recorder.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_tr_stream.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_tr_database.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_links.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_packer.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_comparer.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_printer.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_config_db.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_specializations.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_spell_chkr.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_registry.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_factory.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_queue.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_pool.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_object.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_misc.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_object_globals.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_version.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_coreservice.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_base.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/dpi/uvm_regex.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/dpi/uvm_svcmd_dpi.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/dpi/uvm_hdl.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/dpi/uvm_dpi.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_deprecated_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_reg_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_callback_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_sequence_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_tlm_imps.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_tlm_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_printer_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_object_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_phase_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_message_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_global_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_version_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/uvm_macros.svh|/home/ahmed/uvm_training/design/kernel/cdc_pulse_toggle_sync.sv|/home/ahmed/uvm_training/design/kernel/cdc_count_11bit_toggle.sv|/home/ahmed/uvm_training/design/kernel/cdc_bit_sync.sv|/home/ahmed/uvm_training/design/kernel/dual_port_FIFO.sv|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/uvm_pkg.sv|/home/ahmed/modelsim_2020_libs/glbl.v|
 Z16 !s90 -modelsimini|/home/ahmed/modelsim_2020_libs/modelsim.ini|-sv|-mfcu|-work|/home/ahmed/uvm_training/verif/EIU/test/work|+define+VSIM|-timescale=1ns/100fs|+incdir+/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src|-suppress|2388|/home/ahmed/modelsim_2020_libs/glbl.v|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/uvm_pkg.sv|/home/ahmed/uvm_training/design/kernel/dual_port_FIFO.sv|/home/ahmed/uvm_training/design/kernel/cdc_bit_sync.sv|/home/ahmed/uvm_training/design/kernel/cdc_count_11bit_toggle.sv|/home/ahmed/uvm_training/design/kernel/cdc_pulse_toggle_sync.sv|
 !i113 1
@@ -74,7 +74,7 @@ R0
 w1778320230
 8/home/ahmed/uvm_training/design/kernel/cdc_count_11bit_toggle.sv
 F/home/ahmed/uvm_training/design/kernel/cdc_count_11bit_toggle.sv
-!i122 293
+!i122 376
 L0 1 76
 R6
 r1
@@ -100,7 +100,7 @@ R0
 w1778320279
 8/home/ahmed/uvm_training/design/kernel/cdc_pulse_toggle_sync.sv
 F/home/ahmed/uvm_training/design/kernel/cdc_pulse_toggle_sync.sv
-!i122 293
+!i122 376
 L0 1 42
 R6
 r1
@@ -113,11 +113,123 @@ R16
 R10
 R17
 R12
-vcounter_8bit
+vclk_wiz_125_to_200
 Z18 !s105 counter_8bit_sv_unit
-Z19 DXx4 work 20 counter_8bit_sv_unit 0 22 gRjlfOzOdidbkQ4Ll2ICL3
+Z19 DXx4 work 20 counter_8bit_sv_unit 0 22 WJdmdA@:WLmJceK1LWf0P0
 R1
-Z20 !s110 1779344439
+R2
+!i10b 1
+!s100 k28SWkX8l9DAc38@RkXhP0
+R3
+IO<a]hFdQ^ZiL4I7U;TNjl3
+R4
+S1
+R0
+Z20 w1779353270
+Z21 8/home/ahmed/uvm_training/design/EIU/EIU_TOP.sv
+Z22 F/home/ahmed/uvm_training/design/EIU/EIU_TOP.sv
+!i122 380
+L0 1526 23
+R6
+r1
+!s85 0
+31
+R7
+!s107 /home/ahmed/uvm_training/verif/EIU/uvm_tb/env/eiu_env.sv|/home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv|/home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv|/home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vsqr.sv|/home/ahmed/uvm_training/verif/EIU/uvm_tb/config/eiu_config.sv|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_deprecated_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_reg_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_callback_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_sequence_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_tlm_imps.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_tlm_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_printer_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_object_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_phase_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_message_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_global_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_version_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/uvm_macros.svh|/home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv|/home/ahmed/uvm_training/verif/EIU/test/eiu_base_test.sv|/home/ahmed/uvm_training/verif/EIU/uvm_tb/pkg/eiu_pkg.sv|/home/ahmed/uvm_training/design/EIU/EIU_TOP.sv|/home/ahmed/uvm_training/design/EIU/counter_8bit.sv|
+Z23 !s90 -modelsimini|/home/ahmed/modelsim_2020_libs/modelsim.ini|-sv|-mfcu|-work|/home/ahmed/uvm_training/verif/EIU/test/work|+define+VSIM|-timescale=1ns/100fs|+incdir+/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src|-suppress|2388|+incdir+/home/ahmed/uvm_training/verif/EIU/uvm_tb/config|+incdir+/home/ahmed/uvm_training/verif/EIU/uvm_tb/env|+incdir+/home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard|+incdir+/home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence|/home/ahmed/uvm_training/design/EIU/counter_8bit.sv|/home/ahmed/uvm_training/design/EIU/EIU_TOP.sv|/home/ahmed/uvm_training/verif/EIU/uvm_tb/pkg/eiu_pkg.sv|/home/ahmed/uvm_training/verif/EIU/test/eiu_base_test.sv|/home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv|
+!i113 1
+R10
+Z24 !s92 -suppress 2388 -sv -mfcu -work /home/ahmed/uvm_training/verif/EIU/test/work +define+VSIM -timescale=1ns/100fs +incdir+/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src +incdir+/home/ahmed/uvm_training/verif/EIU/uvm_tb/config +incdir+/home/ahmed/uvm_training/verif/EIU/uvm_tb/env +incdir+/home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard +incdir+/home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence
+R12
+vclk_wiz_125_to_200_clk_wiz
+R18
+R19
+R1
+R2
+!i10b 1
+!s100 XVhE:jD;gbX]dDK2AUcd?1
+R3
+I34>G[keE[OXL?onaE7CEM2
+R4
+S1
+R0
+R20
+R21
+R22
+!i122 380
+L0 1614 135
+R6
+r1
+!s85 0
+31
+R7
+Z25 !s107 /home/ahmed/uvm_training/verif/EIU/uvm_tb/env/eiu_env.sv|/home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv|/home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv|/home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vsqr.sv|/home/ahmed/uvm_training/verif/EIU/uvm_tb/config/eiu_config.sv|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_deprecated_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_reg_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_callback_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_sequence_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_tlm_imps.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_tlm_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_printer_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_object_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_phase_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_message_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_global_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_version_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/uvm_macros.svh|/home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv|/home/ahmed/uvm_training/verif/EIU/test/eiu_base_test.sv|/home/ahmed/uvm_training/verif/EIU/uvm_tb/pkg/eiu_pkg.sv|/home/ahmed/uvm_training/design/EIU/EIU_TOP.sv|/home/ahmed/uvm_training/design/EIU/counter_8bit.sv|
+R23
+!i113 1
+R10
+R24
+R12
+vclk_wiz_rgmii_rx_shift
+R18
+R19
+R1
+Z26 !s110 1779359216
+!i10b 1
+!s100 4T?7m24@R4@5X1P^;>82b1
+R3
+Idm_AS:o>Ajj9D:i]SKUZm2
+R4
+S1
+R0
+R20
+R21
+R22
+!i122 380
+L0 1816 23
+R6
+r1
+!s85 0
+31
+R7
+R25
+R23
+!i113 1
+R10
+R24
+R12
+vclk_wiz_rgmii_rx_shift_clk_wiz
+R18
+R19
+R1
+R26
+!i10b 1
+!s100 QahokN0RAKD79Y8XPeB`U2
+R3
+IBl`HX1HRTJC:M`0<k53<:1
+R4
+S1
+R0
+R20
+R21
+R22
+!i122 380
+L0 1904 135
+R6
+r1
+!s85 0
+31
+R7
+R25
+R23
+!i113 1
+R10
+R24
+R12
+vcounter_8bit
+R18
+R19
+R1
+R2
 !i10b 1
 !s100 aQTe^UIS<KMMnDoB@D>G;2
 R3
@@ -126,53 +238,53 @@ R4
 S1
 R0
 w1778504090
-Z21 8/home/ahmed/uvm_training/design/EIU/counter_8bit.sv
-Z22 F/home/ahmed/uvm_training/design/EIU/counter_8bit.sv
-!i122 297
+Z27 8/home/ahmed/uvm_training/design/EIU/counter_8bit.sv
+Z28 F/home/ahmed/uvm_training/design/EIU/counter_8bit.sv
+!i122 380
 L0 1 35
 R6
 r1
 !s85 0
 31
-Z23 !s108 1779344439.000000
-!s107 /home/ahmed/uvm_training/verif/EIU/uvm_tb/env/eiu_env.sv|/home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv|/home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv|/home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vsqr.sv|/home/ahmed/uvm_training/verif/EIU/uvm_tb/config/eiu_config.sv|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_deprecated_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_reg_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_callback_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_sequence_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_tlm_imps.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_tlm_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_printer_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_object_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_phase_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_message_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_global_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_version_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/uvm_macros.svh|/home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv|/home/ahmed/uvm_training/verif/EIU/test/eiu_base_test.sv|/home/ahmed/uvm_training/verif/EIU/uvm_tb/pkg/eiu_pkg.sv|/home/ahmed/uvm_training/design/EIU/EIU_TOP.sv|/home/ahmed/uvm_training/design/EIU/counter_8bit.sv|
-Z24 !s90 -modelsimini|/home/ahmed/modelsim_2020_libs/modelsim.ini|-sv|-mfcu|-work|/home/ahmed/uvm_training/verif/EIU/test/work|+define+VSIM|-timescale=1ns/100fs|+incdir+/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src|-suppress|2388|+incdir+/home/ahmed/uvm_training/verif/EIU/uvm_tb/config|+incdir+/home/ahmed/uvm_training/verif/EIU/uvm_tb/env|+incdir+/home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard|+incdir+/home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence|/home/ahmed/uvm_training/design/EIU/counter_8bit.sv|/home/ahmed/uvm_training/design/EIU/EIU_TOP.sv|/home/ahmed/uvm_training/verif/EIU/uvm_tb/pkg/eiu_pkg.sv|/home/ahmed/uvm_training/verif/EIU/test/eiu_base_test.sv|/home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv|
+R7
+R25
+R23
 !i113 1
 R10
-Z25 !s92 -suppress 2388 -sv -mfcu -work /home/ahmed/uvm_training/verif/EIU/test/work +define+VSIM -timescale=1ns/100fs +incdir+/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src +incdir+/home/ahmed/uvm_training/verif/EIU/uvm_tb/config +incdir+/home/ahmed/uvm_training/verif/EIU/uvm_tb/env +incdir+/home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard +incdir+/home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence
+R24
 R12
 Xcounter_8bit_sv_unit
-Z26 !s115 eth_tx_if
-Z27 !s115 eth_rx_if
-Z28 !s115 mac_rx_if
-Z29 !s115 uart_unified_intf
-Z30 !s115 nrz_intf
-Z31 !s115 bkp_intf
-Z32 !s115 fault_inject_if
+Z29 !s115 eth_tx_if
+Z30 !s115 eth_rx_if
+Z31 !s115 mac_rx_if
+Z32 !s115 uart_unified_intf
+Z33 !s115 nrz_intf
+Z34 !s115 bkp_intf
+Z35 !s115 fault_inject_if
 R1
-Z33 DXx4 work 7 uvm_pkg 0 22 Q7]^>LIhXR1aMCHfD`ef[2
-Z34 DXx4 work 10 kernel_pkg 0 22 V2lhm`1H`WS=[4JQcOhe63
-Z35 DXx4 work 8 uart_pkg 0 22 mZ6VaQ7XC`:efl>ZTe>XI1
-Z36 DXx4 work 7 eth_pkg 0 22 M7I0i3:;cFDn8;cJUoonz1
-Z37 DXx4 work 10 eth_rx_pkg 0 22 ?[QAP;135b@T>mkYaAVGV2
-Z38 DXx4 work 10 mac_rx_pkg 0 22 4DiWHKe>CJ[gAW<f=2M862
-Z39 DXx4 work 11 rx_fifo_pkg 0 22 RNmGI>O4AF[E<e@^b<c6R1
-Z40 DXx4 work 7 eiu_pkg 0 22 o[ZAG43C21BdgN875UOT52
-Z41 !s110 1779344440
-VgRjlfOzOdidbkQ4Ll2ICL3
+Z36 DXx4 work 7 uvm_pkg 0 22 Q7]^>LIhXR1aMCHfD`ef[2
+Z37 DXx4 work 10 kernel_pkg 0 22 8_dUX:@]:kT_?zA5Dz[Sl1
+Z38 DXx4 work 8 uart_pkg 0 22 mZ6VaQ7XC`:efl>ZTe>XI1
+Z39 DXx4 work 7 eth_pkg 0 22 M7I0i3:;cFDn8;cJUoonz1
+Z40 DXx4 work 10 eth_rx_pkg 0 22 ?[QAP;135b@T>mkYaAVGV2
+Z41 DXx4 work 10 mac_rx_pkg 0 22 4DiWHKe>CJ[gAW<f=2M862
+Z42 DXx4 work 11 rx_fifo_pkg 0 22 RNmGI>O4AF[E<e@^b<c6R1
+Z43 DXx4 work 7 eiu_pkg 0 22 R>Q0ICHT9nIgM16E<gdT=2
+R26
+VWJdmdA@:WLmJceK1LWf0P0
 r1
 !s85 0
 !i10b 1
-!s100 emRZ5NIH8Pi8GC^>HfPYJ2
-IgRjlfOzOdidbkQ4Ll2ICL3
+!s100 EJbGE><7=dZTA^P8fMH4N2
+IWJdmdA@:WLmJceK1LWf0P0
 !i103 1
 S1
 R0
-Z42 w1779097798
+Z44 w1779359209
+R27
+R28
 R21
 R22
-Z43 8/home/ahmed/uvm_training/design/EIU/EIU_TOP.sv
-Z44 F/home/ahmed/uvm_training/design/EIU/EIU_TOP.sv
 Z45 8/home/ahmed/uvm_training/verif/EIU/uvm_tb/pkg/eiu_pkg.sv
 Z46 F/home/ahmed/uvm_training/verif/EIU/uvm_tb/pkg/eiu_pkg.sv
 8/home/ahmed/uvm_training/verif/EIU/test/eiu_base_test.sv
@@ -180,20 +292,20 @@ F/home/ahmed/uvm_training/verif/EIU/test/eiu_base_test.sv
 Z47 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/uvm_macros.svh
 Z48 8/home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv
 Z49 F/home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv
-!i122 297
+!i122 380
 L0 101 0
 R6
 31
+R7
+R25
 R23
-Z50 !s107 /home/ahmed/uvm_training/verif/EIU/uvm_tb/env/eiu_env.sv|/home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv|/home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv|/home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vsqr.sv|/home/ahmed/uvm_training/verif/EIU/uvm_tb/config/eiu_config.sv|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_deprecated_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_reg_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_callback_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_sequence_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_tlm_imps.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_tlm_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_printer_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_object_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_phase_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_message_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_global_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_version_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/uvm_macros.svh|/home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv|/home/ahmed/uvm_training/verif/EIU/test/eiu_base_test.sv|/home/ahmed/uvm_training/verif/EIU/uvm_tb/pkg/eiu_pkg.sv|/home/ahmed/uvm_training/design/EIU/EIU_TOP.sv|/home/ahmed/uvm_training/design/EIU/counter_8bit.sv|
-R24
 !i113 1
 R10
-R25
+R24
 R12
 vcrc32_data8
 R1
-R13
+Z50 !s110 1779359214
 !i10b 1
 !s100 F3=F66YmOh_C1BJO;z>C51
 R3
@@ -204,13 +316,13 @@ R0
 w1777361554
 8/home/ahmed/uvm_training/design/eth_1/crc32_data8.sv
 F/home/ahmed/uvm_training/design/eth_1/crc32_data8.sv
-!i122 295
+!i122 378
 L0 1 96
 R6
 r1
 !s85 0
 31
-Z51 !s108 1779344437.000000
+Z51 !s108 1779359214.000000
 Z52 !s107 /home/ahmed/uvm_training/verif/eth_1/uvm_tb/env/rx_fifo_env.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/scoreboard/rx_fifo_scoreboard.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/rx_fifo_out_agent.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/rx_fifo_out_monitor.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/rx_fifo_in_agent.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/rx_fifo_in_driver.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/rx_fifo_in_monitor.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/sequence/rx_fifo_master_seq.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/sequence_item/rx_fifo_out_seq_item.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/sequence_item/rx_fifo_in_seq_item.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/env/mac_rx_env.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/scoreboard/mac_rx_scoreboard.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/whitebox_mac_agent.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/whitebox_mac_monitor.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/cpu_mac_agent.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/cpu_mac_driver.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/cpu_mac_monitor.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/phy_mac_agent.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/phy_mac_driver.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/phy_mac_monitor.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/sequence/mac_rx_cpu_seqs.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/sequence/mac_rx_phy_seqs.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/sequence_item/mac_rx_cpu_seq_item.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/sequence_item/mac_rx_phy_seq_item.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/config/mac_rx_env_cfg.sv|/home/ahmed/uvm_training/verif/eth_1/test/new_test/eth_rx_base_test.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/env/eth_rx_env.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/scoreboard/eth_rx_scoreboard.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/fifo_out_agent.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/fifo_out_monitor.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/phy_rx_agent.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/phy_rx_monitor.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/sequence/eth_rx_test_seqs.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/sequence_item/fifo_out_seq_item.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/sequence_item/phy_rx_seq_item.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/config/eth_rx_env_cfg.sv|/home/ahmed/uvm_training/verif/eth_1/test/new_test/eth_loopback_base_test.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/env/eth_loopback_env.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/scoreboard/eth_loopback_scoreboard.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_app_agent.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_app_monitor.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_agent.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_driver.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/sequence/eth_tx_stress_seq.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/sequence/eth_tx_base_sequence.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/sequence_item/eth_rx_seq_item.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/sequence_item/eth_tx_seq_item.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/config/eth_loopback_env_cfg.sv|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_deprecated_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_reg_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_callback_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_sequence_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_tlm_imps.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_tlm_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_printer_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_object_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_phase_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_message_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_global_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_version_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/uvm_macros.svh|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/mac_rx_if.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/fault_inject_if.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_tx_if.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_rx_if.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_rx_fifo_if.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_rx_app_if.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_if.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/package/rx_fifo_pkg.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/package/mac_rx_pkg.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/package/eth_rx_pkg.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/package/eth_pkg.sv|/home/ahmed/uvm_training/design/eth_1/eth.sv|/home/ahmed/uvm_training/design/eth_1/udp_packet_maker.sv|/home/ahmed/uvm_training/design/eth_1/ipv4_header_maker.sv|/home/ahmed/uvm_training/design/eth_1/eth_tx_frame_maker.sv|/home/ahmed/uvm_training/design/eth_1/eth_tx_IF.sv|/home/ahmed/uvm_training/design/eth_1/eth_rx_metadata.sv|/home/ahmed/uvm_training/design/eth_1/eth_rx_fifo_IF.sv|/home/ahmed/uvm_training/design/eth_1/eth_rx_IF.sv|/home/ahmed/uvm_training/design/eth_1/eth_mac_tx.sv|/home/ahmed/uvm_training/design/eth_1/eth_mac_rx.sv|/home/ahmed/uvm_training/design/eth_1/eth_header_maker.sv|/home/ahmed/uvm_training/design/eth_1/oddr_tx.sv|/home/ahmed/uvm_training/design/eth_1/iddr_rx.sv|/home/ahmed/uvm_training/design/eth_1/udp_checksum_calculator.sv|/home/ahmed/uvm_training/design/eth_1/crc32_data8.sv|
 Z53 !s90 -modelsimini|/home/ahmed/modelsim_2020_libs/modelsim.ini|-sv|-mfcu|-work|/home/ahmed/uvm_training/verif/EIU/test/work|+define+VSIM|-timescale=1ns/100fs|+incdir+/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src|-suppress|2388|+incdir+/home/ahmed/uvm_training/verif/eth_1/uvm_tb/sequence_item|+incdir+/home/ahmed/uvm_training/verif/eth_1/uvm_tb/sequence|+incdir+/home/ahmed/uvm_training/verif/eth_1/uvm_tb/config|+incdir+/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent|+incdir+/home/ahmed/uvm_training/verif/eth_1/uvm_tb/scoreboard|+incdir+/home/ahmed/uvm_training/verif/eth_1/uvm_tb/env|+incdir+/home/ahmed/uvm_training/verif/eth_1/test/new_test|/home/ahmed/uvm_training/design/eth_1/crc32_data8.sv|/home/ahmed/uvm_training/design/eth_1/udp_checksum_calculator.sv|/home/ahmed/uvm_training/design/eth_1/iddr_rx.sv|/home/ahmed/uvm_training/design/eth_1/oddr_tx.sv|/home/ahmed/uvm_training/design/eth_1/eth_header_maker.sv|/home/ahmed/uvm_training/design/eth_1/eth_mac_rx.sv|/home/ahmed/uvm_training/design/eth_1/eth_mac_tx.sv|/home/ahmed/uvm_training/design/eth_1/eth_rx_IF.sv|/home/ahmed/uvm_training/design/eth_1/eth_rx_fifo_IF.sv|/home/ahmed/uvm_training/design/eth_1/eth_rx_metadata.sv|/home/ahmed/uvm_training/design/eth_1/eth_tx_IF.sv|/home/ahmed/uvm_training/design/eth_1/eth_tx_frame_maker.sv|/home/ahmed/uvm_training/design/eth_1/ipv4_header_maker.sv|/home/ahmed/uvm_training/design/eth_1/udp_packet_maker.sv|/home/ahmed/uvm_training/design/eth_1/eth.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/package/eth_pkg.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/package/eth_rx_pkg.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/package/mac_rx_pkg.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/package/rx_fifo_pkg.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_if.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_rx_app_if.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_rx_fifo_if.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_rx_if.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_tx_if.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/fault_inject_if.sv|/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/mac_rx_if.sv|
 !i113 1
@@ -230,7 +342,7 @@ R0
 w1778504236
 8/home/ahmed/uvm_training/design/kernel/dual_port_FIFO.sv
 F/home/ahmed/uvm_training/design/kernel/dual_port_FIFO.sv
-!i122 293
+!i122 376
 L0 10 68
 R6
 r1
@@ -272,94 +384,94 @@ R54
 R12
 ndual_port_@f@i@f@o1
 Xeiu_pkg
-R26
-R27
-R28
 R29
 R30
 R31
-R1
+R32
 R33
 R34
-R35
+R1
 R36
 R37
 R38
 R39
+R40
 R41
+R42
+R26
 !i10b 1
-!s100 A4lz_JO@EBeb4K>^K]L2M2
+!s100 OZeagA>:gdbJzVJ3UdB101
 R3
-Io[ZAG43C21BdgN875UOT52
-Vo[ZAG43C21BdgN875UOT52
+IR>Q0ICHT9nIgM16E<gdT=2
+VR>Q0ICHT9nIgM16E<gdT=2
 S1
 R0
-w1779343316
+Z57 w1779347339
 R45
 R46
 R47
-Z57 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_version_defines.svh
-Z58 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_global_defines.svh
-Z59 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_message_defines.svh
-Z60 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_phase_defines.svh
-Z61 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_object_defines.svh
-Z62 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_printer_defines.svh
-Z63 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_tlm_defines.svh
-Z64 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_tlm_imps.svh
-Z65 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_sequence_defines.svh
-Z66 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_callback_defines.svh
-Z67 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_reg_defines.svh
-Z68 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_deprecated_defines.svh
+Z58 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_version_defines.svh
+Z59 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_global_defines.svh
+Z60 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_message_defines.svh
+Z61 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_phase_defines.svh
+Z62 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_object_defines.svh
+Z63 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_printer_defines.svh
+Z64 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_tlm_defines.svh
+Z65 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_tlm_imps.svh
+Z66 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_sequence_defines.svh
+Z67 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_callback_defines.svh
+Z68 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_reg_defines.svh
+Z69 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_deprecated_defines.svh
 F/home/ahmed/uvm_training/verif/EIU/uvm_tb/config/eiu_config.sv
 F/home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vsqr.sv
 F/home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv
 F/home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv
 F/home/ahmed/uvm_training/verif/EIU/uvm_tb/env/eiu_env.sv
-!i122 297
+!i122 380
 R5
 R6
 r1
 !s85 0
 31
+R7
+R25
 R23
-R50
-R24
 !i113 1
 R10
-R25
+R24
 R12
 vEIU_TOP
 R18
 R19
 R1
-R20
+R2
 !i10b 1
-!s100 aefi9]6eE_lC]fo^zH[AB2
+!s100 :4c<o@NNDz:Q2g]67dm981
 R3
-IFoKGlU0dD7iOA@:G_MVb33
+I5X[SkGeZboeG6eSGIJ8g92
 R4
 S1
 R0
-w1778503585
-R43
-R44
-!i122 297
-L0 3 1038
+R20
+R21
+R22
+!i122 380
+L0 1 1458
 R6
 r1
 !s85 0
 31
+R7
+R25
 R23
-R50
-R24
 !i113 1
 R10
-R25
+R24
 R12
 n@e@i@u_@t@o@p
 Yerror_inject_intf
 R1
-R13
+R50
 !i10b 1
 !s100 EYjObOGWFQDlX?XM77<jU0
 R3
@@ -370,34 +482,34 @@ R0
 w1777468250
 8/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/error_inject_intf.sv
 F/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/error_inject_intf.sv
-!i122 294
+!i122 377
 R5
 R6
 r1
 !s85 0
 31
-R51
-Z69 !s107 /home/ahmed/uvm_training/verif/uart_1/test/short_test/unified_base_test.sv|/home/ahmed/uvm_training/verif/uart_1/test/short_test/dynamic_duplex_test.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/env/unified_env.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/scoreboard/unified_scoreboard.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_agent.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_tx_agent.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/host_rx_agent.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/host_tx_agent.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_tx_monitor.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_monitor.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/host_rx_monitor.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/host_tx_monitor.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/host_tx_driver.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence/static_uart_sequence.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence/uart_main_sequence.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence/uart_tx_sequence.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence_item/rx_uart.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence_item/tx_uart.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/config/uart_config.sv|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_deprecated_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_reg_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_callback_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_sequence_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_tlm_imps.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_tlm_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_printer_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_object_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_phase_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_message_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_global_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_version_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/uvm_macros.svh|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/package/uart_pkg.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_unified_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_tx_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_rx_out_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_rx_in_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_out_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_config_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/serial_line_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/fifo_intf_uart.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/fifo_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/error_inject_intf.sv|/home/ahmed/uvm_training/design/uart_1/uart.sv|/home/ahmed/uvm_training/design/uart_1/uart_IF.sv|/home/ahmed/uvm_training/design/uart_1/uart_TX.sv|/home/ahmed/uvm_training/design/uart_1/uart_RX.sv|
-Z70 !s90 -modelsimini|/home/ahmed/modelsim_2020_libs/modelsim.ini|-sv|-mfcu|-work|/home/ahmed/uvm_training/verif/EIU/test/work|+define+VSIM|-timescale=1ns/100fs|+incdir+/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src|-suppress|2388|+define+UART_WIDTH=9|+incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence_item|+incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence|+incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/config|+incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent|+incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/scoreboard|+incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/env|+incdir+/home/ahmed/uvm_training/verif/uart_1/test/short_test|/home/ahmed/uvm_training/design/uart_1/uart_RX.sv|/home/ahmed/uvm_training/design/uart_1/uart_TX.sv|/home/ahmed/uvm_training/design/uart_1/uart_IF.sv|/home/ahmed/uvm_training/design/uart_1/uart.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/error_inject_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/fifo_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/fifo_intf_uart.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/serial_line_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_config_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_out_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_rx_in_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_rx_out_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_tx_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_unified_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/package/uart_pkg.sv|
+Z70 !s108 1779359213.000000
+Z71 !s107 /home/ahmed/uvm_training/verif/uart_1/test/short_test/unified_base_test.sv|/home/ahmed/uvm_training/verif/uart_1/test/short_test/dynamic_duplex_test.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/env/unified_env.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/scoreboard/unified_scoreboard.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_agent.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_tx_agent.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/host_rx_agent.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/host_tx_agent.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_tx_monitor.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_monitor.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/host_rx_monitor.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/host_tx_monitor.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/host_tx_driver.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence/static_uart_sequence.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence/uart_main_sequence.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence/uart_tx_sequence.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence_item/rx_uart.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence_item/tx_uart.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/config/uart_config.sv|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_deprecated_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_reg_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_callback_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_sequence_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_tlm_imps.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_tlm_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_printer_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_object_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_phase_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_message_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_global_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/macros/uvm_version_defines.svh|/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/uvm_macros.svh|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/package/uart_pkg.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_unified_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_tx_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_rx_out_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_rx_in_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_out_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_config_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/serial_line_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/fifo_intf_uart.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/fifo_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/error_inject_intf.sv|/home/ahmed/uvm_training/design/uart_1/uart.sv|/home/ahmed/uvm_training/design/uart_1/uart_IF.sv|/home/ahmed/uvm_training/design/uart_1/uart_TX.sv|/home/ahmed/uvm_training/design/uart_1/uart_RX.sv|
+Z72 !s90 -modelsimini|/home/ahmed/modelsim_2020_libs/modelsim.ini|-sv|-mfcu|-work|/home/ahmed/uvm_training/verif/EIU/test/work|+define+VSIM|-timescale=1ns/100fs|+incdir+/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src|-suppress|2388|+define+UART_WIDTH=9|+incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence_item|+incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence|+incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/config|+incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent|+incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/scoreboard|+incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/env|+incdir+/home/ahmed/uvm_training/verif/uart_1/test/short_test|/home/ahmed/uvm_training/design/uart_1/uart_RX.sv|/home/ahmed/uvm_training/design/uart_1/uart_TX.sv|/home/ahmed/uvm_training/design/uart_1/uart_IF.sv|/home/ahmed/uvm_training/design/uart_1/uart.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/error_inject_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/fifo_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/fifo_intf_uart.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/serial_line_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_config_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_out_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_rx_in_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_rx_out_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_tx_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_unified_intf.sv|/home/ahmed/uvm_training/verif/uart_1/uvm_tb/package/uart_pkg.sv|
 !i113 1
 R10
-Z71 !s92 -suppress 2388 -sv -mfcu -work /home/ahmed/uvm_training/verif/EIU/test/work +define+VSIM -timescale=1ns/100fs +incdir+/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src +define+UART_WIDTH=9 +incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence_item +incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence +incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/config +incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent +incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/scoreboard +incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/env +incdir+/home/ahmed/uvm_training/verif/uart_1/test/short_test
+Z73 !s92 -suppress 2388 -sv -mfcu -work /home/ahmed/uvm_training/verif/EIU/test/work +define+VSIM -timescale=1ns/100fs +incdir+/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src +define+UART_WIDTH=9 +incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence_item +incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence +incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/config +incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent +incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/scoreboard +incdir+/home/ahmed/uvm_training/verif/uart_1/uvm_tb/env +incdir+/home/ahmed/uvm_training/verif/uart_1/test/short_test
 R12
 veth
 R1
-R2
+R50
 !i10b 1
-!s100 L@9QhJGfVB95X8TXjg@aN3
+!s100 fczYCH[kLSz?AL4@lm_SY1
 R3
-IYCWZ4C59>S^`Mdk8C4ozE2
+In^meLJF7RaoA[j;f966EH3
 R4
 S1
 R0
-w1778051261
+w1779351657
 8/home/ahmed/uvm_training/design/eth_1/eth.sv
 F/home/ahmed/uvm_training/design/eth_1/eth.sv
-!i122 295
-L0 84 79
+!i122 378
+L0 1 127
 R6
 r1
 !s85 0
@@ -411,7 +523,7 @@ R54
 R12
 veth_header_maker
 R1
-R2
+R50
 !i10b 1
 !s100 KGlS4i2ST_EIaOhcmYmA43
 R3
@@ -422,7 +534,7 @@ R0
 w1777032340
 8/home/ahmed/uvm_training/design/eth_1/eth_header_maker.sv
 F/home/ahmed/uvm_training/design/eth_1/eth_header_maker.sv
-!i122 295
+!i122 378
 L0 1 236
 R6
 r1
@@ -448,7 +560,7 @@ R0
 w1777614178
 8/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_if.sv
 F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_if.sv
-!i122 295
+!i122 378
 R5
 R6
 r1
@@ -463,19 +575,19 @@ R54
 R12
 veth_mac_rx
 R1
-R2
+R50
 !i10b 1
-!s100 gSa8U:2Q36Wd6@ll1>j:f2
+!s100 :biz4naIZ@V57]Pa17l320
 R3
-I=^JDc?acij?GF5C=fnY?>2
+IQSd;USl9o1h]hNmCHY2Jd1
 R4
 S1
 R0
-w1779218323
+w1779349740
 8/home/ahmed/uvm_training/design/eth_1/eth_mac_rx.sv
 F/home/ahmed/uvm_training/design/eth_1/eth_mac_rx.sv
-!i122 295
-L0 2 142
+!i122 378
+L0 1 169
 R6
 r1
 !s85 0
@@ -489,7 +601,7 @@ R54
 R12
 veth_mac_tx
 R1
-R2
+R50
 !i10b 1
 !s100 EB^NIgN?Ml54@8VQVT]We1
 R3
@@ -497,10 +609,10 @@ IO=7CSK^?1GiB=RVR`Q9[c2
 R4
 S1
 R0
-w1779172703
+w1779348510
 8/home/ahmed/uvm_training/design/eth_1/eth_mac_tx.sv
 F/home/ahmed/uvm_training/design/eth_1/eth_mac_tx.sv
-!i122 295
+!i122 378
 L0 1 182
 R6
 r1
@@ -514,11 +626,11 @@ R10
 R54
 R12
 Xeth_pkg
-R32
+R35
 !s115 eth_rx_app_if
-R26
+R29
 R1
-R33
+R36
 R2
 !i10b 1
 !s100 YRM8T]PogmP:c71C:9NDk1
@@ -531,7 +643,6 @@ w1778945536
 8/home/ahmed/uvm_training/verif/eth_1/uvm_tb/package/eth_pkg.sv
 F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/package/eth_pkg.sv
 R47
-R57
 R58
 R59
 R60
@@ -543,6 +654,7 @@ R65
 R66
 R67
 R68
+R69
 F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/config/eth_loopback_env_cfg.sv
 F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/sequence_item/eth_tx_seq_item.sv
 F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/sequence_item/eth_rx_seq_item.sv
@@ -556,7 +668,7 @@ F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_app_agent.sv
 F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/scoreboard/eth_loopback_scoreboard.sv
 F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/env/eth_loopback_env.sv
 F/home/ahmed/uvm_training/verif/eth_1/test/new_test/eth_loopback_base_test.sv
-!i122 295
+!i122 378
 R5
 R6
 r1
@@ -582,7 +694,33 @@ R0
 w1777637082
 8/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_rx_app_if.sv
 F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_rx_app_if.sv
-!i122 295
+!i122 378
+R5
+R6
+r1
+!s85 0
+31
+R51
+R52
+R53
+!i113 1
+R10
+R54
+R12
+Yeth_rx_fifo_if
+R1
+R2
+!i10b 1
+!s100 6zkjJNiG^KLfb=TMfU1Qm1
+R3
+IoH9HjWfR`Va2oSWd:AAUG3
+R4
+S1
+R0
+w1777442998
+8/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_rx_fifo_if.sv
+F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_rx_fifo_if.sv
+!i122 378
 R5
 R6
 r1
@@ -597,19 +735,19 @@ R54
 R12
 veth_rx_fifo_IF
 R1
-R2
+R50
 !i10b 1
-!s100 :f]_Li9[1<11jNfc@6V063
+!s100 V1a_Lgi]SZZHK7hm;5bP`2
 R3
-Imm_Wm:9hVW5=JD85=L^Fl0
+I`koTT<L6]:fVCbT7EoS8]2
 R4
 S1
 R0
-w1779219256
+w1779349116
 8/home/ahmed/uvm_training/design/eth_1/eth_rx_fifo_IF.sv
 F/home/ahmed/uvm_training/design/eth_1/eth_rx_fifo_IF.sv
-!i122 295
-L0 2 234
+!i122 378
+L0 1 232
 R6
 r1
 !s85 0
@@ -622,20 +760,20 @@ R10
 R54
 R12
 neth_rx_fifo_@i@f
-Yeth_rx_fifo_if
+Yeth_rx_if
 R1
 R2
 !i10b 1
-!s100 6zkjJNiG^KLfb=TMfU1Qm1
+!s100 bSaCG0LQ@5bi?>7gmf8`>1
 R3
-IoH9HjWfR`Va2oSWd:AAUG3
+IQmj1TPW@XKZeMUO97l3gW1
 R4
 S1
 R0
-w1777442998
-8/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_rx_fifo_if.sv
-F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_rx_fifo_if.sv
-!i122 295
+w1777377073
+8/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_rx_if.sv
+F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_rx_if.sv
+!i122 378
 R5
 R6
 r1
@@ -650,19 +788,19 @@ R54
 R12
 veth_rx_IF
 R1
-R2
+R50
 !i10b 1
-!s100 UMEoVd1ZVJ7AbFF=EYQXh0
+!s100 ]gNPVhNJO<C3gg]aEP`bJ3
 R3
-IA:lc18ZVXNXA?2olH401?3
+IUbL8`Q69nBIUQ__:6MXSE2
 R4
 S1
 R0
-w1779219337
+w1779349068
 8/home/ahmed/uvm_training/design/eth_1/eth_rx_IF.sv
 F/home/ahmed/uvm_training/design/eth_1/eth_rx_IF.sv
-!i122 295
-L0 3 244
+!i122 378
+L0 1 379
 R6
 r1
 !s85 0
@@ -675,35 +813,9 @@ R10
 R54
 R12
 neth_rx_@i@f
-Yeth_rx_if
-R1
-R2
-!i10b 1
-!s100 bSaCG0LQ@5bi?>7gmf8`>1
-R3
-IQmj1TPW@XKZeMUO97l3gW1
-R4
-S1
-R0
-w1777377073
-8/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_rx_if.sv
-F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_rx_if.sv
-!i122 295
-R5
-R6
-r1
-!s85 0
-31
-R51
-R52
-R53
-!i113 1
-R10
-R54
-R12
 veth_rx_metadata
 R1
-R2
+R50
 !i10b 1
 !s100 4DC1N0=^F`:0b6a1oT>_d2
 R3
@@ -711,10 +823,10 @@ IQ>mD[oQ4<[S9j`Y=NcjZa3
 R4
 S1
 R0
-w1777548948
+w1779349047
 8/home/ahmed/uvm_training/design/eth_1/eth_rx_metadata.sv
 F/home/ahmed/uvm_training/design/eth_1/eth_rx_metadata.sv
-!i122 295
+!i122 378
 L0 1 64
 R6
 r1
@@ -728,9 +840,9 @@ R10
 R54
 R12
 Xeth_rx_pkg
-R27
+R30
 R1
-R33
+R36
 R2
 !i10b 1
 !s100 JzUa>H@YAAMKQV1ggIW0_3
@@ -755,7 +867,7 @@ F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/fifo_out_agent.sv
 F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/scoreboard/eth_rx_scoreboard.sv
 F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/env/eth_rx_env.sv
 F/home/ahmed/uvm_training/verif/eth_1/test/new_test/eth_rx_base_test.sv
-!i122 295
+!i122 378
 R5
 R6
 r1
@@ -770,7 +882,7 @@ R54
 R12
 veth_tx_frame_maker
 R1
-R2
+R50
 !i10b 1
 !s100 <hiS_V?]dG44m^0[AS^l`3
 R3
@@ -778,10 +890,10 @@ IPmB7QGa@49OG9g6]E<KV^1
 R4
 S1
 R0
-w1779172686
+w1779348491
 8/home/ahmed/uvm_training/design/eth_1/eth_tx_frame_maker.sv
 F/home/ahmed/uvm_training/design/eth_1/eth_tx_frame_maker.sv
-!i122 295
+!i122 378
 L0 1 459
 R6
 r1
@@ -794,33 +906,6 @@ R53
 R10
 R54
 R12
-veth_tx_IF
-R1
-R2
-!i10b 1
-!s100 QB6B2Mc21BjH69MAa^]`30
-R3
-IXN0dnd4Z<h_82@Q60IBbb2
-R4
-S1
-R0
-w1779219013
-8/home/ahmed/uvm_training/design/eth_1/eth_tx_IF.sv
-F/home/ahmed/uvm_training/design/eth_1/eth_tx_IF.sv
-!i122 295
-L0 1 141
-R6
-r1
-!s85 0
-31
-R51
-R52
-R53
-!i113 1
-R10
-R54
-R12
-neth_tx_@i@f
 Yeth_tx_if
 R1
 R2
@@ -834,7 +919,7 @@ R0
 w1778928735
 8/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_tx_if.sv
 F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/eth_tx_if.sv
-!i122 295
+!i122 378
 R5
 R6
 r1
@@ -847,10 +932,37 @@ R53
 R10
 R54
 R12
+veth_tx_IF
+R1
+R50
+!i10b 1
+!s100 7=0zmbnAd^9?bZ?]]k2=Q0
+R3
+IchzMcPB8a;gh84A?BTeZd2
+R4
+S1
+R0
+w1779348463
+8/home/ahmed/uvm_training/design/eth_1/eth_tx_IF.sv
+F/home/ahmed/uvm_training/design/eth_1/eth_tx_IF.sv
+!i122 378
+L0 1 139
+R6
+r1
+!s85 0
+31
+R51
+R52
+R53
+!i113 1
+R10
+R54
+R12
+neth_tx_@i@f
 Yfault_inject_if
 R1
-R33
 R36
+R39
 R2
 !i10b 1
 !s100 o52o:<FA=K^4c=zE3?5VA2
@@ -862,7 +974,7 @@ R0
 w1778501402
 8/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/fault_inject_if.sv
 F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/fault_inject_if.sv
-!i122 295
+!i122 378
 R5
 R6
 r1
@@ -877,7 +989,7 @@ R54
 R12
 Yfifo_intf
 R1
-R13
+R50
 !i10b 1
 !s100 zdH28e_9Qi]2lnLKG23e90
 R3
@@ -888,22 +1000,22 @@ R0
 w1777268747
 8/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/fifo_intf.sv
 F/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/fifo_intf.sv
-!i122 294
+!i122 377
 L0 24 0
 R6
 r1
 !s85 0
 31
-R51
-R69
 R70
+R71
+R72
 !i113 1
 R10
-R71
+R73
 R12
 Yfifo_intf_uart
 R1
-R13
+R50
 !i10b 1
 !s100 DFZ1TI35Lj`Akfd^OLO_f1
 R3
@@ -914,22 +1026,22 @@ R0
 w1777268766
 8/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/fifo_intf_uart.sv
 F/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/fifo_intf_uart.sv
-!i122 294
+!i122 377
 R5
 R6
 r1
 !s85 0
 31
-R51
-R69
 R70
+R71
+R72
 !i113 1
 R10
-R71
+R73
 R12
 vglbl
 R1
-!s110 1779344436
+!s110 1779359212
 !i10b 1
 !s100 X=c2KIlGGbG[9:JP<TgKD3
 R3
@@ -940,7 +1052,7 @@ R0
 w1776524113
 8/home/ahmed/modelsim_2020_libs/glbl.v
 F/home/ahmed/modelsim_2020_libs/glbl.v
-!i122 293
+!i122 376
 L0 6 78
 R6
 r1
@@ -955,19 +1067,19 @@ R17
 R12
 viddr_rx
 R1
-R13
+R50
 !i10b 1
-!s100 I0`X:[jP0Q2UlmJf?j:1;0
+!s100 ?DUzC=63E?10N4]MU8]i43
 R3
-ITz7c`0ng8oI9c?jhLGVV82
+In7`BlnePA1[;8mID=P5401
 R4
 S1
 R0
-w1779219289
+w1779349030
 8/home/ahmed/uvm_training/design/eth_1/iddr_rx.sv
 F/home/ahmed/uvm_training/design/eth_1/iddr_rx.sv
-!i122 295
-L0 1 73
+!i122 378
+L0 1 128
 R6
 r1
 !s85 0
@@ -981,7 +1093,7 @@ R54
 R12
 vipv4_header_maker
 R1
-R2
+R50
 !i10b 1
 !s100 2TPg`X2[edB[X?;g5FzDg2
 R3
@@ -992,8 +1104,8 @@ R0
 w1777100876
 8/home/ahmed/uvm_training/design/eth_1/ipv4_header_maker.sv
 F/home/ahmed/uvm_training/design/eth_1/ipv4_header_maker.sv
-!i122 295
-Z72 L0 1 229
+!i122 378
+Z74 L0 1 229
 R6
 r1
 !s85 0
@@ -1018,7 +1130,7 @@ R0
 w1778320052
 8/home/ahmed/uvm_training/design/kernel/kernel.sv
 F/home/ahmed/uvm_training/design/kernel/kernel.sv
-!i122 296
+!i122 379
 L0 1 472
 R6
 r1
@@ -1044,7 +1156,7 @@ R0
 w1778320096
 8/home/ahmed/uvm_training/design/kernel/kernel_config.sv
 F/home/ahmed/uvm_training/design/kernel/kernel_config.sv
-!i122 296
+!i122 379
 L0 1 550
 R6
 r1
@@ -1061,17 +1173,17 @@ vkernel_nrz
 R1
 R2
 !i10b 1
-!s100 GCU_QE[]Lg5]@gQf?5G>S0
+!s100 CK]h?VR@?@JdG8L]lLQaO0
 R3
-IgTfc33iBN7@JmfTjilXK;1
+I[fZ@2nhKKFn?3:k<ffWQY3
 R4
 S1
 R0
-w1778320067
+R57
 8/home/ahmed/uvm_training/design/kernel/kernel_nrz.sv
 F/home/ahmed/uvm_training/design/kernel/kernel_nrz.sv
-!i122 296
-L0 1 723
+!i122 379
+L0 1 728
 R6
 r1
 !s85 0
@@ -1085,28 +1197,27 @@ R11
 R12
 Xkernel_pkg
 !s115 eth_if
-R29
-R30
+R32
+R33
 !s115 krd_intf
 !s115 kst_intf
 !s115 kwr_intf
 !s115 out_intf
-R31
+R34
 R1
-R33
-R20
+R36
+R2
 !i10b 1
-!s100 h]96nmAjPHFh1UXQ^lAUN3
+!s100 9:IQa1[_G<D]IA08?@e192
 R3
-IV2lhm`1H`WS=[4JQcOhe63
-VV2lhm`1H`WS=[4JQcOhe63
+I8_dUX:@]:kT_?zA5Dz[Sl1
+V8_dUX:@]:kT_?zA5Dz[Sl1
 S1
 R0
-w1779343265
+R57
 8/home/ahmed/uvm_training/verif/kernel/uvm_tb/package/kernel_pkg.sv
 F/home/ahmed/uvm_training/verif/kernel/uvm_tb/package/kernel_pkg.sv
 R47
-R57
 R58
 R59
 R60
@@ -1118,6 +1229,7 @@ R65
 R66
 R67
 R68
+R69
 F/home/ahmed/uvm_training/verif/kernel/uvm_tb/config/kernel_config.sv
 F/home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence_item/bkp_item.sv
 F/home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence_item/out_item.sv
@@ -1154,7 +1266,7 @@ F/home/ahmed/uvm_training/verif/kernel/uvm_tb/scoreboard/kst_scoreboard.sv
 F/home/ahmed/uvm_training/verif/kernel/uvm_tb/scoreboard/krd_scoreboard.sv
 F/home/ahmed/uvm_training/verif/kernel/uvm_tb/scoreboard/nrz_scoreboard.sv
 F/home/ahmed/uvm_training/verif/kernel/uvm_tb/env/kernel_env.sv
-!i122 296
+!i122 379
 R5
 R6
 r1
@@ -1180,7 +1292,7 @@ R0
 w1778320138
 8/home/ahmed/uvm_training/design/kernel/kernel_read.sv
 F/home/ahmed/uvm_training/design/kernel/kernel_read.sv
-!i122 296
+!i122 379
 L0 1 962
 R6
 r1
@@ -1206,7 +1318,7 @@ R0
 w1778320194
 8/home/ahmed/uvm_training/design/kernel/kernel_start_tx.sv
 F/home/ahmed/uvm_training/design/kernel/kernel_start_tx.sv
-!i122 296
+!i122 379
 L0 1 363
 R6
 r1
@@ -1232,7 +1344,7 @@ R0
 w1778320159
 8/home/ahmed/uvm_training/design/kernel/kernel_write.sv
 F/home/ahmed/uvm_training/design/kernel/kernel_write.sv
-!i122 296
+!i122 379
 L0 1 255
 R6
 r1
@@ -1258,7 +1370,7 @@ R0
 w1778147286
 8/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/krd_intf.sv
 F/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/krd_intf.sv
-!i122 296
+!i122 379
 R5
 R6
 r1
@@ -1284,7 +1396,7 @@ R0
 w1777979085
 8/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/kst_intf.sv
 F/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/kst_intf.sv
-!i122 296
+!i122 379
 R5
 R6
 r1
@@ -1310,7 +1422,7 @@ R0
 w1777873134
 8/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/kwr_intf.sv
 F/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/kwr_intf.sv
-!i122 296
+!i122 379
 R5
 R6
 r1
@@ -1336,7 +1448,7 @@ R0
 w1777549178
 8/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/mac_rx_if.sv
 F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/interface/mac_rx_if.sv
-!i122 295
+!i122 378
 R5
 R6
 r1
@@ -1350,9 +1462,9 @@ R10
 R54
 R12
 Xmac_rx_pkg
-R28
+R31
 R1
-R33
+R36
 R2
 !i10b 1
 !s100 L8jzZB3@T0K3fSGa>>ZMK0
@@ -1380,7 +1492,7 @@ F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/whitebox_mac_monitor.sv
 F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/whitebox_mac_agent.sv
 F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/scoreboard/mac_rx_scoreboard.sv
 F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/env/mac_rx_env.sv
-!i122 295
+!i122 378
 R5
 R6
 r1
@@ -1406,7 +1518,7 @@ R0
 w1778433193
 8/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/nrz_intf.sv
 F/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/nrz_intf.sv
-!i122 296
+!i122 379
 R5
 R6
 r1
@@ -1421,19 +1533,19 @@ R11
 R12
 voddr_tx
 R1
-R2
+R50
 !i10b 1
-!s100 fL4SZ;z4d>M5jAPBFiQ1h0
+!s100 `WN?A_zC2<_gVXIn5bW]g1
 R3
-Ie7`ahBX=PLV=_3IW_g`g42
+IKWgj88CC>c5XbU2`I]jzH3
 R4
 S1
 R0
-w1779172694
+w1779348443
 8/home/ahmed/uvm_training/design/eth_1/oddr_tx.sv
 F/home/ahmed/uvm_training/design/eth_1/oddr_tx.sv
-!i122 295
-L0 1 87
+!i122 378
+L0 1 85
 R6
 r1
 !s85 0
@@ -1458,7 +1570,7 @@ R0
 w1778308335
 8/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/out_intf.sv
 F/home/ahmed/uvm_training/verif/kernel/uvm_tb/interface/out_intf.sv
-!i122 296
+!i122 379
 R5
 R6
 r1
@@ -1474,7 +1586,7 @@ R12
 Xrx_fifo_pkg
 !s115 eth_rx_fifo_if
 R1
-R33
+R36
 R2
 !i10b 1
 !s100 LbUI0C8nBCdcA?WN?49Lf2
@@ -1497,7 +1609,7 @@ F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/rx_fifo_out_monitor.sv
 F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/rx_fifo_out_agent.sv
 F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/scoreboard/rx_fifo_scoreboard.sv
 F/home/ahmed/uvm_training/verif/eth_1/uvm_tb/env/rx_fifo_env.sv
-!i122 295
+!i122 378
 R5
 R6
 r1
@@ -1512,7 +1624,7 @@ R54
 R12
 Yserial_line_intf
 R1
-R13
+R50
 !i10b 1
 !s100 8BndmHYfPZU6_OZ2zG=Q[0
 R3
@@ -1523,53 +1635,53 @@ R0
 w1777268773
 8/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/serial_line_intf.sv
 F/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/serial_line_intf.sv
-!i122 294
-Z73 L0 1 0
+!i122 377
+Z75 L0 1 0
 R6
 r1
 !s85 0
 31
-R51
-R69
 R70
+R71
+R72
 !i113 1
 R10
-R71
+R73
 R12
 vtb_top
 R1
-R33
-R34
-R35
 R36
 R37
 R38
 R39
 R40
-R19
 R41
+R42
+R43
+R19
+R26
 R4
 r1
 !s85 0
 !i10b 1
-!s100 9d[^dPXoYg5VI4eF?z`Oc0
-I^<<G@Vg[d=e[PeF?37oIE0
+!s100 LKX;^6h1H`R3WM?8G572P0
+IXc2?H<j4c<^XT7^;LUP?K2
 R18
 S1
 R0
-R42
+R44
 R48
 R49
-!i122 297
-L0 9 260
+!i122 380
+L0 9 267
 R6
 31
+R7
+R25
 R23
-R50
-R24
 !i113 1
 R10
-R25
+R24
 R12
 vuart
 R1
@@ -1584,22 +1696,22 @@ R0
 w1777460658
 8/home/ahmed/uvm_training/design/uart_1/uart.sv
 F/home/ahmed/uvm_training/design/uart_1/uart.sv
-!i122 294
+!i122 377
 L0 1 103
 R6
 r1
 !s85 0
 31
-R51
-R69
 R70
+R71
+R72
 !i113 1
 R10
-R71
+R73
 R12
 Yuart_config_intf
 R1
-R13
+R50
 !i10b 1
 !s100 @ZRZbKeY5l[BBeQhMabQV2
 R3
@@ -1610,18 +1722,18 @@ R0
 w1777528471
 8/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_config_intf.sv
 F/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_config_intf.sv
-!i122 294
+!i122 377
 R5
 R6
 r1
 !s85 0
 31
-R51
-R69
 R70
+R71
+R72
 !i113 1
 R10
-R71
+R73
 R12
 vuart_IF
 R1
@@ -1636,23 +1748,23 @@ R0
 w1777620744
 8/home/ahmed/uvm_training/design/uart_1/uart_IF.sv
 F/home/ahmed/uvm_training/design/uart_1/uart_IF.sv
-!i122 294
+!i122 377
 L0 1 94
 R6
 r1
 !s85 0
 31
-R51
-R69
 R70
+R71
+R72
 !i113 1
 R10
-R71
+R73
 R12
 nuart_@i@f
 Yuart_out_intf
 R1
-R13
+R50
 !i10b 1
 !s100 YLTY^V^dd>NLTQI3gmgUe2
 R3
@@ -1663,24 +1775,24 @@ R0
 w1776408920
 8/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_out_intf.sv
 F/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_out_intf.sv
-!i122 294
-Z74 L0 23 0
+!i122 377
+Z76 L0 23 0
 R6
 r1
 !s85 0
 31
-R51
-R69
 R70
+R71
+R72
 !i113 1
 R10
-R71
+R73
 R12
 Xuart_pkg
-R29
+R32
 R1
-R33
-R13
+R36
+R50
 !i10b 1
 !s100 ?ZZN]kPzBSYkCAFn8o[SF2
 R3
@@ -1692,7 +1804,6 @@ w1778846581
 8/home/ahmed/uvm_training/verif/uart_1/uvm_tb/package/uart_pkg.sv
 F/home/ahmed/uvm_training/verif/uart_1/uvm_tb/package/uart_pkg.sv
 R47
-R57
 R58
 R59
 R60
@@ -1704,6 +1815,7 @@ R65
 R66
 R67
 R68
+R69
 F/home/ahmed/uvm_training/verif/uart_1/uvm_tb/config/uart_config.sv
 F/home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence_item/tx_uart.sv
 F/home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence_item/rx_uart.sv
@@ -1724,18 +1836,18 @@ F/home/ahmed/uvm_training/verif/uart_1/uvm_tb/scoreboard/unified_scoreboard.sv
 F/home/ahmed/uvm_training/verif/uart_1/uvm_tb/env/unified_env.sv
 F/home/ahmed/uvm_training/verif/uart_1/test/short_test/dynamic_duplex_test.sv
 F/home/ahmed/uvm_training/verif/uart_1/test/short_test/unified_base_test.sv
-!i122 294
-R73
+!i122 377
+R75
 R6
 r1
 !s85 0
 31
-R51
-R69
 R70
+R71
+R72
 !i113 1
 R10
-R71
+R73
 R12
 vuart_RX
 R1
@@ -1750,23 +1862,23 @@ R0
 w1778655930
 8/home/ahmed/uvm_training/design/uart_1/uart_RX.sv
 F/home/ahmed/uvm_training/design/uart_1/uart_RX.sv
-!i122 294
-R72
+!i122 377
+R74
 R6
 r1
 !s85 0
 31
-R51
-R69
 R70
+R71
+R72
 !i113 1
 R10
-R71
+R73
 R12
 nuart_@r@x
 Yuart_rx_in_intf
 R1
-R13
+R50
 !i10b 1
 !s100 QO8XW[1MnPzSPF>Mh:o^01
 R3
@@ -1777,22 +1889,22 @@ R0
 w1776409006
 8/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_rx_in_intf.sv
 F/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_rx_in_intf.sv
-!i122 294
-R74
+!i122 377
+R76
 R6
 r1
 !s85 0
 31
-R51
-R69
 R70
+R71
+R72
 !i113 1
 R10
-R71
+R73
 R12
 Yuart_rx_out_intf
 R1
-R13
+R50
 !i10b 1
 !s100 TZF>bK3;abMfi<H@oL4=91
 R3
@@ -1803,18 +1915,18 @@ R0
 w1776408994
 8/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_rx_out_intf.sv
 F/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_rx_out_intf.sv
-!i122 294
-R74
+!i122 377
+R76
 R6
 r1
 !s85 0
 31
-R51
-R69
 R70
+R71
+R72
 !i113 1
 R10
-R71
+R73
 R12
 vuart_TX
 R1
@@ -1829,23 +1941,23 @@ R0
 w1777462247
 8/home/ahmed/uvm_training/design/uart_1/uart_TX.sv
 F/home/ahmed/uvm_training/design/uart_1/uart_TX.sv
-!i122 294
+!i122 377
 L0 1 196
 R6
 r1
 !s85 0
 31
-R51
-R69
 R70
+R71
+R72
 !i113 1
 R10
-R71
+R73
 R12
 nuart_@t@x
 Yuart_tx_intf
 R1
-R13
+R50
 !i10b 1
 !s100 IG9dP;nOC_MHNg`J2dclk3
 R3
@@ -1856,22 +1968,22 @@ R0
 w1776409069
 8/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_tx_intf.sv
 F/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_tx_intf.sv
-!i122 294
-R74
+!i122 377
+R76
 R6
 r1
 !s85 0
 31
-R51
-R69
 R70
+R71
+R72
 !i113 1
 R10
-R71
+R73
 R12
 Yuart_unified_intf
 R1
-R13
+R50
 !i10b 1
 !s100 `_fiWR555mjXQBz_76SQ[1
 R3
@@ -1882,22 +1994,22 @@ R0
 w1776409101
 8/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_unified_intf.sv
 F/home/ahmed/uvm_training/verif/uart_1/uvm_tb/interface/uart_unified_intf.sv
-!i122 294
-R74
+!i122 377
+R76
 R6
 r1
 !s85 0
 31
-R51
-R69
 R70
+R71
+R72
 !i113 1
 R10
-R71
+R73
 R12
 vudp_checksum_calculator
 R1
-R13
+R50
 !i10b 1
 !s100 ]zW`gj:me_Rh34UYV7ign0
 R3
@@ -1905,10 +2017,10 @@ IWLaLR2^HP2Dz]UPIC;_]12
 R4
 S1
 R0
-w1779172665
+w1779348423
 R55
 R56
-!i122 295
+!i122 378
 L0 1 315
 R6
 r1
@@ -1923,7 +2035,7 @@ R54
 R12
 vudp_packet_maker
 R1
-R2
+R50
 !i10b 1
 !s100 eiGE99SKLGLof=@=k^7A]3
 R3
@@ -1934,7 +2046,7 @@ R0
 w1777613061
 8/home/ahmed/uvm_training/design/eth_1/udp_packet_maker.sv
 F/home/ahmed/uvm_training/design/eth_1/udp_packet_maker.sv
-!i122 295
+!i122 378
 L0 1 648
 R6
 r1
@@ -2020,7 +2132,7 @@ F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-
 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_tlm_ifs.svh
 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_sqr_ifs.svh
 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_port_base.svh
-R64
+R65
 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_imps.svh
 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_ports.svh
 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/tlm1/uvm_exports.svh
@@ -2090,7 +2202,7 @@ F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-
 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/sequences/uvm_reg_mem_shared_access_seq.svh
 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/sequences/uvm_reg_mem_built_in_seq.svh
 F/home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/reg/sequences/uvm_reg_mem_hdl_paths_seq.svh
-!i122 293
+!i122 376
 L0 28 0
 R6
 r1

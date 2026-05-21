@@ -1,20 +1,32 @@
-module iddr_rx(
+module iddr_rx#(
+        parameter IODELAY_GROUP_NAME = "ETH1_IDELAY_GROUP",
+        parameter integer RXD0_IDELAY_VALUE   = 22,
+        parameter integer RXD1_IDELAY_VALUE   = 20,
+        parameter integer RXD2_IDELAY_VALUE   = 20,
+        parameter integer RXD3_IDELAY_VALUE   = 20,
+        parameter integer RXCTL_IDELAY_VALUE  = 20
+)(
 
-		input clk,
-		input rst_n,
-		
-		input [3:0] data_in,
-		input rx_ctl,
-		
-		output [7:0] iddr_out,
-		output rx_dv,
-		
-		output rx_er
-		);
-
+        input clk,
+        input rst_n,
+        
+        input [3:0] data_in,
+        input       rx_ctl,
+        
+        output [7:0] iddr_out,
+        output       rx_dv,
+        output       rx_er
+);
 
 wire rx_ctl1;
 wire rx_ctl2;
+
+wire rx_ctl_delayed;
+wire [3:0] data_in_delayed;
+
+wire iddr_rst;
+
+assign iddr_rst = ~rst_n;
 
 assign rx_dv = rx_ctl1;
 assign rx_er = rx_ctl1 ^ rx_ctl2;
@@ -24,50 +36,93 @@ genvar i;
 generate
     for (i = 0; i < 4; i = i + 1)
     begin : IDDR_RXD_GEN
+            
+        (* IODELAY_GROUP = IODELAY_GROUP_NAME *)
+        IDELAYE2 #(
+            .CINVCTRL_SEL          ("FALSE"),
+            .DELAY_SRC             ("IDATAIN"),
+            .HIGH_PERFORMANCE_MODE ("TRUE"),
+            .IDELAY_TYPE           ("FIXED"),
+            .IDELAY_VALUE(
+                (i == 0) ? RXD0_IDELAY_VALUE :
+                (i == 1) ? RXD1_IDELAY_VALUE :
+                (i == 2) ? RXD2_IDELAY_VALUE :
+                           RXD3_IDELAY_VALUE
+            ),
+            .PIPE_SEL              ("FALSE"),
+            .REFCLK_FREQUENCY      (200.0),
+            .SIGNAL_PATTERN        ("DATA")
+        ) IDELAYE2_RXD_inst (
+            .DATAOUT     (data_in_delayed[i]),
+            .DATAIN      (1'b0),
+            .C           (1'b0),
+            .CE          (1'b0),
+            .INC         (1'b0),
+            .IDATAIN     (data_in[i]),
+            .LD          (1'b0),
+            .REGRST      (1'b0),
+            .LDPIPEEN    (1'b0),
+            .CNTVALUEIN  (5'd0),
+            .CNTVALUEOUT (),
+            .CINVCTRL    (1'b0)
+        );
+        
+        IDDR #(
+            .DDR_CLK_EDGE("SAME_EDGE_PIPELINED"),
+            .INIT_Q1(1'b0),
+            .INIT_Q2(1'b0),
+            .SRTYPE("SYNC")
+        ) IDDR_inst (
+            .Q1(iddr_out[i]),
+            .Q2(iddr_out[i+4]),
+            .C(clk),
+            .CE(1'b1),
+            .D(data_in_delayed[i]),
+            .R(iddr_rst),
+            .S(1'b0)
+        );
 
-		IDDR #(
-		   .DDR_CLK_EDGE("SAME_EDGE_PIPELINED"), // "OPPOSITE_EDGE", "SAME_EDGE"
-										   //    or "SAME_EDGE_PIPELINED"
-		   .INIT_Q1(1'b0), // Initial value of Q1: 1'b0 or 1'b1
-		   .INIT_Q2(1'b0), // Initial value of Q2: 1'b0 or 1'b1
-		   .SRTYPE("SYNC") // Set/Reset type: "SYNC" or "ASYNC"
-		) IDDR_inst (
-		   .Q1(iddr_out[i]), // 1-bit output for positive edge of clock
-		   .Q2(iddr_out[i+4]), // 1-bit output for negative edge of clock
-		   .C(clk),   // 1-bit clock input
-		   .CE(1'b1), // 1-bit clock enable input
-		   .D(data_in[i]),   // 1-bit DDR data input
-		   .R(~rst_n),   // 1-bit reset
-		   .S(1'b0)    // 1-bit set
-		);
-
-		// End of IDDR_inst instantiation
-	end
+    end
 endgenerate
 
+(* IODELAY_GROUP = IODELAY_GROUP_NAME *)
+IDELAYE2 #(
+    .CINVCTRL_SEL          ("FALSE"),
+    .DELAY_SRC             ("IDATAIN"),
+    .HIGH_PERFORMANCE_MODE ("TRUE"),
+    .IDELAY_TYPE           ("FIXED"),
+    .IDELAY_VALUE          (RXCTL_IDELAY_VALUE),
+    .PIPE_SEL              ("FALSE"),
+    .REFCLK_FREQUENCY      (200.0),
+    .SIGNAL_PATTERN        ("DATA")
+) IDELAYE2_RX_CTL_inst (
+    .DATAOUT     (rx_ctl_delayed),
+    .DATAIN      (1'b0),
+    .C           (1'b0),
+    .CE          (1'b0),
+    .INC         (1'b0),
+    .IDATAIN     (rx_ctl),
+    .LD          (1'b0),
+    .REGRST      (1'b0),
+    .LDPIPEEN    (1'b0),
+    .CNTVALUEIN  (5'd0),
+    .CNTVALUEOUT (),
+    .CINVCTRL    (1'b0)
+);
 
 IDDR #(
-		   .DDR_CLK_EDGE("SAME_EDGE_PIPELINED"), // "OPPOSITE_EDGE", "SAME_EDGE"
-										   //    or "SAME_EDGE_PIPELINED"
-		   .INIT_Q1(1'b0), // Initial value of Q1: 1'b0 or 1'b1
-		   .INIT_Q2(1'b0), // Initial value of Q2: 1'b0 or 1'b1
-		   .SRTYPE("SYNC") // Set/Reset type: "SYNC" or "ASYNC"
-		) IDDR_rx_ctl (
-		   .Q1(rx_ctl1), // 1-bit output for positive edge of clock
-		   .Q2(rx_ctl2), // 1-bit output for negative edge of clock
-		   .C(clk),   // 1-bit clock input
-		   .CE(1'b1), // 1-bit clock enable input
-		   .D(rx_ctl),   // 1-bit DDR data input
-		   .R(~rst_n),   // 1-bit reset
-		   .S(1'b0)    // 1-bit set
-		);
-
-		// --- DEBUG SNIPPET 1 ---
-always @(posedge clk) begin
-    // Replace 'iddr_out' and 'rx_dv_out' with your actual output wire names
-    if (rx_dv) begin 
-        $display("[RTL_IDDR] @%0t: Reconstructed Byte = %h", $time, iddr_out);
-    end
-end
+    .DDR_CLK_EDGE("SAME_EDGE_PIPELINED"),
+    .INIT_Q1(1'b0),
+    .INIT_Q2(1'b0),
+    .SRTYPE("SYNC")
+) IDDR_rx_ctl (
+    .Q1(rx_ctl1),
+    .Q2(rx_ctl2),
+    .C(clk),
+    .CE(1'b1),
+    .D(rx_ctl_delayed),
+    .R(iddr_rst),
+    .S(1'b0)
+);
 
 endmodule

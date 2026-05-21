@@ -58,7 +58,12 @@ assign tx_payload_internal = (kernel_config_done) ? tx_payload_length_eth_nrz : 
 assign tx_zero_endian = (kernel_config_done) ? tx_zero_endian_eth_nrz : 0;
 assign tx_sync_word1 = (kernel_config_done) ? tx_sync_word1_eth_nrz : 0;
 assign tx_sync_word2 = (kernel_config_done) ? tx_sync_word2_eth_nrz : 0;
-assign tx_payload_length_actual = (tx_bpw == 2'd0) ? tx_payload_internal : (tx_payload_internal + tx_payload_internal) ;
+// The NRZ stream writes both sync words into the ETH5 UDP payload before the
+// configured payload words.  Advertise the byte count actually written to the
+// FIFO so the Ethernet MAC drains exactly one complete NRZ packet.
+assign tx_payload_length_actual = (tx_bpw == 2'd0) ?
+                                  (tx_payload_internal + 11'd2) :
+                                  ((tx_payload_internal + 11'd2) << 1);
 
 reg [11:0] 	word_done_buff;
 reg [3:0]  	bit_counter;
@@ -715,7 +720,7 @@ cdc_pulse_toggle_sync u_eth_nrz_config_done_pulse_cdc (
 		.dst_clk	(clk_eth),
 		.rst_n		(rst_n),
 
-		.src_pulse	(eth_tx_start_pulse_eth_nrz_64),
+		.src_pulse	(config_done_pulse),
 		.dst_pulse	(config_done_pulse_eth_nrz)
 );
 
