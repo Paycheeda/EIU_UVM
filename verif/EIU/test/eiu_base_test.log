@@ -1,6 +1,6 @@
-# vsim -c tb_top glbl -modelsimini /home/ahmed/modelsim_2020_libs/modelsim.ini -L unisims_ver -L unimacro_ver -L secureip -L xpm -sv_lib /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/lib/uvm_dpi -work /home/ahmed/uvm_training/verif/EIU/test/work "+NUM_PKTS=1" "+EN_UART1=0" "+EN_UART2=0" "+EN_UART3=0" "+UART_WIDTH=8" "+UART_PARITY_EN=1" "+UART_PARITY_OE=0" "+EN_ETH1=1" "+EN_ETH2=1" "+EN_ETH3=1" "+EN_ETH4=1" "+EN_NRZ=1" "+NRZ_BPW=12" "+NRZ_PLEN=50" "+NRZ_ENDIAN=0" "+UVM_TESTNAME=eiu_base_test" "+UVM_CONFIG_DB_TRACE" -classdebug -l eiu_base_test.log -do "run -a; q" 
-# Start time: 16:36:14 on May 21,2026
-# Loading /tmp/root@ahmedpc_dpi_26945/linuxaloem_gcc-7.4.0/export_tramp.so
+# vsim tb_top glbl -modelsimini /home/ahmed/modelsim_2020_libs/modelsim.ini -L unisims_ver -L unimacro_ver -L secureip -L xpm -sv_lib /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/lib/uvm_dpi -work /home/ahmed/uvm_training/verif/EIU/test/work "+NUM_PKTS=1" "+EN_UART1=0" "+EN_UART2=0" "+EN_UART3=0" "+UART_WIDTH=8" "+UART_PARITY_EN=1" "+UART_PARITY_OE=0" "+EN_ETH1=1" "+EN_ETH2=1" "+EN_ETH3=1" "+EN_ETH4=1" "+EN_NRZ=1" "+NRZ_BPW=12" "+NRZ_PLEN=50" "+NRZ_ENDIAN=0" "+UVM_TESTNAME=eiu_base_test" "+UVM_CONFIG_DB_TRACE" -classdebug -l eiu_base_test.log -do " onerror {resume}; add wave -noupdate -divider {=== EIU TOP PINS ===}; add wave -noupdate /tb_top/DUT/*; add wave -noupdate -divider {=== ETH (Config/Write/Read) ===}; add wave -noupdate -r /tb_top/DUT/u_eth1/*; add wave -noupdate -divider {=== UART TX / RX & FIFOs ===}; add wave -noupdate -r /tb_top/DUT/*uart*/*; run -a;" 
+# Start time: 17:57:22 on May 21,2026
+# Loading /tmp/root@ahmedpc_dpi_31352/linuxaloem_gcc-7.4.0/export_tramp.so
 # ** Note: (vsim-8785) UVM-aware debugging capabilities will be disabled since no compiled "questa_uvm_pkg" can be found.
 # This also means that later if you turn on UVM-aware debugging your debug simulations may have
 # different random seeds from your non-debug simulations.
@@ -217,12 +217,21 @@
 # ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(234): [TFMPC] - Missing connection for port 'clk_eth3'.
 # ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(234): [TFMPC] - Missing connection for port 'clk_eth4'.
 # ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(234): [TFMPC] - Missing connection for port 'rst_n'.
-# Compiling /tmp/root@ahmedpc_dpi_26945/linuxaloem_gcc-7.4.0/exportwrapper.c
-# Loading /tmp/root@ahmedpc_dpi_26945/linuxaloem_gcc-7.4.0/vsim_auto_compile.so
+# Compiling /tmp/root@ahmedpc_dpi_31352/linuxaloem_gcc-7.4.0/exportwrapper.c
+# Loading /tmp/root@ahmedpc_dpi_31352/linuxaloem_gcc-7.4.0/vsim_auto_compile.so
 # Loading /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/lib/uvm_dpi.so
-# ** Warning: Design size of 82906 statements exceeds ModelSim-Intel FPGA Starter Edition recommended capacity.
+# ** Warning: Design size of 82920 statements exceeds ModelSim-Intel FPGA Starter Edition recommended capacity.
 # Expect performance to be adversely affected.
-# run -a
+#  onerror {resume}
+#  Warning: onerror command for use within macro
+#  add wave -noupdate -divider {=== EIU TOP PINS ===}
+#  add wave -noupdate /tb_top/DUT/*
+#  add wave -noupdate -divider {=== ETH (Config/Write/Read) ===}
+#  add wave -noupdate -r /tb_top/DUT/u_eth1/*
+#  add wave -noupdate -divider {=== UART TX / RX & FIFOs ===}
+#  add wave -noupdate -r /tb_top/DUT/*uart*/*
+# (vish-4014) No objects found matching '/tb_top/DUT/*uart*/*'.
+#  run -a
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_root.svh(392) @ 0: reporter [UVM/RELNOTES] 
 # ----------------------------------------------------------------
 # UVM-1.2
@@ -1301,19 +1310,42 @@
 # UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(19) @ 0: uvm_test_top.env.eth_rx_agts[2].drv [RX_DRV] Driver starting... Waiting for reset.
 # UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(19) @ 0: uvm_test_top.env.eth_rx_agts[1].drv [RX_DRV] Driver starting... Waiting for reset.
 # UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(19) @ 0: uvm_test_top.env.eth_rx_agts[0].drv [RX_DRV] Driver starting... Waiting for reset.
-# DRC Error : Reset is unsuccessful at time              2000000.  RST must be held high for at least five RDCLK clock cycles, and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
-# DRC Error : Reset is unsuccessful at time              2000000.  RST must be held high for at least five RDCLK clock cycles, and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
-# DRC Error : Reset is unsuccessful at time              2000000.  RST must be held high for at least five RDCLK clock cycles, and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
-# DRC Error : Reset is unsuccessful at time              2000000.  RST must be held high for at least five RDCLK clock cycles, and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
-# DRC Error : Reset is unsuccessful at time              2000000.  RST must be held high for at least five RDCLK clock cycles, and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
-# DRC Error : Reset is unsuccessful at time              2000000.  RST must be held high for at least five RDCLK clock cycles, and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
-# DRC Error : Reset is unsuccessful at time              2000000.  RST must be held high for at least five RDCLK clock cycles, and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
-# DRC Error : Reset is unsuccessful at time              2000000.  RST must be held high for at least five RDCLK clock cycles, and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
 # UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(22) @ 2000000: uvm_test_top.env.eth_rx_agts[0].drv [RX_DRV] Reset cleared! Entering main loop.
 # UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(22) @ 2000000: uvm_test_top.env.eth_rx_agts[1].drv [RX_DRV] Reset cleared! Entering main loop.
 # UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(22) @ 2000000: uvm_test_top.env.eth_rx_agts[2].drv [RX_DRV] Reset cleared! Entering main loop.
 # UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(22) @ 2000000: uvm_test_top.env.eth_rx_agts[3].drv [RX_DRV] Reset cleared! Entering main loop.
-# ** Note: $finish    : /media/ahmed/Transcend/ahmed_avantlabs/2025.1.1/data/verilog/src/unisims/FIFO18E1.v(1183)
-#    Time: 200001 ps  Iteration: 0  Region: /tb_top/DUT/u_eth4/GEN_ETH_RX/u_eth_mac_rx/u_eth_rx_metadata/metadata_fifo/FIFO_DUALCLOCK_MACRO_inst/genblk5/fifo_18_bl_1/fifo_18_bl_1/INT_FIFO/genblk1
-# End time: 16:36:17 on May 21,2026, Elapsed time: 0:00:03
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/test/eiu_base_test.sv(167) @ 3000000: uvm_test_top [TEST] === BOOTING EIU_TOP SYSTEM TEST ===
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(133) @ 3000000: uvm_test_top.vsqr@@vseq [VSEQ] === STAGE 1: HARDWARE CONFIGURATION ===
+# UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_sequence.sv(53) @ 3000000: uvm_test_top.env.bkp_agt.sqr@@cfg_seq [BKP_SEQ] >>> Starting FULL Hardware Initialization Sequence...
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(124) @ 20000000: uvm_test_top.env.uart_rx_agts[2].drvr [DRV_PROBE] Waiting 150us for EIU Hardware to acquire Baudrate lock from Backplane...
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(124) @ 20000000: uvm_test_top.env.uart_rx_agts[1].drvr [DRV_PROBE] Waiting 150us for EIU Hardware to acquire Baudrate lock from Backplane...
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(124) @ 20000000: uvm_test_top.env.uart_rx_agts[0].drvr [DRV_PROBE] Waiting 150us for EIU Hardware to acquire Baudrate lock from Backplane...
+# UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_sequence.sv(184) @ 242750000: uvm_test_top.env.bkp_agt.sqr@@cfg_seq [BKP_SEQ] <<< FULL Hardware Initialization Sequence Complete.
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(148) @ 1242750000: uvm_test_top.vsqr@@vseq [VSEQ] === STAGE 2: EVENT-DRIVEN PING-PONG TRAFFIC (1 Packets) ===
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(183) @ 1242750000: uvm_test_top.vsqr@@vseq [VSEQ] --- ETH PING-PONG: Pushing Packet 1/1 to PHY ---
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(167) @ 1242750000: uvm_test_top.vsqr@@vseq [VSEQ] Enabling Telemetry Traffic on ETH5 (NRZ)
+# UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/kwr_sequence.sv(36) @ 1242750000: uvm_test_top.env.bkp_agt.sqr@@tx_inj_seq [SEQ] Starting BACK-TO-BACK Burst Test with RANDOM Data: 1 Packets per FIFO...
+# UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/nrz_sequence.sv(22) @ 1242750000: uvm_test_top.env.nrz_agt.sqr@@nrz_seq [NRZ_SEQ] Starting Continuous NRZ Serial Injection...
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 1242750000: reporter [CFGDB/GET] Configuration '.golden_nrz_q' (type class uvm_pkg::uvm_queue #(class kernel_pkg::nrz_item)) read by  = (class uvm_pkg::uvm_queue #(class kernel_pkg::nrz_item)) {golden_nrz_q} 4735 1 7048 @uvm_status_container@1 { } {} {uvm_queue} null
+# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(26) @ 1242750000: uvm_test_top.env.eth_rx_agts[0].drv [RX_DRV] Received new packet from sequence. Generating Checksums and Driving...
+# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(89) @ 1242750000: uvm_test_top.env.eth_rx_agts[0].drv [RX_DRV] Driving TRUE DDR Preamble...
+# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(110) @ 1243360000: uvm_test_top.env.eth_rx_agts[0].drv [RX_DRV] Driving 67 bytes of DDR Frame Data...
+# [PIN_PROBE_BKP] @1244750000: BKP WRITE -> Addr: 44 | Data: 0xe0
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv(72) @ 1244750000: uvm_test_top.env.scb [SCB_TRACKER] ETH 1 Live Count -> TX [Inj: 1, Ver: 0] | RX [Inj: 0, Ver: 0]
+# [PIN_PROBE_BKP] @1246750000: BKP WRITE -> Addr: 44 | Data: 0xbc
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv(72) @ 1246750000: uvm_test_top.env.scb [SCB_TRACKER] ETH 1 Live Count -> TX [Inj: 2, Ver: 0] | RX [Inj: 0, Ver: 0]
+# [PIN_PROBE_BKP] @1248750000: BKP WRITE -> Addr: 44 | Data: 0xe3
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv(72) @ 1248750000: uvm_test_top.env.scb [SCB_TRACKER] ETH 1 Live Count -> TX [Inj: 3, Ver: 0] | RX [Inj: 0, Ver: 0]
+# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(143) @ 1248840000: uvm_test_top.env.eth_rx_agts[0].drv [RX_DRV] SUCCESS: RTL pulsed transaction done!
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 1248880000: reporter [CFGDB/GET] Configuration '.golden_eth_rx_q_0' (type class uvm_pkg::uvm_queue #(class eth_rx_pkg::phy_rx_seq_item)) read by  = (class uvm_pkg::uvm_queue #(class eth_rx_pkg::phy_rx_seq_item)) {golden_q_0} 4155 1 7098 @uvm_status_container@1 { } {} {uvm_queue} null
+# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(26) @ 1248880000: uvm_test_top.env.eth_rx_agts[1].drv [RX_DRV] Received new packet from sequence. Generating Checksums and Driving...
+# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(89) @ 1248880000: uvm_test_top.env.eth_rx_agts[1].drv [RX_DRV] Driving TRUE DDR Preamble...
+# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv(110) @ 1249520000: uvm_test_top.env.eth_rx_agts[1].drv [RX_DRV] Driving 71 bytes of DDR Frame Data...
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv(72) @ 1250000000: uvm_test_top.env.scb [SCB_TRACKER] ETH 1 Live Count -> TX [Inj: 3, Ver: 0] | RX [Inj: 63, Ver: 0]
+# [PIN_PROBE_BKP] @1250750000: BKP WRITE -> Addr: 44 | Data: 0x20
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv(72) @ 1250750000: uvm_test_top.env.scb [SCB_TRACKER] ETH 1 Live Count -> TX [Inj: 4, Ver: 0] | RX [Inj: 63, Ver: 0]
+# DRC Error : Reset is unsuccessful at time           1252178170.  WREN must be low for at least two WRCLK clock cycles after RST deasserted.
+# ** Note: $finish    : /media/ahmed/Transcend/ahmed_avantlabs/2025.1.1/data/verilog/src/unisims/FIFO18E1.v(1058)
+#    Time: 125217818 ps  Iteration: 0  Region: /tb_top/DUT/rx_fifo_eth1/FIFO_DUALCLOCK_MACRO_inst/genblk5/fifo_18_bl/fifo_18_bl/INT_FIFO/genblk1
+# End time: 18:00:34 on May 21,2026, Elapsed time: 0:03:12
 # Errors: 0, Warnings: 87

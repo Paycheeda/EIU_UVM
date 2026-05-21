@@ -89,23 +89,23 @@ class eth_rx_if_driver extends uvm_driver #(phy_rx_seq_item);
         `uvm_info("RX_DRV", "Driving TRUE DDR Preamble...", UVM_NONE)
         
         // Setup for the very first POSEDGE (Change on Negedge)
-        @(negedge vif.clk);
+        @(posedge vif.clk);
         vif.rx_dv <= 1'b1;
         vif.rxd   <= 4'h5; 
         
         // Setup for the very first NEGEDGE (Change on Posedge)
-        @(posedge vif.clk);
+        @(negedge vif.clk);
         vif.rxd   <= 4'h5; 
         
         // Bytes 2 through 7 (6 bytes of 0x55)
         for(int i=0; i<6; i++) begin
-           @(negedge vif.clk); vif.rxd <= 4'h5;
            @(posedge vif.clk); vif.rxd <= 4'h5;
+           @(negedge vif.clk); vif.rxd <= 4'h5;
         end
         
         // Byte 8: Start of Frame Delimiter (0xD5)
-        @(negedge vif.clk); vif.rxd <= 4'h5; // Lower Nibble
-        @(posedge vif.clk); vif.rxd <= 4'hD; // Upper Nibble
+        @(posedge vif.clk); vif.rxd <= 4'h5; // Lower Nibble
+        @(negedge vif.clk); vif.rxd <= 4'hD; // Upper Nibble
 
         `uvm_info("RX_DRV", $sformatf("Driving %0d bytes of DDR Frame Data...", frame_data.size()), UVM_NONE)
         
@@ -113,7 +113,7 @@ class eth_rx_if_driver extends uvm_driver #(phy_rx_seq_item);
            current_byte = frame_data.pop_front();
            
            // Setup data to be stable for POSITIVE EDGE
-           @(negedge vif.clk);
+           @(posedge vif.clk);
            if (req.early_drop_at_byte > 0 && byte_idx == req.early_drop_at_byte) begin
                vif.rx_dv <= 1'b0;
                break;
@@ -124,14 +124,14 @@ class eth_rx_if_driver extends uvm_driver #(phy_rx_seq_item);
            vif.rxd <= current_byte[3:0]; 
            
            // Setup data to be stable for NEGATIVE EDGE
-           @(posedge vif.clk);
+           @(negedge vif.clk);
            vif.rxd <= current_byte[7:4];
            
            byte_idx++;
         end
 
         // Close Frame
-        @(negedge vif.clk);
+        @(posedge vif.clk);
         vif.rx_dv <= 1'b0;
         vif.rx_er <= 1'b0;
         vif.rxd   <= 4'h0;
@@ -149,7 +149,7 @@ class eth_rx_if_driver extends uvm_driver #(phy_rx_seq_item);
         join_any
         disable fork; 
         
-        @(posedge vif.clk);
+        @(negedge vif.clk);
     endtask
 
     // Checksum Utilities
