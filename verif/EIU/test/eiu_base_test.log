@@ -1,6 +1,6 @@
 # vsim -c tb_top glbl -modelsimini /home/ahmed/modelsim_2020_libs/modelsim.ini -L unisims_ver -L unimacro_ver -L secureip -L xpm -sv_lib /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/lib/uvm_dpi -work /home/ahmed/uvm_training/verif/EIU/test/work "+NUM_PKTS=1" "+EN_UART1=0" "+EN_UART2=0" "+EN_UART3=0" "+UART_WIDTH=8" "+UART_PARITY_EN=1" "+UART_PARITY_OE=0" "+EN_ETH1=1" "+EN_ETH2=1" "+EN_ETH3=1" "+EN_ETH4=1" "+EN_NRZ=1" "+NRZ_BPW=12" "+NRZ_PLEN=50" "+NRZ_ENDIAN=0" "+UVM_TESTNAME=eiu_base_test" "+UVM_CONFIG_DB_TRACE" -classdebug -l eiu_base_test.log -do "run -a; q" 
-# Start time: 15:43:08 on May 21,2026
-# Loading /tmp/root@ahmedpc_dpi_22998/linuxaloem_gcc-7.4.0/export_tramp.so
+# Start time: 16:01:14 on May 21,2026
+# Loading /tmp/root@ahmedpc_dpi_24429/linuxaloem_gcc-7.4.0/export_tramp.so
 # ** Note: (vsim-8785) UVM-aware debugging capabilities will be disabled since no compiled "questa_uvm_pkg" can be found.
 # This also means that later if you turn on UVM-aware debugging your debug simulations may have
 # different random seeds from your non-debug simulations.
@@ -99,7 +99,154 @@
 # Loading work.nrz_intf
 # Loading work.EIU_TOP
 # Loading unisims_ver.BUFG
-# ** Error: (vsim-13) Recompile work.clk_wiz_125_to_200 because work.counter_8bit_sv_unit has changed.
+# Loading work.clk_wiz_125_to_200
+# Loading work.clk_wiz_125_to_200_clk_wiz
+# Loading unisims_ver.MMCME2_ADV
+# Loading work.uart
+# Loading work.uart_IF
+# Loading work.uart_TX
+# Loading work.uart_RX
+# Loading work.clk_wiz_rgmii_rx_shift
+# Loading work.clk_wiz_rgmii_rx_shift_clk_wiz
+# Loading work.eth
+# Loading work.eth_mac_tx
+# Loading work.udp_checksum_calculator
+# Loading work.dual_port_FIFO
+# Loading unimacro_ver.FIFO_DUALCLOCK_MACRO
+# Loading work.eth_tx_frame_maker
+# Loading work.crc32_data8
+# Loading work.eth_tx_IF
+# Loading work.oddr_tx
+# Loading unisims_ver.ODDR
+# Loading work.kernel
+# Loading work.kernel_config
+# Loading work.kernel_write
+# Loading work.kernel_start_tx
+# Loading work.cdc_pulse_toggle_sync
+# Loading work.cdc_bit_sync
+# Loading work.kernel_read
+# Loading work.cdc_count_11bit_toggle
+# Loading work.kernel_nrz
+# Loading work.eth_rx_app_if
+# Loading work.eth_if
+# Loading work.fifo_intf
+# Loading work.fifo_intf_uart
+# Loading work.uart_config_intf
+# Loading work.uart_out_intf
+# Loading work.uart_rx_in_intf
+# Loading work.uart_rx_out_intf
+# Loading work.uart_tx_intf
+# Loading work.out_intf
+# Loading work.kwr_intf
+# Loading work.krd_intf
+# Loading work.kst_intf
+# Loading work.glbl
+# Loading work.eth_tx_if
+# Loading work.fault_inject_if
+# Loading unisims_ver.FIFO18E1
+# Loading unisims_ver.FF18_INTERNAL_VLOG
+# Loading unisims_ver.IDELAYCTRL
+# Loading work.eth_mac_rx
+# Loading work.iddr_rx
+# Loading unisims_ver.IDELAYE2
+# Loading unisims_ver.IDDR
+# Loading work.eth_rx_IF
+# Loading work.eth_rx_fifo_IF
+# Loading work.eth_rx_metadata
+# Loading unisims_ver.FIFO36E1
+# Loading unisims_ver.FF36_INTERNAL_VLOG
+# ** Warning: (vsim-8311) System Verilog assertions are supported only in Questasim.
+# ** Warning: (vsim-2685) [TFMPC] - Too few port connections for 'dummy_eth_rx_fifo_if'.  Expected 2, found 0.
+#    Time: 0 fs  Iteration: 0  Instance: /tb_top/dummy_eth_rx_fifo_if File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 221
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(221): [TFMPC] - Missing connection for port 'clk'.
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(221): [TFMPC] - Missing connection for port 'rst_n'.
+# ** Warning: (vsim-2685) [TFMPC] - Too few port connections for 'dummy_eth_rx_app_if'.  Expected 2, found 0.
+#    Time: 0 fs  Iteration: 0  Instance: /tb_top/dummy_eth_rx_app_if File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 222
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(222): [TFMPC] - Missing connection for port 'clk'.
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(222): [TFMPC] - Missing connection for port 'rst_n'.
+# ** Warning: (vsim-2685) [TFMPC] - Too few port connections for 'dummy_eth_if'.  Expected 2, found 0.
+#    Time: 0 fs  Iteration: 0  Instance: /tb_top/dummy_eth_if File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 223
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(223): [TFMPC] - Missing connection for port 'clk'.
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(223): [TFMPC] - Missing connection for port 'rst_n'.
+# ** Warning: (vsim-2685) [TFMPC] - Too few port connections for 'dummy_fifo_if'.  Expected 2, found 0.
+#    Time: 0 fs  Iteration: 0  Instance: /tb_top/dummy_fifo_if File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 224
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(224): [TFMPC] - Missing connection for port 'wr_clk'.
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(224): [TFMPC] - Missing connection for port 'rd_clk'.
+# ** Warning: (vsim-2685) [TFMPC] - Too few port connections for 'dummy_fifo_uart_if'.  Expected 2, found 0.
+#    Time: 0 fs  Iteration: 0  Instance: /tb_top/dummy_fifo_uart_if File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 225
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(225): [TFMPC] - Missing connection for port 'wr_clk'.
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(225): [TFMPC] - Missing connection for port 'rd_clk'.
+# ** Warning: (vsim-2685) [TFMPC] - Too few port connections for 'dummy_uart_config_if'.  Expected 1, found 0.
+#    Time: 0 fs  Iteration: 0  Instance: /tb_top/dummy_uart_config_if File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 226
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(226): [TFMPC] - Missing connection for port 'clk'.
+# ** Warning: (vsim-2685) [TFMPC] - Too few port connections for 'dummy_uart_out_if'.  Expected 1, found 0.
+#    Time: 0 fs  Iteration: 0  Instance: /tb_top/dummy_uart_out_if File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 227
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(227): [TFMPC] - Missing connection for port 'clk'.
+# ** Warning: (vsim-2685) [TFMPC] - Too few port connections for 'dummy_uart_rx_in_if'.  Expected 1, found 0.
+#    Time: 0 fs  Iteration: 0  Instance: /tb_top/dummy_uart_rx_in_if File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 228
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(228): [TFMPC] - Missing connection for port 'clk'.
+# ** Warning: (vsim-2685) [TFMPC] - Too few port connections for 'dummy_uart_rx_out_if'.  Expected 1, found 0.
+#    Time: 0 fs  Iteration: 0  Instance: /tb_top/dummy_uart_rx_out_if File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 229
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(229): [TFMPC] - Missing connection for port 'clk'.
+# ** Warning: (vsim-2685) [TFMPC] - Too few port connections for 'dummy_uart_tx_intf'.  Expected 1, found 0.
+#    Time: 0 fs  Iteration: 0  Instance: /tb_top/dummy_uart_tx_intf File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 230
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(230): [TFMPC] - Missing connection for port 'clk'.
+# ** Warning: (vsim-2685) [TFMPC] - Too few port connections for 'dummy_out_if'.  Expected 2, found 0.
+#    Time: 0 fs  Iteration: 0  Instance: /tb_top/dummy_out_if File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 231
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(231): [TFMPC] - Missing connection for port 'clk'.
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(231): [TFMPC] - Missing connection for port 'rst_n'.
+# ** Warning: (vsim-2685) [TFMPC] - Too few port connections for 'dummy_kwr_if'.  Expected 2, found 0.
+#    Time: 0 fs  Iteration: 0  Instance: /tb_top/dummy_kwr_if File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 232
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(232): [TFMPC] - Missing connection for port 'clk'.
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(232): [TFMPC] - Missing connection for port 'rst_n'.
+# ** Warning: (vsim-2685) [TFMPC] - Too few port connections for 'dummy_krd_if'.  Expected 7, found 0.
+#    Time: 0 fs  Iteration: 0  Instance: /tb_top/dummy_krd_if File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 233
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(233): [TFMPC] - Missing connection for port 'clk'.
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(233): [TFMPC] - Missing connection for port 'clk_uart'.
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(233): [TFMPC] - Missing connection for port 'clk_eth1'.
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(233): [TFMPC] - Missing connection for port 'clk_eth2'.
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(233): [TFMPC] - Missing connection for port 'clk_eth3'.
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(233): [TFMPC] - Missing connection for port 'clk_eth4'.
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(233): [TFMPC] - Missing connection for port 'rst_n'.
+# ** Warning: (vsim-2685) [TFMPC] - Too few port connections for 'dummy_kst_if'.  Expected 7, found 0.
+#    Time: 0 fs  Iteration: 0  Instance: /tb_top/dummy_kst_if File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 234
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(234): [TFMPC] - Missing connection for port 'clk'.
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(234): [TFMPC] - Missing connection for port 'clk_uart'.
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(234): [TFMPC] - Missing connection for port 'clk_eth1'.
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(234): [TFMPC] - Missing connection for port 'clk_eth2'.
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(234): [TFMPC] - Missing connection for port 'clk_eth3'.
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(234): [TFMPC] - Missing connection for port 'clk_eth4'.
+# ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(234): [TFMPC] - Missing connection for port 'rst_n'.
+# ** Error (suppressible): (vsim-3839) Variable '/tb_top/eth_tx_if[0]/tx_c', driven via a port connection, is multiply driven. See /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(103).
+#    Time: 0 fs  Iteration: 0  Region: /tb_top/eth_tx_assigns[0] File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 95
+# ** Error (suppressible): (vsim-3839) Variable '/tb_top/eth_tx_if[0]/tx_ctl', driven via a port connection, is multiply driven. See /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(103).
+#    Time: 0 fs  Iteration: 0  Region: /tb_top/eth_tx_assigns[0] File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 94
+# ** Error (suppressible): (vsim-3839) Variable '/tb_top/eth_tx_if[0]/txd', driven via a port connection, is multiply driven. See /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(103).
+#    Time: 0 fs  Iteration: 0  Region: /tb_top/eth_tx_assigns[0] File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 93
+# ** Error (suppressible): (vsim-3839) Variable '/tb_top/eth_tx_if[1]/tx_c', driven via a port connection, is multiply driven. See /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(103).
+#    Time: 0 fs  Iteration: 0  Region: /tb_top/eth_tx_assigns[1] File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 95
+# ** Error (suppressible): (vsim-3839) Variable '/tb_top/eth_tx_if[1]/tx_ctl', driven via a port connection, is multiply driven. See /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(103).
+#    Time: 0 fs  Iteration: 0  Region: /tb_top/eth_tx_assigns[1] File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 94
+# ** Error (suppressible): (vsim-3839) Variable '/tb_top/eth_tx_if[1]/txd', driven via a port connection, is multiply driven. See /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(103).
+#    Time: 0 fs  Iteration: 0  Region: /tb_top/eth_tx_assigns[1] File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 93
+# ** Error (suppressible): (vsim-3839) Variable '/tb_top/eth_tx_if[2]/tx_c', driven via a port connection, is multiply driven. See /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(103).
+#    Time: 0 fs  Iteration: 0  Region: /tb_top/eth_tx_assigns[2] File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 95
+# ** Error (suppressible): (vsim-3839) Variable '/tb_top/eth_tx_if[2]/tx_ctl', driven via a port connection, is multiply driven. See /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(103).
+#    Time: 0 fs  Iteration: 0  Region: /tb_top/eth_tx_assigns[2] File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 94
+# ** Error (suppressible): (vsim-3839) Variable '/tb_top/eth_tx_if[2]/txd', driven via a port connection, is multiply driven. See /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(103).
+#    Time: 0 fs  Iteration: 0  Region: /tb_top/eth_tx_assigns[2] File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 93
+# ** Error (suppressible): (vsim-3839) Variable '/tb_top/eth_tx_if[3]/tx_c', driven via a port connection, is multiply driven. See /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(103).
+#    Time: 0 fs  Iteration: 0  Region: /tb_top/eth_tx_assigns[3] File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 95
+# ** Error (suppressible): (vsim-3839) Variable '/tb_top/eth_tx_if[3]/tx_ctl', driven via a port connection, is multiply driven. See /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(103).
+#    Time: 0 fs  Iteration: 0  Region: /tb_top/eth_tx_assigns[3] File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 94
+# ** Error (suppressible): (vsim-3839) Variable '/tb_top/eth_tx_if[3]/txd', driven via a port connection, is multiply driven. See /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(103).
+#    Time: 0 fs  Iteration: 0  Region: /tb_top/eth_tx_assigns[3] File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 93
+# ** Error (suppressible): (vsim-3839) Variable '/tb_top/eth_tx_if[4]/tx_c', driven via a port connection, is multiply driven. See /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(103).
+#    Time: 0 fs  Iteration: 0  Region: /tb_top/eth_tx_assigns[4] File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 95
+# ** Error (suppressible): (vsim-3839) Variable '/tb_top/eth_tx_if[4]/tx_ctl', driven via a port connection, is multiply driven. See /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(103).
+#    Time: 0 fs  Iteration: 0  Region: /tb_top/eth_tx_assigns[4] File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 94
+# ** Error (suppressible): (vsim-3839) Variable '/tb_top/eth_tx_if[4]/txd', driven via a port connection, is multiply driven. See /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(103).
+#    Time: 0 fs  Iteration: 0  Region: /tb_top/eth_tx_assigns[4] File: /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv Line: 93
 # Error loading design
-# End time: 15:43:08 on May 21,2026, Elapsed time: 0:00:00
-# Errors: 1, Warnings: 38
+# End time: 16:01:14 on May 21,2026, Elapsed time: 0:00:00
+# Errors: 15, Warnings: 86

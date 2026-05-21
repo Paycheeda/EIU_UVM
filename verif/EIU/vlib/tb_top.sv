@@ -95,11 +95,7 @@ module tb_top;
             assign eth_tx_if[i].tx_c   = tx_c_eth[i];
         end
     endgenerate
-    // -----------------------------------
-    // Tri-state bridge for the backplane inout bus
-    wire [11:0] bkp_data_bus_wire;
-    assign bkp_data_bus_wire = bkp_if.bkp_data_dir ? bkp_if.bkp_data_drive : 12'hZZZ;
-    assign bkp_if.bkp_data   = bkp_data_bus_wire;
+    // ----------------------------------
 
     // =========================================================
     // 2. DUT INSTANTIATION
@@ -114,19 +110,19 @@ module tb_top;
         .clk_uart_55_296MHz     (clk_44_2368MHz), // Assuming this is the intended connection
 
         // UART1
-        .uart1_rx               (uart_rx_in_if[0].rx),
+        .uart1_rx               (uart_rx_if[0].rx),
         .uart1_tx               (uart_tx_if[0].tx),
 
         // UART2
-        .uart2_rx               (uart_rx_in_if[1].rx),
+        .uart2_rx               (uart_rx_if[1].rx),
         .uart2_tx               (uart_tx_if[1].tx),
         
         // UART3
-        .uart3_rx               (uart_rx_in_if[2].rx),
+        .uart3_rx               (uart_rx_if[2].rx),
         .uart3_tx               (uart_tx_if[2].tx),
 
         // ETH1 RGMII
-        .rx_c_eth1                 (eth_rx_if[0].rx_c),
+        .rx_c_eth1                 (rx_c_eth1),
         .rxd_eth1                 (eth_rx_if[0].rxd),
         .rx_ctl_eth1               (eth_rx_if[0].rx_ctl),
         .txd_eth1                  (eth_tx_if[0].txd),
@@ -134,7 +130,7 @@ module tb_top;
         .tx_c_eth1                 (eth_tx_if[0].tx_c),
 
         // ETH2 RGMII
-        .rx_c_eth2                 (eth_rx_if[1].rx_c),
+        .rx_c_eth2                 (rx_c_eth2),
         .rxd_eth2                  (eth_rx_if[1].rxd),
         .rx_ctl_eth2               (eth_rx_if[1].rx_ctl),
         .txd_eth2                  (eth_tx_if[1].txd),
@@ -142,7 +138,7 @@ module tb_top;
         .tx_c_eth2                 (eth_tx_if[1].tx_c),
 
         // ETH3 RGMII
-        .rx_c_eth3                 (eth_rx_if[2].rx_c),
+        .rx_c_eth3                 (rx_c_eth3),
         .rxd_eth3                  (eth_rx_if[2].rxd),
         .rx_ctl_eth3               (eth_rx_if[2].rx_ctl),
         .txd_eth3                  (eth_tx_if[2].txd),
@@ -150,7 +146,7 @@ module tb_top;
         .tx_c_eth3                 (eth_tx_if[2].tx_c),
 
         // ETH4 RGMII
-        .rx_c_eth4                 (eth_rx_if[3].rx_c),
+        .rx_c_eth4                 (rx_c_eth4),
         .rxd_eth4                  (eth_rx_if[3].rxd),
         .rx_ctl_eth4               (eth_rx_if[3].rx_ctl),
         .txd_eth4                  (eth_tx_if[3].txd),
@@ -163,7 +159,6 @@ module tb_top;
         .tx_c_eth_nrz                 (eth_tx_if[4].tx_c),
 
         // Backplane CPU Interface
-        .bkp_clk                (bkp_if.clk),
         .rst_n              (bkp_if.rst_n),
         .bkp_config_wr_pulse    (bkp_if.bkp_config_wr_pulse),
         .word_start_strobe_pulse(bkp_if.word_start_strobe),
@@ -172,7 +167,7 @@ module tb_top;
         .bkp_prg_mode_on           (bkp_if.program_mode),
         .bkp_card_id            (bkp_if.bkp_card_id),
         .fpga_card_id           (bkp_if.fpga_card_id),
-        .bkp_data_bus           (bkp_if.bkp_data_bus),
+        .bkp_data_bus           (bkp_if.bkp_data),
         //rst_n
 
         // NRZ Telemetry Input
