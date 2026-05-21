@@ -125,38 +125,38 @@ module tb_top;
         .rx_c_eth1                 (rx_c_eth1),
         .rxd_eth1                 (eth_rx_if[0].rxd),
         .rx_ctl_eth1               (eth_rx_if[0].rx_ctl),
-        .txd_eth1                  (eth_tx_if[0].txd),
-        .tx_ctl_eth1               (eth_tx_if[0].tx_ctl),
-        .tx_c_eth1                 (eth_tx_if[0].tx_c),
+        .txd_eth1                  (txd_eth[0]),
+        .tx_ctl_eth1               (tx_ctl_eth[0]),
+        .tx_c_eth1                 (tx_c_eth[0]),
 
         // ETH2 RGMII
         .rx_c_eth2                 (rx_c_eth2),
         .rxd_eth2                  (eth_rx_if[1].rxd),
         .rx_ctl_eth2               (eth_rx_if[1].rx_ctl),
-        .txd_eth2                  (eth_tx_if[1].txd),
-        .tx_ctl_eth2               (eth_tx_if[1].tx_ctl),
-        .tx_c_eth2                 (eth_tx_if[1].tx_c),
+        .txd_eth2                  (txd_eth[1]),
+        .tx_ctl_eth2               (tx_ctl_eth[1]),
+        .tx_c_eth2                 (tx_c_eth[1]),
 
         // ETH3 RGMII
         .rx_c_eth3                 (rx_c_eth3),
         .rxd_eth3                  (eth_rx_if[2].rxd),
         .rx_ctl_eth3               (eth_rx_if[2].rx_ctl),
-        .txd_eth3                  (eth_tx_if[2].txd),
-        .tx_ctl_eth3               (eth_tx_if[2].tx_ctl),
-        .tx_c_eth3                 (eth_tx_if[2].tx_c),
+        .txd_eth3                  (txd_eth[2]),
+        .tx_ctl_eth3               (tx_ctl_eth[2]),
+        .tx_c_eth3                 (tx_c_eth[2]),
 
         // ETH4 RGMII
         .rx_c_eth4                 (rx_c_eth4),
         .rxd_eth4                  (eth_rx_if[3].rxd),
         .rx_ctl_eth4               (eth_rx_if[3].rx_ctl),
-        .txd_eth4                  (eth_tx_if[3].txd),
-        .tx_ctl_eth4               (eth_tx_if[3].tx_ctl),
-        .tx_c_eth4                 (eth_tx_if[3].tx_c),
+        .txd_eth4                  (txd_eth[3]),
+        .tx_ctl_eth4               (tx_ctl_eth[3]),
+        .tx_c_eth4                 (tx_c_eth[3]),
 
         // ETH5 (NRZ) RGMII TX ONLY
-        .txd_eth_nrz                  (eth_tx_if[4].txd),
-        .tx_ctl_eth_nrz               (eth_tx_if[4].tx_ctl),
-        .tx_c_eth_nrz                 (eth_tx_if[4].tx_c),
+        .txd_eth_nrz                  (txd_eth[4]),
+        .tx_ctl_eth_nrz               (tx_ctl_eth[4]),
+        .tx_c_eth_nrz                 (tx_c_eth[4]),
 
         // Backplane CPU Interface
         .rst_n              (bkp_if.rst_n),
