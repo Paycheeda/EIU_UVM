@@ -1,6 +1,6 @@
-# vsim -c tb_top glbl -modelsimini /home/ahmed/modelsim_2020_libs/modelsim.ini -L unisims_ver -L unimacro_ver -L secureip -L xpm -sv_lib /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/lib/uvm_dpi -work /home/ahmed/uvm_training/verif/EIU/test/work "+NUM_PKTS=1" "+EN_UART1=0" "+EN_UART2=0" "+EN_UART3=0" "+UART_WIDTH=8" "+UART_PARITY_EN=1" "+UART_PARITY_OE=0" "+EN_ETH1=0" "+EN_ETH2=0" "+EN_ETH3=0" "+EN_ETH4=0" "+EN_NRZ=1" "+NRZ_BPW=12" "+NRZ_PLEN=50" "+NRZ_ENDIAN=0" "+UVM_TESTNAME=eiu_base_test" "+UVM_CONFIG_DB_TRACE" -classdebug -l eiu_base_test.log -do "run -a; q" 
-# Start time: 15:32:25 on May 22,2026
-# Loading /tmp/root@ahmedpc_dpi_16151/linuxaloem_gcc-7.4.0/export_tramp.so
+# vsim tb_top glbl -modelsimini /home/ahmed/modelsim_2020_libs/modelsim.ini -L unisims_ver -L unimacro_ver -L secureip -L xpm -sv_lib /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/lib/uvm_dpi -work /home/ahmed/uvm_training/verif/EIU/test/work "+NUM_PKTS=5" "+EN_UART1=0" "+EN_UART2=0" "+EN_UART3=0" "+UART_WIDTH=8" "+UART_PARITY_EN=1" "+UART_PARITY_OE=0" "+EN_ETH1=0" "+EN_ETH2=0" "+EN_ETH3=0" "+EN_ETH4=0" "+EN_NRZ=1" "+NRZ_BPW=8" "+NRZ_PLEN=50" "+NRZ_ENDIAN=0" "+UVM_TESTNAME=eiu_base_test" "+UVM_CONFIG_DB_TRACE" -classdebug -l eiu_base_test.log -do " onerror {resume}; add wave -noupdate -divider {=== EIU TOP PINS ===}; add wave -noupdate -r /tb_top/DUT/u_kernel/u_kernel_nrz/*; add wave -noupdate -r /tb_top/DUT/u_eth_nrz/*; add wave -noupdate /tb_top/DUT/*; add wave -noupdate -divider {=== ETH (Config/Write/Read) ===}; add wave -noupdate -r /tb_top/DUT/u_eth1/*; add wave -noupdate -divider {=== UART TX / RX & FIFOs ===}; add wave -noupdate -r /tb_top/DUT/*uart*/*; run -a;" 
+# Start time: 18:58:11 on May 22,2026
+# Loading /tmp/root@ahmedpc_dpi_26757/linuxaloem_gcc-7.4.0/export_tramp.so
 # ** Note: (vsim-8785) UVM-aware debugging capabilities will be disabled since no compiled "questa_uvm_pkg" can be found.
 # This also means that later if you turn on UVM-aware debugging your debug simulations may have
 # different random seeds from your non-debug simulations.
@@ -128,6 +128,8 @@
 # Loading work.kernel_read
 # Loading work.cdc_count_11bit_toggle
 # Loading work.kernel_nrz
+# Loading work.cdc_pulse_toggle_sync_negedge_src
+# Loading work.cdc_word12_toggle_sync_negedge_src
 # Loading work.eth_rx_app_if
 # Loading work.eth_if
 # Loading work.fifo_intf
@@ -218,12 +220,23 @@
 # ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(234): [TFMPC] - Missing connection for port 'clk_eth3'.
 # ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(234): [TFMPC] - Missing connection for port 'clk_eth4'.
 # ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(234): [TFMPC] - Missing connection for port 'rst_n'.
-# Compiling /tmp/root@ahmedpc_dpi_16151/linuxaloem_gcc-7.4.0/exportwrapper.c
-# Loading /tmp/root@ahmedpc_dpi_16151/linuxaloem_gcc-7.4.0/vsim_auto_compile.so
+# Compiling /tmp/root@ahmedpc_dpi_26757/linuxaloem_gcc-7.4.0/exportwrapper.c
+# Loading /tmp/root@ahmedpc_dpi_26757/linuxaloem_gcc-7.4.0/vsim_auto_compile.so
 # Loading /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/lib/uvm_dpi.so
-# ** Warning: Design size of 82932 statements exceeds ModelSim-Intel FPGA Starter Edition recommended capacity.
+# ** Warning: Design size of 82930 statements exceeds ModelSim-Intel FPGA Starter Edition recommended capacity.
 # Expect performance to be adversely affected.
-# run -a
+#  onerror {resume}
+#  Warning: onerror command for use within macro
+#  add wave -noupdate -divider {=== EIU TOP PINS ===}
+#  add wave -noupdate -r /tb_top/DUT/u_kernel/u_kernel_nrz/*
+#  add wave -noupdate -r /tb_top/DUT/u_eth_nrz/*
+#  add wave -noupdate /tb_top/DUT/*
+#  add wave -noupdate -divider {=== ETH (Config/Write/Read) ===}
+#  add wave -noupdate -r /tb_top/DUT/u_eth1/*
+#  add wave -noupdate -divider {=== UART TX / RX & FIFOs ===}
+#  add wave -noupdate -r /tb_top/DUT/*uart*/*
+# (vish-4014) No objects found matching '/tb_top/DUT/*uart*/*'.
+#  run -a
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_root.svh(392) @ 0: reporter [UVM/RELNOTES] 
 # ----------------------------------------------------------------
 # UVM-1.2
@@ -349,8 +362,8 @@
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.vsqr.seq_item_export.recording_detail' (type int) read by uvm_test_top.vsqr.seq_item_export = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.vsqr.seq_item_export.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.vsqr.seq_item_export = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.eiu_cfg' (type class eiu_pkg::eiu_config) read by uvm_test_top.env = (class eiu_pkg::eiu_config) {cfg} 488 1 819 @uvm_status_container@1 { } /tb_top/bkp_if /tb_top/nrz_if {/tb_top/uart_rx_if[0] /tb_top/uart_rx_if[1] /tb_top/uart_rx_if[2]} {/tb_top/uart_tx_if[0] /tb_top/uart_tx_if[1] /tb_top/uart_tx_if[2]} {/tb_top/eth_rx_if[0] /tb_top/eth_rx_if[1] /tb_top/eth_rx_if[2] /tb_top/eth_rx_if[3]} {/tb_top/eth_rx_drv_if[0] /tb_top/eth_rx_drv_if[1] /tb_top/eth_rx_drv_if[2] /tb_top/eth_rx_drv_if[3]} {/tb_top/eth_tx_if[0] /tb_top/eth_tx_if[1] /tb_top/eth_tx_if[2] /tb_top/eth_tx_if[3] /tb_top/eth_tx_if[4]} {eiu_config}
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/config/uart_config.sv(48) @ 0: reporter [UART_CFG] CLI Override: num_uart_packets = 1
-# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/SET] Configuration 'uvm_test_top.env.*.uart_cfg' (type class uart_pkg::uart_config) set by uvm_test_top.env = (class uart_pkg::uart_config) {u_cfg} 821 1 828 @uvm_status_container@1 { } @uvm_cmdline_processor@1 1 99999999 115200 0 0 115200 8 1 0 {uart_config}
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/config/uart_config.sv(48) @ 0: reporter [UART_CFG] CLI Override: num_uart_packets = 5
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/SET] Configuration 'uvm_test_top.env.*.uart_cfg' (type class uart_pkg::uart_config) set by uvm_test_top.env = (class uart_pkg::uart_config) {u_cfg} 821 1 828 @uvm_status_container@1 { } @uvm_cmdline_processor@1 5 99999999 115200 0 0 115200 8 1 0 {uart_config}
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/SET] Configuration 'uvm_test_top.env.bkp_agt*.bkp_vif' (type virtual bkp_intf) set by uvm_test_top.env = (virtual bkp_intf) /tb_top/bkp_if
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.bkp_agt.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.bkp_agt = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.bkp_agt.recording_detail' (type int) read by uvm_test_top.env.bkp_agt = null (failed lookup)
@@ -1134,9 +1147,9 @@
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[0].drvr.rsp_port.recording_detail' (type int) read by uvm_test_top.env.uart_rx_agts[0].drvr.rsp_port = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[0].drvr.rsp_port.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.uart_rx_agts[0].drvr.rsp_port = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[0].drvr.uart_unified_intf' (type virtual uart_unified_intf) read by uvm_test_top.env.uart_rx_agts[0].drvr = (virtual uart_unified_intf) /tb_top/uart_rx_if[0]
-# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[0].drvr.uart_cfg' (type class uart_pkg::uart_config) read by uvm_test_top.env.uart_rx_agts[0].drvr = (class uart_pkg::uart_config) {u_cfg} 821 1 5021 @uvm_status_container@1 { } @uvm_cmdline_processor@1 1 99999999 115200 0 0 115200 8 1 0 {uart_config}
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[0].drvr.uart_cfg' (type class uart_pkg::uart_config) read by uvm_test_top.env.uart_rx_agts[0].drvr = (class uart_pkg::uart_config) {u_cfg} 821 1 5021 @uvm_status_container@1 { } @uvm_cmdline_processor@1 5 99999999 115200 0 0 115200 8 1 0 {uart_config}
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[0].mntr.uart_unified_intf' (type virtual uart_unified_intf) read by uvm_test_top.env.uart_rx_agts[0].mntr = (virtual uart_unified_intf) /tb_top/uart_rx_if[0]
-# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[0].mntr.uart_cfg' (type class uart_pkg::uart_config) read by uvm_test_top.env.uart_rx_agts[0].mntr = (class uart_pkg::uart_config) {u_cfg} 821 1 5027 @uvm_status_container@1 { } @uvm_cmdline_processor@1 1 99999999 115200 0 0 115200 8 1 0 {uart_config}
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[0].mntr.uart_cfg' (type class uart_pkg::uart_config) read by uvm_test_top.env.uart_rx_agts[0].mntr = (class uart_pkg::uart_config) {u_cfg} 821 1 5027 @uvm_status_container@1 { } @uvm_cmdline_processor@1 5 99999999 115200 0 0 115200 8 1 0 {uart_config}
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[0].mntr.mon_analysis_port.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.uart_rx_agts[0].mntr.mon_analysis_port = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[0].mntr.mon_analysis_port.recording_detail' (type int) read by uvm_test_top.env.uart_rx_agts[0].mntr.mon_analysis_port = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[0].mntr.mon_analysis_port.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.uart_rx_agts[0].mntr.mon_analysis_port = null (failed lookup)
@@ -1195,9 +1208,9 @@
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[1].drvr.rsp_port.recording_detail' (type int) read by uvm_test_top.env.uart_rx_agts[1].drvr.rsp_port = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[1].drvr.rsp_port.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.uart_rx_agts[1].drvr.rsp_port = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[1].drvr.uart_unified_intf' (type virtual uart_unified_intf) read by uvm_test_top.env.uart_rx_agts[1].drvr = (virtual uart_unified_intf) /tb_top/uart_rx_if[1]
-# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[1].drvr.uart_cfg' (type class uart_pkg::uart_config) read by uvm_test_top.env.uart_rx_agts[1].drvr = (class uart_pkg::uart_config) {u_cfg} 821 1 5339 @uvm_status_container@1 { } @uvm_cmdline_processor@1 1 99999999 115200 0 0 115200 8 1 0 {uart_config}
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[1].drvr.uart_cfg' (type class uart_pkg::uart_config) read by uvm_test_top.env.uart_rx_agts[1].drvr = (class uart_pkg::uart_config) {u_cfg} 821 1 5339 @uvm_status_container@1 { } @uvm_cmdline_processor@1 5 99999999 115200 0 0 115200 8 1 0 {uart_config}
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[1].mntr.uart_unified_intf' (type virtual uart_unified_intf) read by uvm_test_top.env.uart_rx_agts[1].mntr = (virtual uart_unified_intf) /tb_top/uart_rx_if[1]
-# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[1].mntr.uart_cfg' (type class uart_pkg::uart_config) read by uvm_test_top.env.uart_rx_agts[1].mntr = (class uart_pkg::uart_config) {u_cfg} 821 1 5345 @uvm_status_container@1 { } @uvm_cmdline_processor@1 1 99999999 115200 0 0 115200 8 1 0 {uart_config}
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[1].mntr.uart_cfg' (type class uart_pkg::uart_config) read by uvm_test_top.env.uart_rx_agts[1].mntr = (class uart_pkg::uart_config) {u_cfg} 821 1 5345 @uvm_status_container@1 { } @uvm_cmdline_processor@1 5 99999999 115200 0 0 115200 8 1 0 {uart_config}
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[1].mntr.mon_analysis_port.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.uart_rx_agts[1].mntr.mon_analysis_port = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[1].mntr.mon_analysis_port.recording_detail' (type int) read by uvm_test_top.env.uart_rx_agts[1].mntr.mon_analysis_port = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[1].mntr.mon_analysis_port.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.uart_rx_agts[1].mntr.mon_analysis_port = null (failed lookup)
@@ -1256,9 +1269,9 @@
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[2].drvr.rsp_port.recording_detail' (type int) read by uvm_test_top.env.uart_rx_agts[2].drvr.rsp_port = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[2].drvr.rsp_port.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.uart_rx_agts[2].drvr.rsp_port = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[2].drvr.uart_unified_intf' (type virtual uart_unified_intf) read by uvm_test_top.env.uart_rx_agts[2].drvr = (virtual uart_unified_intf) /tb_top/uart_rx_if[2]
-# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[2].drvr.uart_cfg' (type class uart_pkg::uart_config) read by uvm_test_top.env.uart_rx_agts[2].drvr = (class uart_pkg::uart_config) {u_cfg} 821 1 5657 @uvm_status_container@1 { } @uvm_cmdline_processor@1 1 99999999 115200 0 0 115200 8 1 0 {uart_config}
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[2].drvr.uart_cfg' (type class uart_pkg::uart_config) read by uvm_test_top.env.uart_rx_agts[2].drvr = (class uart_pkg::uart_config) {u_cfg} 821 1 5657 @uvm_status_container@1 { } @uvm_cmdline_processor@1 5 99999999 115200 0 0 115200 8 1 0 {uart_config}
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[2].mntr.uart_unified_intf' (type virtual uart_unified_intf) read by uvm_test_top.env.uart_rx_agts[2].mntr = (virtual uart_unified_intf) /tb_top/uart_rx_if[2]
-# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[2].mntr.uart_cfg' (type class uart_pkg::uart_config) read by uvm_test_top.env.uart_rx_agts[2].mntr = (class uart_pkg::uart_config) {u_cfg} 821 1 5663 @uvm_status_container@1 { } @uvm_cmdline_processor@1 1 99999999 115200 0 0 115200 8 1 0 {uart_config}
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[2].mntr.uart_cfg' (type class uart_pkg::uart_config) read by uvm_test_top.env.uart_rx_agts[2].mntr = (class uart_pkg::uart_config) {u_cfg} 821 1 5663 @uvm_status_container@1 { } @uvm_cmdline_processor@1 5 99999999 115200 0 0 115200 8 1 0 {uart_config}
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[2].mntr.mon_analysis_port.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.uart_rx_agts[2].mntr.mon_analysis_port = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[2].mntr.mon_analysis_port.recording_detail' (type int) read by uvm_test_top.env.uart_rx_agts[2].mntr.mon_analysis_port = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_rx_agts[2].mntr.mon_analysis_port.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.uart_rx_agts[2].mntr.mon_analysis_port = null (failed lookup)
@@ -1270,21 +1283,21 @@
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_tx_agts[0].mntr.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.uart_tx_agts[0].mntr = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_tx_agts[0].mntr.recording_detail' (type int) read by uvm_test_top.env.uart_tx_agts[0].mntr = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_tx_agts[0].mntr.uart_unified_intf' (type virtual uart_unified_intf) read by uvm_test_top.env.uart_tx_agts[0].mntr = (virtual uart_unified_intf) /tb_top/uart_tx_if[0]
-# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_tx_agts[0].mntr.uart_cfg' (type class uart_pkg::uart_config) read by uvm_test_top.env.uart_tx_agts[0].mntr = (class uart_pkg::uart_config) {u_cfg} 821 1 5715 @uvm_status_container@1 { } @uvm_cmdline_processor@1 1 99999999 115200 0 0 115200 8 1 0 {uart_config}
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_tx_agts[0].mntr.uart_cfg' (type class uart_pkg::uart_config) read by uvm_test_top.env.uart_tx_agts[0].mntr = (class uart_pkg::uart_config) {u_cfg} 821 1 5715 @uvm_status_container@1 { } @uvm_cmdline_processor@1 5 99999999 115200 0 0 115200 8 1 0 {uart_config}
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_tx_agts[0].mntr.mon_analysis_port.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.uart_tx_agts[0].mntr.mon_analysis_port = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_tx_agts[0].mntr.mon_analysis_port.recording_detail' (type int) read by uvm_test_top.env.uart_tx_agts[0].mntr.mon_analysis_port = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_tx_agts[0].mntr.mon_analysis_port.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.uart_tx_agts[0].mntr.mon_analysis_port = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_tx_agts[1].mntr.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.uart_tx_agts[1].mntr = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_tx_agts[1].mntr.recording_detail' (type int) read by uvm_test_top.env.uart_tx_agts[1].mntr = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_tx_agts[1].mntr.uart_unified_intf' (type virtual uart_unified_intf) read by uvm_test_top.env.uart_tx_agts[1].mntr = (virtual uart_unified_intf) /tb_top/uart_tx_if[1]
-# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_tx_agts[1].mntr.uart_cfg' (type class uart_pkg::uart_config) read by uvm_test_top.env.uart_tx_agts[1].mntr = (class uart_pkg::uart_config) {u_cfg} 821 1 5752 @uvm_status_container@1 { } @uvm_cmdline_processor@1 1 99999999 115200 0 0 115200 8 1 0 {uart_config}
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_tx_agts[1].mntr.uart_cfg' (type class uart_pkg::uart_config) read by uvm_test_top.env.uart_tx_agts[1].mntr = (class uart_pkg::uart_config) {u_cfg} 821 1 5752 @uvm_status_container@1 { } @uvm_cmdline_processor@1 5 99999999 115200 0 0 115200 8 1 0 {uart_config}
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_tx_agts[1].mntr.mon_analysis_port.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.uart_tx_agts[1].mntr.mon_analysis_port = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_tx_agts[1].mntr.mon_analysis_port.recording_detail' (type int) read by uvm_test_top.env.uart_tx_agts[1].mntr.mon_analysis_port = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_tx_agts[1].mntr.mon_analysis_port.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.uart_tx_agts[1].mntr.mon_analysis_port = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_tx_agts[2].mntr.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.uart_tx_agts[2].mntr = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_tx_agts[2].mntr.recording_detail' (type int) read by uvm_test_top.env.uart_tx_agts[2].mntr = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_tx_agts[2].mntr.uart_unified_intf' (type virtual uart_unified_intf) read by uvm_test_top.env.uart_tx_agts[2].mntr = (virtual uart_unified_intf) /tb_top/uart_tx_if[2]
-# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_tx_agts[2].mntr.uart_cfg' (type class uart_pkg::uart_config) read by uvm_test_top.env.uart_tx_agts[2].mntr = (class uart_pkg::uart_config) {u_cfg} 821 1 5789 @uvm_status_container@1 { } @uvm_cmdline_processor@1 1 99999999 115200 0 0 115200 8 1 0 {uart_config}
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_tx_agts[2].mntr.uart_cfg' (type class uart_pkg::uart_config) read by uvm_test_top.env.uart_tx_agts[2].mntr = (class uart_pkg::uart_config) {u_cfg} 821 1 5789 @uvm_status_container@1 { } @uvm_cmdline_processor@1 5 99999999 115200 0 0 115200 8 1 0 {uart_config}
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_tx_agts[2].mntr.mon_analysis_port.recording_detail' (type reg signed[4095:0]) read by uvm_test_top.env.uart_tx_agts[2].mntr.mon_analysis_port = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_tx_agts[2].mntr.mon_analysis_port.recording_detail' (type int) read by uvm_test_top.env.uart_tx_agts[2].mntr.mon_analysis_port = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.env.uart_tx_agts[2].mntr.mon_analysis_port.check_connection_relationships' (type reg signed[4095:0]) read by uvm_test_top.env.uart_tx_agts[2].mntr.mon_analysis_port = null (failed lookup)
@@ -1293,8 +1306,8 @@
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.vsqr.max_random_count' (type reg signed[4095:0]) read by uvm_test_top.vsqr = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.vsqr.max_random_depth' (type reg signed[4095:0]) read by uvm_test_top.vsqr = null (failed lookup)
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/GET] Configuration 'uvm_test_top.vsqr.pound_zero_count' (type reg signed[4095:0]) read by uvm_test_top.vsqr = null (failed lookup)
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/config/uart_config.sv(48) @ 0: reporter [UART_CFG] CLI Override: num_uart_packets = 1
-# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/SET] Configuration 'uvm_test_top.env.*.uart_cfg' (type class uart_pkg::uart_config) set by uvm_test_top.env = (class uart_pkg::uart_config) {u_cfg} 5823 1 5826 @uvm_status_container@1 { } @uvm_cmdline_processor@1 1 99999999 115200 0 0 115200 8 1 0 {uart_config}
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/config/uart_config.sv(48) @ 0: reporter [UART_CFG] CLI Override: num_uart_packets = 5
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 0: reporter [CFGDB/SET] Configuration 'uvm_test_top.env.*.uart_cfg' (type class uart_pkg::uart_config) set by uvm_test_top.env = (class uart_pkg::uart_config) {u_cfg} 5823 1 5826 @uvm_status_container@1 { } @uvm_cmdline_processor@1 5 99999999 115200 0 0 115200 8 1 0 {uart_config}
 # UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(121) @ 0: uvm_test_top.env.uart_rx_agts[2].drvr [DRV_PROBE] Driver started. Waiting 2us for system settle...
 # UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(121) @ 0: uvm_test_top.env.uart_rx_agts[1].drvr [DRV_PROBE] Driver started. Waiting 2us for system settle...
 # UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(121) @ 0: uvm_test_top.env.uart_rx_agts[0].drvr [DRV_PROBE] Driver started. Waiting 2us for system settle...
@@ -1312,3 +1325,104 @@
 # UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(124) @ 20000000: uvm_test_top.env.uart_rx_agts[2].drvr [DRV_PROBE] Waiting 150us for EIU Hardware to acquire Baudrate lock from Backplane...
 # UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(124) @ 20000000: uvm_test_top.env.uart_rx_agts[1].drvr [DRV_PROBE] Waiting 150us for EIU Hardware to acquire Baudrate lock from Backplane...
 # UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(124) @ 20000000: uvm_test_top.env.uart_rx_agts[0].drvr [DRV_PROBE] Waiting 150us for EIU Hardware to acquire Baudrate lock from Backplane...
+# UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_sequence.sv(184) @ 242750000: uvm_test_top.env.bkp_agt.sqr@@cfg_seq [BKP_SEQ] <<< FULL Hardware Initialization Sequence Complete.
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(148) @ 1242750000: uvm_test_top.vsqr@@vseq [VSEQ] === STAGE 2: EVENT-DRIVEN PING-PONG TRAFFIC (5 Packets) ===
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(183) @ 1242750000: uvm_test_top.vsqr@@vseq [VSEQ] --- ETH PING-PONG: Pushing Packet 1/5 to PHY ---
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(167) @ 1242750000: uvm_test_top.vsqr@@vseq [VSEQ] Enabling Telemetry Traffic on ETH5 (NRZ)
+# UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/kwr_sequence.sv(36) @ 1242750000: uvm_test_top.env.bkp_agt.sqr@@tx_inj_seq [SEQ] Starting BACK-TO-BACK Burst Test with RANDOM Data: 5 Packets per FIFO...
+# UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/nrz_sequence.sv(22) @ 1242750000: uvm_test_top.env.nrz_agt.sqr@@nrz_seq [NRZ_SEQ] Starting Continuous NRZ Serial Injection...
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_resource_db.svh(121) @ 1242750000: reporter [CFGDB/GET] Configuration '.golden_nrz_q' (type class uvm_pkg::uvm_queue #(class kernel_pkg::nrz_item)) read by  = (class uvm_pkg::uvm_queue #(class kernel_pkg::nrz_item)) {golden_nrz_q} 4735 1 7031 @uvm_status_container@1 { } {} {uvm_queue} null
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(198) @ 1272750000: uvm_test_top.vsqr@@vseq [VSEQ] --- ETH PING-PONG: Triggering CPU to Extract Packet 1 ---
+# [PIN_PROBE_BKP] @1274750000: BKP  READ -> Addr: 1 | Data: 0x0
+# [PIN_PROBE_BKP] @1280750000: BKP  READ -> Addr: 4 | Data: 0x0
+# [PIN_PROBE_BKP] @1286750000: BKP  READ -> Addr: 7 | Data: 0x0
+# [PIN_PROBE_BKP] @1292750000: BKP  READ -> Addr: 10 | Data: 0x0
+# [PIN_PROBE_BKP] @1298750000: BKP  READ -> Addr: 13 | Data: 0x0
+# [PIN_PROBE_BKP] @1304750000: BKP  READ -> Addr: 16 | Data: 0x0
+# [PIN_PROBE_BKP] @1310750000: BKP  READ -> Addr: 19 | Data: 0x0
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(183) @ 1314750000: uvm_test_top.vsqr@@vseq [VSEQ] --- ETH PING-PONG: Pushing Packet 2/5 to PHY ---
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(198) @ 1344750000: uvm_test_top.vsqr@@vseq [VSEQ] --- ETH PING-PONG: Triggering CPU to Extract Packet 2 ---
+# [PIN_PROBE_BKP] @1346750000: BKP  READ -> Addr: 1 | Data: 0x0
+# [PIN_PROBE_BKP] @1352750000: BKP  READ -> Addr: 4 | Data: 0x0
+# [PIN_PROBE_BKP] @1358750000: BKP  READ -> Addr: 7 | Data: 0x0
+# [PIN_PROBE_BKP] @1364750000: BKP  READ -> Addr: 10 | Data: 0x0
+# [PIN_PROBE_BKP] @1370750000: BKP  READ -> Addr: 13 | Data: 0x0
+# [PIN_PROBE_BKP] @1376750000: BKP  READ -> Addr: 16 | Data: 0x0
+# [PIN_PROBE_BKP] @1382750000: BKP  READ -> Addr: 19 | Data: 0x0
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(183) @ 1386750000: uvm_test_top.vsqr@@vseq [VSEQ] --- ETH PING-PONG: Pushing Packet 3/5 to PHY ---
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(198) @ 1416750000: uvm_test_top.vsqr@@vseq [VSEQ] --- ETH PING-PONG: Triggering CPU to Extract Packet 3 ---
+# [PIN_PROBE_BKP] @1418750000: BKP  READ -> Addr: 1 | Data: 0x0
+# [PIN_PROBE_BKP] @1424750000: BKP  READ -> Addr: 4 | Data: 0x0
+# [PIN_PROBE_BKP] @1430750000: BKP  READ -> Addr: 7 | Data: 0x0
+# [PIN_PROBE_BKP] @1436750000: BKP  READ -> Addr: 10 | Data: 0x0
+# [PIN_PROBE_BKP] @1442750000: BKP  READ -> Addr: 13 | Data: 0x0
+# [PIN_PROBE_BKP] @1448750000: BKP  READ -> Addr: 16 | Data: 0x0
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv(75) @ 1450000000: uvm_test_top.env.scb [SCB_TRACKER] NRZ/ETH5 Live Count -> Payload Bytes [Inj: 50, Ver: 0]
+# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(38) @ 1453961000: uvm_test_top.env.eth_tx_agts[4].mon [TX_MON] tx_ctl went HIGH! Start of Frame detected. Sampling DDR pins...
+# [PIN_PROBE_BKP] @1454750000: BKP  READ -> Addr: 19 | Data: 0x0
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(183) @ 1458750000: uvm_test_top.vsqr@@vseq [VSEQ] --- ETH PING-PONG: Pushing Packet 4/5 to PHY ---
+# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(67) @ 1462281100: uvm_test_top.env.eth_tx_agts[4].mon [TX_MON] tx_ctl went LOW. Captured 104 bytes from physical pins.
+# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(114) @ 1462281100: uvm_test_top.env.eth_tx_agts[4].mon [TX_MON] Parsed UDP Payload (50 bytes). Extracted hardware CRC: 0xc9af3d40. Broadcasting to Scoreboard!
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv(75) @ 1462281100: uvm_test_top.env.scb [SCB_TRACKER] NRZ/ETH5 Live Count -> Payload Bytes [Inj: 50, Ver: 50]
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(198) @ 1488750000: uvm_test_top.vsqr@@vseq [VSEQ] --- ETH PING-PONG: Triggering CPU to Extract Packet 4 ---
+# [PIN_PROBE_BKP] @1490750000: BKP  READ -> Addr: 1 | Data: 0x0
+# [PIN_PROBE_BKP] @1496750000: BKP  READ -> Addr: 4 | Data: 0x0
+# [PIN_PROBE_BKP] @1502750000: BKP  READ -> Addr: 7 | Data: 0x0
+# [PIN_PROBE_BKP] @1508750000: BKP  READ -> Addr: 10 | Data: 0x0
+# [PIN_PROBE_BKP] @1514750000: BKP  READ -> Addr: 13 | Data: 0x0
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(127) @ 1520000000: uvm_test_top.env.uart_rx_agts[2].drvr [DRV_PROBE] Driver awake! Entering main loop.
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(127) @ 1520000000: uvm_test_top.env.uart_rx_agts[1].drvr [DRV_PROBE] Driver awake! Entering main loop.
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(127) @ 1520000000: uvm_test_top.env.uart_rx_agts[0].drvr [DRV_PROBE] Driver awake! Entering main loop.
+# [PIN_PROBE_BKP] @1520750000: BKP  READ -> Addr: 16 | Data: 0x0
+# [PIN_PROBE_BKP] @1526750000: BKP  READ -> Addr: 19 | Data: 0x0
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(183) @ 1530750000: uvm_test_top.vsqr@@vseq [VSEQ] --- ETH PING-PONG: Pushing Packet 5/5 to PHY ---
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(198) @ 1560750000: uvm_test_top.vsqr@@vseq [VSEQ] --- ETH PING-PONG: Triggering CPU to Extract Packet 5 ---
+# [PIN_PROBE_BKP] @1562750000: BKP  READ -> Addr: 1 | Data: 0x0
+# [PIN_PROBE_BKP] @1568750000: BKP  READ -> Addr: 4 | Data: 0x0
+# [PIN_PROBE_BKP] @1574750000: BKP  READ -> Addr: 7 | Data: 0x0
+# [PIN_PROBE_BKP] @1580750000: BKP  READ -> Addr: 10 | Data: 0x0
+# [PIN_PROBE_BKP] @1586750000: BKP  READ -> Addr: 13 | Data: 0x0
+# [PIN_PROBE_BKP] @1592750000: BKP  READ -> Addr: 16 | Data: 0x0
+# [PIN_PROBE_BKP] @1598750000: BKP  READ -> Addr: 19 | Data: 0x0
+# UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/kwr_sequence.sv(147) @ 1742750000: uvm_test_top.env.bkp_agt.sqr@@tx_inj_seq [SEQ] Random Burst Sequence Complete! Pipeline flushing...
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv(75) @ 2660000000: uvm_test_top.env.scb [SCB_TRACKER] NRZ/ETH5 Live Count -> Payload Bytes [Inj: 100, Ver: 50]
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv(75) @ 3870000000: uvm_test_top.env.scb [SCB_TRACKER] NRZ/ETH5 Live Count -> Payload Bytes [Inj: 150, Ver: 50]
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv(75) @ 5070000000: uvm_test_top.env.scb [SCB_TRACKER] NRZ/ETH5 Live Count -> Payload Bytes [Inj: 200, Ver: 50]
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv(75) @ 6280000000: uvm_test_top.env.scb [SCB_TRACKER] NRZ/ETH5 Live Count -> Payload Bytes [Inj: 250, Ver: 50]
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(205) @ 6602750000: uvm_test_top.vsqr@@vseq [VSEQ] === ALL DUPLEX STAGES COMPLETE ===
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_objection.svh(1270) @ 6622750000: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/test/eiu_base_test.sv(175) @ 6622750000: uvm_test_top [TEST_SUMMARY] ===============================================================================
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/test/eiu_base_test.sv(176) @ 6622750000: uvm_test_top [TEST_SUMMARY]                  EIU SYSTEM TEST EXECUTION COMPLETE                            
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/test/eiu_base_test.sv(177) @ 6622750000: uvm_test_top [TEST_SUMMARY]  Check the [SCB_PASS] logs above for verification of the TX and RX pipelines.  
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/test/eiu_base_test.sv(178) @ 6622750000: uvm_test_top [TEST_SUMMARY] ===============================================================================
+# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_report_server.svh(847) @ 6622750000: reporter [UVM/REPORT/SERVER] 
+# --- UVM Report Summary ---
+# 
+# ** Report counts by severity
+# UVM_INFO : 1102
+# UVM_WARNING :    0
+# UVM_ERROR :    0
+# UVM_FATAL :    0
+# ** Report counts by id
+# [BKP_SEQ]     2
+# [CFGDB/GET]   972
+# [CFGDB/SET]    75
+# [DRV_PROBE]     9
+# [NRZ_SEQ]     1
+# [RNTST]     1
+# [RX_DRV]     8
+# [SCB_TRACKER]     6
+# [SEQ]     2
+# [TEST]     1
+# [TEST_DONE]     1
+# [TEST_SUMMARY]     4
+# [TX_MON]     3
+# [UART_CFG]     2
+# [UVM/RELNOTES]     1
+# [VSEQ]    14
+# 
+# ** Note: $finish    : /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_root.svh(517)
+#    Time: 662275 ns  Iteration: 71  Instance: /tb_top
+# 1
+# Break in Task uvm_pkg/uvm_root::run_test at /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_root.svh line 517
+# 

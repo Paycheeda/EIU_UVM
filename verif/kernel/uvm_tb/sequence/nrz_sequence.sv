@@ -37,7 +37,7 @@ class nrz_sequence extends uvm_sequence #(nrz_item);
             req.sync_word2  = cfg_sync_word2;
             
             // Generate the dynamic payload based on the requested length plusarg
-            req.generate_payload(cfg_payload_len, cfg_bpw);
+            req.generate_payload((cfg_payload_len-2), cfg_bpw);
             
             finish_item(req);
             
