@@ -11,6 +11,7 @@ module eth#(
 		input 			tx_clk,
 		input 			rx_clk,
 		input 			rst_n,
+		input 			eth_rx_rst_n,
 		
 		input 			idelay_refclk_200MHz,
 		input 			idelay_refclk_locked,
@@ -72,7 +73,7 @@ generate
 			.RXCTL_IDELAY_VALUE (RXCTL_IDELAY_VALUE)
 		) u_eth_mac_rx (
 			.clk                          (rx_clk),
-			.rst_n                        (rst_n),
+			.rst_n                        (eth_rx_rst_n),
 
 			.rxd                          (rxd),
 			.rx_ctl                       (rx_ctl),
@@ -92,7 +93,7 @@ generate
 
 		assign rx_fifo_wr_en              = 1'b0;
 		assign rx_fifo_data_in            = 8'd0;
-		assign rx_fifo_rst_n              = rst_n;
+		assign rx_fifo_rst_n              = eth_rx_rst_n;
 
 		assign rx_eth_corrupt_frame_count = 11'd0;
 		assign eth_rx_data_valid          = 1'b0;

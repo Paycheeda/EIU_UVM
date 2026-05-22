@@ -69,6 +69,7 @@ ifeq ($(SIMULATOR), questa)
     SIM_OPT := $(SIM_OPT) -do " \
         onerror {resume}; \
         add wave -noupdate -divider {=== EIU TOP PINS ===}; \
+        add wave -noupdate -r /tb_top/DUT/u_kernel/u_kernel_nrz/*; \
         add wave -noupdate /tb_top/DUT/*; \
         add wave -noupdate -divider {=== ETH (Config/Write/Read) ===}; \
         add wave -noupdate -r /tb_top/DUT/u_eth1/*; \

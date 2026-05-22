@@ -1,32 +1,32 @@
 /*
-	The read operation is also synchronous, presenting the next data word at DO whenever the
-	RDEN is active one setup time before the rising RDCLK edge.
+    The read operation is also synchronous, presenting the next data word at DO whenever the
+    RDEN is active one setup time before the rising RDCLK edge.
 */
 
 /*
-	The write operation is synchronous, writing the data word available at DI into the FIFO
-	whenever WREN is active one setup time before the rising WRCLK edge.
+    The write operation is synchronous, writing the data word available at DI into the FIFO
+    whenever WREN is active one setup time before the rising WRCLK edge.
 */
 module dual_port_FIFO#(
-				parameter integer PARAM_DATA_WIDTH = 9,
-				parameter PARAM_FIFO_SIZE = "18Kb",
-				parameter PARAM_FIRST_WORD_FALL_THROUGH  = "FALSE"
-		)(
-			input 							rst_n,
-			
-			input 							wr_clk,
-			input[PARAM_DATA_WIDTH-1 : 0]	data_in,
-			input 							wr_en,
+                parameter integer PARAM_DATA_WIDTH = 9,
+                parameter PARAM_FIFO_SIZE = "18Kb",
+                parameter PARAM_FIRST_WORD_FALL_THROUGH  = "FALSE"
+        )(
+            input                           rst_n,
+            
+            input                           wr_clk,
+            input[PARAM_DATA_WIDTH-1 : 0]   data_in,
+            input                           wr_en,
 
-			input 							rd_clk,
-			input							rd_en,
-			output[PARAM_DATA_WIDTH-1 : 0]	data_out,
-			
-			
-			
-			output wire 					fifo_full,
-			output wire 					fifo_empty
-		);
+            input                           rd_clk,
+            input                           rd_en,
+            output[PARAM_DATA_WIDTH-1 : 0]  data_out,
+            
+            
+            
+            output wire                     fifo_full,
+            output wire                     fifo_empty
+        );
 
 // FIFO_DUALCLOCK_MACRO: Dual Clock First-In, First-Out (FIFO) RAM Buffer
 //                       7 Series
@@ -45,6 +45,35 @@ module dual_port_FIFO#(
 //    1-4     |  "36Kb"   |    8192    |        13-bit         //
 //    1-4     |  "18Kb"   |    4096    |        12-bit         //
 /////////////////////////////////////////////////////////////////
+
+// The Xilinx FIFO simulation model checks reset protocol very strictly:
+// RST must be asserted for at least five RDCLK cycles and RDEN/WREN must
+// remain low while reset is active.  At time 0 many upstream rd_en/wr_en
+// signals can still be X until their own reset blocks run, so gate them here
+// and generate a local FIFO reset that is guaranteed to satisfy the model.
+reg [2:0] fifo_rst_cnt = 3'd0;
+reg       fifo_rst     = 1'b1;
+
+always @(posedge rd_clk or negedge rst_n)
+begin
+    if (!rst_n)
+    begin
+        fifo_rst_cnt <= 3'd0;
+        fifo_rst     <= 1'b1;
+    end
+    else if (fifo_rst_cnt < 3'd5)
+    begin
+        fifo_rst_cnt <= fifo_rst_cnt + 3'd1;
+        fifo_rst     <= 1'b1;
+    end
+    else
+    begin
+        fifo_rst     <= 1'b0;
+    end
+end
+
+wire fifo_rd_en_safe = (!fifo_rst) && (rd_en === 1'b1);
+
 
 FIFO_DUALCLOCK_MACRO  #(
    .ALMOST_EMPTY_OFFSET(13'h080), // Sets the almost empty threshold
@@ -65,17 +94,17 @@ FIFO_DUALCLOCK_MACRO  #(
    .WRERR(),             // 1-bit output write error
    .DI(data_in),                   // Input data, width defined by DATA_WIDTH parameter
    .RDCLK(rd_clk),             // 1-bit input read clock
-   .RDEN(rd_en),               // 1-bit input read enable
-   .RST(~rst_n),                 // 1-bit input reset
+   .RDEN(fifo_rd_en_safe),     // 1-bit input read enable
+   .RST(fifo_rst),             // 1-bit input reset
    .WRCLK(wr_clk),             // 1-bit input write clock
-   .WREN(wr_en)                // 1-bit input write enable
+   .WREN(wr_en)      // 1-bit input write enable
 );
 
 // End of FIFO_DUALCLOCK_MACRO_inst instantiation
 
 
 endmodule
-		
+        
 /*
 reg[PARAM_DATA_WIDTH-1 : 0] fifo_data_in;
 reg wr_en;
@@ -99,115 +128,115 @@ assign data_out = data_out_reg;
 
 always @ (posedge wr_clk or negedge rst_n)
 begin
-	if(!rst_n)
-	begin
-		fifo_data_in <= 0;
-		wr_en <= 0;
-		state_wr_data <= 0;
-	end
-	else
-	begin
-		case(state_wr_data)
-			IDLE:
-			begin
-				wr_en <= 0;
-				if(write_pulse_in == 1 && packet_corrupt_flag == 0)
-				begin
-					fifo_data_in <= data_in;
-					state_wr_data <= DATA_WRITE_STATE;
-				end
-				else
-				begin
-					state_wr_data <= IDLE;
-				end
-			end
-			
-			DATA_WRITE_STATE:
-			begin
-				if(fifo_full == 0)
-				begin
-					wr_en <= 1;
-					state_wr_data <= IDLE;
-				end
-				else
-				begin
-					wr_en <= 0;
-					state_wr_data <= DATA_WRITE_STATE;
-				end
-			end
-			
-			default:
-			begin
-				state_wr_data <= IDLE;
-				wr_en <= 0;
-			end	
-		endcase
-	end
+    if(!rst_n)
+    begin
+        fifo_data_in <= 0;
+        wr_en <= 0;
+        state_wr_data <= 0;
+    end
+    else
+    begin
+        case(state_wr_data)
+            IDLE:
+            begin
+                wr_en <= 0;
+                if(write_pulse_in == 1 && packet_corrupt_flag == 0)
+                begin
+                    fifo_data_in <= data_in;
+                    state_wr_data <= DATA_WRITE_STATE;
+                end
+                else
+                begin
+                    state_wr_data <= IDLE;
+                end
+            end
+            
+            DATA_WRITE_STATE:
+            begin
+                if(fifo_full == 0)
+                begin
+                    wr_en <= 1;
+                    state_wr_data <= IDLE;
+                end
+                else
+                begin
+                    wr_en <= 0;
+                    state_wr_data <= DATA_WRITE_STATE;
+                end
+            end
+            
+            default:
+            begin
+                state_wr_data <= IDLE;
+                wr_en <= 0;
+            end 
+        endcase
+    end
 end
 
 
 always @ (posedge rd_clk or negedge rst_n)
 begin
-	if(!rst_n)
-	begin
-		rd_en <= 0;
-		data_out_reg <= 0;
-		read_pulse_out <= 0;
-		state_rd_data <= 0;
-	end
-	else
-	begin
-		case(state_rd_data)
-			READ_DATA_DETECT_STATE:
-			begin
-				rd_en <= 0;
-				read_pulse_out <= 0;
-				if(read_data_flag == 1)
-				begin
-					state_rd_data <= FIFO_EMPTY_DETECT_STATE;
-				end
-				else
-				begin
-					state_rd_data <= READ_DATA_DETECT_STATE;
-				end
-			end
-			
-			FIFO_EMPTY_DETECT_STATE:
-			begin
-				if(fifo_empty == 0)
-				begin
-					rd_en <= 1;
-					state_rd_data <= READ_WAIT_STATE;
-				end
-				else
-				begin
-					rd_en <= 0;
-					state_rd_data <= READ_DATA_DETECT_STATE;
-				end
-			end
-			
-			READ_WAIT_STATE:
-			begin
-				rd_en <= 0;
-				state_rd_data <= READ_DATA_STATE;
-			end
-			
-			READ_DATA_STATE:
-			begin
-				rd_en <= 0;
-				data_out_reg <= fifo_data_out;
-				read_pulse_out <= 1;
-				state_rd_data <= READ_DATA_DETECT_STATE;
-			end
-			
-			default:
-			begin
-				rd_en <= 0;
-				state_rd_data <= READ_DATA_DETECT_STATE;
-			end
-			
-		endcase
-	end
+    if(!rst_n)
+    begin
+        rd_en <= 0;
+        data_out_reg <= 0;
+        read_pulse_out <= 0;
+        state_rd_data <= 0;
+    end
+    else
+    begin
+        case(state_rd_data)
+            READ_DATA_DETECT_STATE:
+            begin
+                rd_en <= 0;
+                read_pulse_out <= 0;
+                if(read_data_flag == 1)
+                begin
+                    state_rd_data <= FIFO_EMPTY_DETECT_STATE;
+                end
+                else
+                begin
+                    state_rd_data <= READ_DATA_DETECT_STATE;
+                end
+            end
+            
+            FIFO_EMPTY_DETECT_STATE:
+            begin
+                if(fifo_empty == 0)
+                begin
+                    rd_en <= 1;
+                    state_rd_data <= READ_WAIT_STATE;
+                end
+                else
+                begin
+                    rd_en <= 0;
+                    state_rd_data <= READ_DATA_DETECT_STATE;
+                end
+            end
+            
+            READ_WAIT_STATE:
+            begin
+                rd_en <= 0;
+                state_rd_data <= READ_DATA_STATE;
+            end
+            
+            READ_DATA_STATE:
+            begin
+                rd_en <= 0;
+                data_out_reg <= fifo_data_out;
+                read_pulse_out <= 1;
+                state_rd_data <= READ_DATA_DETECT_STATE;
+            end
+            
+            default:
+            begin
+                rd_en <= 0;
+                state_rd_data <= READ_DATA_DETECT_STATE;
+            end
+            
+        endcase
+    end
 end
 
 */

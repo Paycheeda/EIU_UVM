@@ -7,20 +7,20 @@ module EIU_TOP(
         input               clk_125MHz_eth3,
         input               clk_125MHz_eth4,
         input               clk_125MHz_eth_nrz,
-                
-                input               clk_uart_55_296MHz,
-                
-                // UART1
-                input               uart1_rx,
-                output              uart1_tx,
+        
+        input               clk_uart_55_296MHz,
+        
+        // UART1
+        input               uart1_rx,
+        output              uart1_tx,
 
-                // UART2
-                input               uart2_rx,
-                output              uart2_tx,
-                
-                // UART3
-                input               uart3_rx,
-                output              uart3_tx,
+        // UART2
+        input               uart2_rx,
+        output              uart2_tx,
+        
+        // UART3
+        input               uart3_rx,
+        output              uart3_tx,
 
         // ETH1 RGMII
         input               rx_c_eth1,
@@ -642,6 +642,9 @@ uart #(
 
 wire rx1_clk_shifted;
 wire rx1_clk_shifted_locked;
+wire eth1_rx_ready = rx1_clk_shifted_locked & idelay_refclk_locked;
+
+wire eth1_rx_rst_n;
 
 clk_wiz_rgmii_rx_shift u_clk_wiz_rgmii_rx1_shift (
     .clk_out_shifted (rx1_clk_shifted),
@@ -650,12 +653,23 @@ clk_wiz_rgmii_rx_shift u_clk_wiz_rgmii_rx1_shift (
     .clk_in          (rx_clk_eth1_buf)
 );
 
+reset_synchronizer u_eth1_rx_reset_synchronizer (
+    .clk        (rx1_clk_shifted),
+    .rst_n      (rst_n),
+    .clk_locked (eth1_rx_ready),
+    .rst_n_sync (eth1_rx_rst_n)
+);
+
 // =====================================================
 // ETH2 RX SHIFTED CLOCK AND RESET
 // =====================================================
 
 wire rx2_clk_shifted;
 wire rx2_clk_shifted_locked;
+wire eth2_rx_ready = rx2_clk_shifted_locked & idelay_refclk_locked;
+
+
+wire eth2_rx_rst_n;
 
 clk_wiz_rgmii_rx_shift u_clk_wiz_rgmii_rx2_shift (
     .clk_out_shifted (rx2_clk_shifted),
@@ -664,12 +678,23 @@ clk_wiz_rgmii_rx_shift u_clk_wiz_rgmii_rx2_shift (
     .clk_in          (rx_clk_eth2_buf)
 );
 
+reset_synchronizer u_eth2_rx_reset_synchronizer (
+    .clk        (rx2_clk_shifted),
+    .rst_n      (rst_n),
+    .clk_locked (eth2_rx_ready),
+    .rst_n_sync (eth2_rx_rst_n)
+);
+
 // =====================================================
 // ETH3 RX SHIFTED CLOCK AND RESET
 // =====================================================
 
 wire rx3_clk_shifted;
 wire rx3_clk_shifted_locked;
+wire eth3_rx_ready = rx3_clk_shifted_locked & idelay_refclk_locked;
+
+
+wire eth3_rx_rst_n;
 
 clk_wiz_rgmii_rx_shift u_clk_wiz_rgmii_rx3_shift (
     .clk_out_shifted (rx3_clk_shifted),
@@ -678,12 +703,23 @@ clk_wiz_rgmii_rx_shift u_clk_wiz_rgmii_rx3_shift (
     .clk_in          (rx_clk_eth3_buf)
 );
 
+reset_synchronizer u_eth3_rx_reset_synchronizer (
+    .clk        (rx3_clk_shifted),
+    .rst_n      (rst_n),
+    .clk_locked (eth3_rx_ready),
+    .rst_n_sync (eth3_rx_rst_n)
+);
+
 // =====================================================
 // ETH4 RX SHIFTED CLOCK AND RESET
 // =====================================================
 
 wire rx4_clk_shifted;
 wire rx4_clk_shifted_locked;
+wire eth4_rx_ready = rx4_clk_shifted_locked & idelay_refclk_locked;
+
+
+wire eth4_rx_rst_n;
 
 clk_wiz_rgmii_rx_shift u_clk_wiz_rgmii_rx4_shift (
     .clk_out_shifted (rx4_clk_shifted),
@@ -692,21 +728,29 @@ clk_wiz_rgmii_rx_shift u_clk_wiz_rgmii_rx4_shift (
     .clk_in          (rx_clk_eth4_buf)
 );
 
+reset_synchronizer u_eth4_rx_reset_synchronizer (
+    .clk        (rx4_clk_shifted),
+    .rst_n      (rst_n),
+    .clk_locked (eth4_rx_ready),
+    .rst_n_sync (eth4_rx_rst_n)
+);
+
 // =====================================================
 // ETH1 MODULE
 // =====================================================
 
 eth #(
     .IODELAY_GROUP_NAME("ETH1_IDELAY_GROUP"),
-        .RXD0_IDELAY_VALUE  (26),
-        .RXD1_IDELAY_VALUE  (26),
-        .RXD2_IDELAY_VALUE  (26),
-        .RXD3_IDELAY_VALUE  (26),
-        .RXCTL_IDELAY_VALUE (26)
+    .RXD0_IDELAY_VALUE  (26),
+    .RXD1_IDELAY_VALUE  (26),
+    .RXD2_IDELAY_VALUE  (26),
+    .RXD3_IDELAY_VALUE  (26),
+    .RXCTL_IDELAY_VALUE (26)
 ) u_eth1 (
         .tx_clk                     (clk_125MHz_eth1_buf),
         .rx_clk                     (rx1_clk_shifted),
         .rst_n                      (rst_n),
+        .eth_rx_rst_n               (eth1_rx_rst_n),
 
         .idelay_refclk_200MHz       (idelay_refclk_200MHz),
         .idelay_refclk_locked       (idelay_refclk_locked),
@@ -751,15 +795,16 @@ eth #(
 
 eth #(
     .IODELAY_GROUP_NAME("ETH2_IDELAY_GROUP"),
-        .RXD0_IDELAY_VALUE  (26),
-        .RXD1_IDELAY_VALUE  (26),
-        .RXD2_IDELAY_VALUE  (26),
-        .RXD3_IDELAY_VALUE  (26),
-        .RXCTL_IDELAY_VALUE (26)
+    .RXD0_IDELAY_VALUE  (26),
+    .RXD1_IDELAY_VALUE  (26),
+    .RXD2_IDELAY_VALUE  (26),
+    .RXD3_IDELAY_VALUE  (26),
+    .RXCTL_IDELAY_VALUE (26)
 ) u_eth2 (
         .tx_clk                     (clk_125MHz_eth2_buf),
         .rx_clk                     (rx2_clk_shifted),
         .rst_n                      (rst_n),
+        .eth_rx_rst_n               (eth2_rx_rst_n),
 
         .idelay_refclk_200MHz       (idelay_refclk_200MHz),
         .idelay_refclk_locked       (idelay_refclk_locked),
@@ -804,15 +849,16 @@ eth #(
 
 eth #(
     .IODELAY_GROUP_NAME("ETH3_IDELAY_GROUP"),
-        .RXD0_IDELAY_VALUE  (26),
-        .RXD1_IDELAY_VALUE  (26),
-        .RXD2_IDELAY_VALUE  (26),
-        .RXD3_IDELAY_VALUE  (26),
-        .RXCTL_IDELAY_VALUE (26)
+    .RXD0_IDELAY_VALUE  (26),
+    .RXD1_IDELAY_VALUE  (26),
+    .RXD2_IDELAY_VALUE  (26),
+    .RXD3_IDELAY_VALUE  (26),
+    .RXCTL_IDELAY_VALUE (26)
 ) u_eth3 (
         .tx_clk                     (clk_125MHz_eth3_buf),
         .rx_clk                     (rx3_clk_shifted),
         .rst_n                      (rst_n),
+        .eth_rx_rst_n               (eth3_rx_rst_n),
 
         .idelay_refclk_200MHz       (idelay_refclk_200MHz),
         .idelay_refclk_locked       (idelay_refclk_locked),
@@ -857,15 +903,16 @@ eth #(
 
 eth #(
     .IODELAY_GROUP_NAME("ETH4_IDELAY_GROUP"),
-        .RXD0_IDELAY_VALUE  (28),
-        .RXD1_IDELAY_VALUE  (28),
-        .RXD2_IDELAY_VALUE  (28),
-        .RXD3_IDELAY_VALUE  (28),
-        .RXCTL_IDELAY_VALUE (28)
+    .RXD0_IDELAY_VALUE  (28),
+    .RXD1_IDELAY_VALUE  (28),
+    .RXD2_IDELAY_VALUE  (28),
+    .RXD3_IDELAY_VALUE  (28),
+    .RXCTL_IDELAY_VALUE (28)
 ) u_eth4 (
         .tx_clk                     (clk_125MHz_eth4_buf),
         .rx_clk                     (rx4_clk_shifted),
         .rst_n                      (rst_n),
+        .eth_rx_rst_n               (eth4_rx_rst_n),
 
         .idelay_refclk_200MHz       (idelay_refclk_200MHz),
         .idelay_refclk_locked       (idelay_refclk_locked),
@@ -910,11 +957,12 @@ eth #(
 
 eth  #(
     .IODELAY_GROUP_NAME("ETH_NRZ_IDELAY_GROUP"),
-        .ENABLE_RX(0)
+    .ENABLE_RX(0)
 )u_eth_nrz(
         .tx_clk                     (clk_125MHz_eth_nrz_buf),
         .rx_clk                     (),
         .rst_n                      (rst_n),
+        .eth_rx_rst_n               (rst_n),
 
         .idelay_refclk_200MHz       (idelay_refclk_200MHz),
         .idelay_refclk_locked       (idelay_refclk_locked),
@@ -1457,8 +1505,34 @@ kernel u_kernel (
 
 endmodule
 
+module reset_synchronizer #(
+    parameter integer STAGES = 3
+)(
+    input  wire clk,
+    input  wire rst_n,
+    input  wire clk_locked,
 
-// file: clk_wiz_125_to_200.v
+    output wire rst_n_sync
+);
+
+reg [STAGES-1:0] rst_sync_reg;
+
+assign rst_n_sync = rst_sync_reg[STAGES-1];
+
+always @(posedge clk or negedge rst_n)
+begin
+    if (!rst_n)
+        rst_sync_reg <= {STAGES{1'b0}};
+    else if (!clk_locked)
+        rst_sync_reg <= {STAGES{1'b0}};
+    else
+        rst_sync_reg <= {rst_sync_reg[STAGES-2:0], 1'b1};
+end
+
+endmodule
+
+
+// file: clk_wiz_rgmii_rx_shift.v
 // (c) Copyright 2017-2018, 2023 Advanced Micro Devices, Inc. All rights reserved.
 //
 // This file contains confidential and proprietary information
@@ -1512,7 +1586,7 @@ endmodule
 //  Output     Output      Phase    Duty Cycle   Pk-to-Pk     Phase
 //   Clock     Freq (MHz)  (degrees)    (%)     Jitter (ps)  Error (ps)
 //----------------------------------------------------------------------------
-// clk_out_200MHz__200.00000______0.000______50.0______109.241_____96.948
+// clk_out_shifted__125.00000____-120.000______50.0______117.042_____94.860
 //
 //----------------------------------------------------------------------------
 // Input Clock   Freq (MHz)    Input Jitter (UI)
@@ -1521,28 +1595,228 @@ endmodule
 
 `timescale 1ps/1ps
 
-(* CORE_GENERATION_INFO = "clk_wiz_125_to_200,clk_wiz_v6_0_16_0_0,{component_name=clk_wiz_125_to_200,use_phase_alignment=true,use_min_o_jitter=false,use_max_i_jitter=false,use_dyn_phase_shift=false,use_inclk_switchover=false,use_dyn_reconfig=false,enable_axi=0,feedback_source=FDBK_AUTO,PRIMITIVE=MMCM,num_out_clk=1,clkin1_period=8.000,clkin2_period=10.000,use_power_down=false,use_reset=true,use_locked=true,use_inclk_stopped=false,feedback_type=SINGLE,CLOCK_MGR_TYPE=NA,manual_override=false}" *)
+module clk_wiz_rgmii_rx_shift_clk_wiz 
 
-module clk_wiz_125_to_200 
+ (// Clock in ports
+  // Clock out ports
+  output        clk_out_shifted,
+  // Status and control signals
+  input         resetn,
+  output        locked,
+  input         clk_in
+ );
+  // Input buffering
+  //------------------------------------
+wire clk_in_clk_wiz_rgmii_rx_shift;
+wire clk_in2_clk_wiz_rgmii_rx_shift;
+  assign clk_in_clk_wiz_rgmii_rx_shift = clk_in;
+
+
+
+
+  // Clocking PRIMITIVE
+  //------------------------------------
+
+  // Instantiation of the MMCM PRIMITIVE
+  //    * Unused inputs are tied off
+  //    * Unused outputs are labeled unused
+
+  wire        clk_out_shifted_clk_wiz_rgmii_rx_shift;
+  wire        clk_out2_clk_wiz_rgmii_rx_shift;
+  wire        clk_out3_clk_wiz_rgmii_rx_shift;
+  wire        clk_out4_clk_wiz_rgmii_rx_shift;
+  wire        clk_out5_clk_wiz_rgmii_rx_shift;
+  wire        clk_out6_clk_wiz_rgmii_rx_shift;
+  wire        clk_out7_clk_wiz_rgmii_rx_shift;
+
+  wire [15:0] do_unused;
+  wire        drdy_unused;
+  wire        psdone_unused;
+  wire        locked_int;
+  wire        clkfbout_clk_wiz_rgmii_rx_shift;
+  wire        clkfbout_buf_clk_wiz_rgmii_rx_shift;
+  wire        clkfboutb_unused;
+    wire clkout0b_unused;
+   wire clkout1_unused;
+   wire clkout1b_unused;
+   wire clkout2_unused;
+   wire clkout2b_unused;
+   wire clkout3_unused;
+   wire clkout3b_unused;
+   wire clkout4_unused;
+  wire        clkout5_unused;
+  wire        clkout6_unused;
+  wire        clkfbstopped_unused;
+  wire        clkinstopped_unused;
+  wire        reset_high;
+
+  MMCME2_ADV
+  #(.BANDWIDTH            ("OPTIMIZED"),
+    .CLKOUT4_CASCADE      ("FALSE"),
+    .COMPENSATION         ("ZHOLD"),
+    .STARTUP_WAIT         ("FALSE"),
+    .DIVCLK_DIVIDE        (1),
+    .CLKFBOUT_MULT_F      (8.250),
+    .CLKFBOUT_PHASE       (0.000),
+    .CLKFBOUT_USE_FINE_PS ("FALSE"),
+    .CLKOUT0_DIVIDE_F     (8.250),
+    .CLKOUT0_PHASE        (-120.000),
+    .CLKOUT0_DUTY_CYCLE   (0.500),
+    .CLKOUT0_USE_FINE_PS  ("FALSE"),
+    .CLKIN1_PERIOD        (8.000))
+  mmcm_adv_inst
+    // Output clocks
+   (
+    .CLKFBOUT            (clkfbout_clk_wiz_rgmii_rx_shift),
+    .CLKFBOUTB           (clkfboutb_unused),
+    .CLKOUT0             (clk_out_shifted_clk_wiz_rgmii_rx_shift),
+    .CLKOUT0B            (clkout0b_unused),
+    .CLKOUT1             (clkout1_unused),
+    .CLKOUT1B            (clkout1b_unused),
+    .CLKOUT2             (clkout2_unused),
+    .CLKOUT2B            (clkout2b_unused),
+    .CLKOUT3             (clkout3_unused),
+    .CLKOUT3B            (clkout3b_unused),
+    .CLKOUT4             (clkout4_unused),
+    .CLKOUT5             (clkout5_unused),
+    .CLKOUT6             (clkout6_unused),
+     // Input clock control
+    .CLKFBIN             (clkfbout_buf_clk_wiz_rgmii_rx_shift),
+    .CLKIN1              (clk_in_clk_wiz_rgmii_rx_shift),
+    .CLKIN2              (1'b0),
+     // Tied to always select the primary input clock
+    .CLKINSEL            (1'b1),
+    // Ports for dynamic reconfiguration
+    .DADDR               (7'h0),
+    .DCLK                (1'b0),
+    .DEN                 (1'b0),
+    .DI                  (16'h0),
+    .DO                  (do_unused),
+    .DRDY                (drdy_unused),
+    .DWE                 (1'b0),
+    // Ports for dynamic phase shift
+    .PSCLK               (1'b0),
+    .PSEN                (1'b0),
+    .PSINCDEC            (1'b0),
+    .PSDONE              (psdone_unused),
+    // Other control and status signals
+    .LOCKED              (locked_int),
+    .CLKINSTOPPED        (clkinstopped_unused),
+    .CLKFBSTOPPED        (clkfbstopped_unused),
+    .PWRDWN              (1'b0),
+    .RST                 (reset_high));
+  assign reset_high = ~resetn; 
+
+  assign locked = locked_int;
+// Clock Monitor clock assigning
+//--------------------------------------
+ // Output buffering
+  //-----------------------------------
+
+  BUFG clkf_buf
+   (.O (clkfbout_buf_clk_wiz_rgmii_rx_shift),
+    .I (clkfbout_clk_wiz_rgmii_rx_shift));
+
+
+
+
+
+
+  BUFG clkout1_buf
+   (.O   (clk_out_shifted),
+    .I   (clk_out_shifted_clk_wiz_rgmii_rx_shift));
+
+
+
+
+endmodule
+
+
+// file: clk_wiz_rgmii_rx_shift.v
+// (c) Copyright 2017-2018, 2023 Advanced Micro Devices, Inc. All rights reserved.
+//
+// This file contains confidential and proprietary information
+// of AMD and is protected under U.S. and international copyright
+// and other intellectual property laws.
+//
+// DISCLAIMER
+// This disclaimer is not a license and does not grant any
+// rights to the materials distributed herewith. Except as
+// otherwise provided in a valid license issued to you by
+// AMD, and to the maximum extent permitted by applicable
+// law: (1) THESE MATERIALS ARE MADE AVAILABLE "AS IS" AND
+// WITH ALL FAULTS, AND AMD HEREBY DISCLAIMS ALL WARRANTIES
+// AND CONDITIONS, EXPRESS, IMPLIED, OR STATUTORY, INCLUDING
+// BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, NON-
+// INFRINGEMENT, OR FITNESS FOR ANY PARTICULAR PURPOSE; and
+// (2) AMD shall not be liable (whether in contract or tort,
+// including negligence, or under any other theory of
+// liability) for any loss or damage of any kind or nature
+// related to, arising under or in connection with these
+// materials, including for any direct, or any indirect,
+// special, incidental, or consequential loss or damage
+// (including loss of data, profits, goodwill, or any type of
+// loss or damage suffered as a result of any action brought
+// by a third party) even if such damage or loss was
+// reasonably foreseeable or AMD had been advised of the
+// possibility of the same.
+//
+// CRITICAL APPLICATIONS
+// AMD products are not designed or intended to be fail-
+// safe, or for use in any application requiring fail-safe
+// performance, such as life-support or safety devices or
+// systems, Class III medical devices, nuclear facilities,
+// applications related to the deployment of airbags, or any
+// other applications that could lead to death, personal
+// injury, or severe property or environmental damage
+// (individually and collectively, "Critical
+// Applications"). Customer assumes the sole risk and
+// liability of any use of AMD products in Critical
+// Applications, subject only to applicable laws and
+// regulations governing limitations on product liability.
+//
+// THIS COPYRIGHT NOTICE AND DISCLAIMER MUST BE RETAINED AS
+// PART OF THIS FILE AT ALL TIMES.
+//----------------------------------------------------------------------------
+// User entered comments
+//----------------------------------------------------------------------------
+// None
+//
+//----------------------------------------------------------------------------
+//  Output     Output      Phase    Duty Cycle   Pk-to-Pk     Phase
+//   Clock     Freq (MHz)  (degrees)    (%)     Jitter (ps)  Error (ps)
+//----------------------------------------------------------------------------
+// clk_out_shifted__125.00000____-120.000______50.0______117.042_____94.860
+//
+//----------------------------------------------------------------------------
+// Input Clock   Freq (MHz)    Input Jitter (UI)
+//----------------------------------------------------------------------------
+// __primary_________125.000____________0.010
+
+`timescale 1ps/1ps
+
+(* CORE_GENERATION_INFO = "clk_wiz_rgmii_rx_shift,clk_wiz_v6_0_16_0_0,{component_name=clk_wiz_rgmii_rx_shift,use_phase_alignment=true,use_min_o_jitter=false,use_max_i_jitter=false,use_dyn_phase_shift=false,use_inclk_switchover=false,use_dyn_reconfig=false,enable_axi=0,feedback_source=FDBK_AUTO,PRIMITIVE=MMCM,num_out_clk=1,clkin1_period=8.000,clkin2_period=10.000,use_power_down=false,use_reset=true,use_locked=true,use_inclk_stopped=false,feedback_type=SINGLE,CLOCK_MGR_TYPE=NA,manual_override=false}" *)
+
+module clk_wiz_rgmii_rx_shift 
  (
   // Clock out ports
-  output        clk_out_200MHz,
+  output        clk_out_shifted,
   // Status and control signals
   input         resetn,
   output        locked,
  // Clock in ports
-  input         clk_125MHz
+  input         clk_in
  );
 
-  clk_wiz_125_to_200_clk_wiz inst
+  clk_wiz_rgmii_rx_shift_clk_wiz inst
   (
   // Clock out ports  
-  .clk_out_200MHz(clk_out_200MHz),
+  .clk_out_shifted(clk_out_shifted),
   // Status and control signals               
   .resetn(resetn), 
   .locked(locked),
  // Clock in ports
-  .clk_125MHz(clk_125MHz)
+  .clk_in(clk_in)
   );
 
 endmodule
@@ -1748,7 +2022,7 @@ wire clk_in2_clk_wiz_125_to_200;
 endmodule
 
 
-// file: clk_wiz_rgmii_rx_shift.v
+// file: clk_wiz_125_to_200.v
 // (c) Copyright 2017-2018, 2023 Advanced Micro Devices, Inc. All rights reserved.
 //
 // This file contains confidential and proprietary information
@@ -1802,7 +2076,7 @@ endmodule
 //  Output     Output      Phase    Duty Cycle   Pk-to-Pk     Phase
 //   Clock     Freq (MHz)  (degrees)    (%)     Jitter (ps)  Error (ps)
 //----------------------------------------------------------------------------
-// clk_out_shifted__125.00000____-120.000______50.0______117.042_____94.860
+// clk_out_200MHz__200.00000______0.000______50.0______109.241_____96.948
 //
 //----------------------------------------------------------------------------
 // Input Clock   Freq (MHz)    Input Jitter (UI)
@@ -1811,228 +2085,28 @@ endmodule
 
 `timescale 1ps/1ps
 
-(* CORE_GENERATION_INFO = "clk_wiz_rgmii_rx_shift,clk_wiz_v6_0_16_0_0,{component_name=clk_wiz_rgmii_rx_shift,use_phase_alignment=true,use_min_o_jitter=false,use_max_i_jitter=false,use_dyn_phase_shift=false,use_inclk_switchover=false,use_dyn_reconfig=false,enable_axi=0,feedback_source=FDBK_AUTO,PRIMITIVE=MMCM,num_out_clk=1,clkin1_period=8.000,clkin2_period=10.000,use_power_down=false,use_reset=true,use_locked=true,use_inclk_stopped=false,feedback_type=SINGLE,CLOCK_MGR_TYPE=NA,manual_override=false}" *)
+(* CORE_GENERATION_INFO = "clk_wiz_125_to_200,clk_wiz_v6_0_16_0_0,{component_name=clk_wiz_125_to_200,use_phase_alignment=true,use_min_o_jitter=false,use_max_i_jitter=false,use_dyn_phase_shift=false,use_inclk_switchover=false,use_dyn_reconfig=false,enable_axi=0,feedback_source=FDBK_AUTO,PRIMITIVE=MMCM,num_out_clk=1,clkin1_period=8.000,clkin2_period=10.000,use_power_down=false,use_reset=true,use_locked=true,use_inclk_stopped=false,feedback_type=SINGLE,CLOCK_MGR_TYPE=NA,manual_override=false}" *)
 
-module clk_wiz_rgmii_rx_shift 
+module clk_wiz_125_to_200 
  (
   // Clock out ports
-  output        clk_out_shifted,
+  output        clk_out_200MHz,
   // Status and control signals
   input         resetn,
   output        locked,
  // Clock in ports
-  input         clk_in
+  input         clk_125MHz
  );
 
-  clk_wiz_rgmii_rx_shift_clk_wiz inst
+  clk_wiz_125_to_200_clk_wiz inst
   (
   // Clock out ports  
-  .clk_out_shifted(clk_out_shifted),
+  .clk_out_200MHz(clk_out_200MHz),
   // Status and control signals               
   .resetn(resetn), 
   .locked(locked),
  // Clock in ports
-  .clk_in(clk_in)
+  .clk_125MHz(clk_125MHz)
   );
-
-endmodule
-
-
-// file: clk_wiz_rgmii_rx_shift.v
-// (c) Copyright 2017-2018, 2023 Advanced Micro Devices, Inc. All rights reserved.
-//
-// This file contains confidential and proprietary information
-// of AMD and is protected under U.S. and international copyright
-// and other intellectual property laws.
-//
-// DISCLAIMER
-// This disclaimer is not a license and does not grant any
-// rights to the materials distributed herewith. Except as
-// otherwise provided in a valid license issued to you by
-// AMD, and to the maximum extent permitted by applicable
-// law: (1) THESE MATERIALS ARE MADE AVAILABLE "AS IS" AND
-// WITH ALL FAULTS, AND AMD HEREBY DISCLAIMS ALL WARRANTIES
-// AND CONDITIONS, EXPRESS, IMPLIED, OR STATUTORY, INCLUDING
-// BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, NON-
-// INFRINGEMENT, OR FITNESS FOR ANY PARTICULAR PURPOSE; and
-// (2) AMD shall not be liable (whether in contract or tort,
-// including negligence, or under any other theory of
-// liability) for any loss or damage of any kind or nature
-// related to, arising under or in connection with these
-// materials, including for any direct, or any indirect,
-// special, incidental, or consequential loss or damage
-// (including loss of data, profits, goodwill, or any type of
-// loss or damage suffered as a result of any action brought
-// by a third party) even if such damage or loss was
-// reasonably foreseeable or AMD had been advised of the
-// possibility of the same.
-//
-// CRITICAL APPLICATIONS
-// AMD products are not designed or intended to be fail-
-// safe, or for use in any application requiring fail-safe
-// performance, such as life-support or safety devices or
-// systems, Class III medical devices, nuclear facilities,
-// applications related to the deployment of airbags, or any
-// other applications that could lead to death, personal
-// injury, or severe property or environmental damage
-// (individually and collectively, "Critical
-// Applications"). Customer assumes the sole risk and
-// liability of any use of AMD products in Critical
-// Applications, subject only to applicable laws and
-// regulations governing limitations on product liability.
-//
-// THIS COPYRIGHT NOTICE AND DISCLAIMER MUST BE RETAINED AS
-// PART OF THIS FILE AT ALL TIMES.
-//----------------------------------------------------------------------------
-// User entered comments
-//----------------------------------------------------------------------------
-// None
-//
-//----------------------------------------------------------------------------
-//  Output     Output      Phase    Duty Cycle   Pk-to-Pk     Phase
-//   Clock     Freq (MHz)  (degrees)    (%)     Jitter (ps)  Error (ps)
-//----------------------------------------------------------------------------
-// clk_out_shifted__125.00000____-120.000______50.0______117.042_____94.860
-//
-//----------------------------------------------------------------------------
-// Input Clock   Freq (MHz)    Input Jitter (UI)
-//----------------------------------------------------------------------------
-// __primary_________125.000____________0.010
-
-`timescale 1ps/1ps
-
-module clk_wiz_rgmii_rx_shift_clk_wiz 
-
- (// Clock in ports
-  // Clock out ports
-  output        clk_out_shifted,
-  // Status and control signals
-  input         resetn,
-  output        locked,
-  input         clk_in
- );
-  // Input buffering
-  //------------------------------------
-wire clk_in_clk_wiz_rgmii_rx_shift;
-wire clk_in2_clk_wiz_rgmii_rx_shift;
-  assign clk_in_clk_wiz_rgmii_rx_shift = clk_in;
-
-
-
-
-  // Clocking PRIMITIVE
-  //------------------------------------
-
-  // Instantiation of the MMCM PRIMITIVE
-  //    * Unused inputs are tied off
-  //    * Unused outputs are labeled unused
-
-  wire        clk_out_shifted_clk_wiz_rgmii_rx_shift;
-  wire        clk_out2_clk_wiz_rgmii_rx_shift;
-  wire        clk_out3_clk_wiz_rgmii_rx_shift;
-  wire        clk_out4_clk_wiz_rgmii_rx_shift;
-  wire        clk_out5_clk_wiz_rgmii_rx_shift;
-  wire        clk_out6_clk_wiz_rgmii_rx_shift;
-  wire        clk_out7_clk_wiz_rgmii_rx_shift;
-
-  wire [15:0] do_unused;
-  wire        drdy_unused;
-  wire        psdone_unused;
-  wire        locked_int;
-  wire        clkfbout_clk_wiz_rgmii_rx_shift;
-  wire        clkfbout_buf_clk_wiz_rgmii_rx_shift;
-  wire        clkfboutb_unused;
-    wire clkout0b_unused;
-   wire clkout1_unused;
-   wire clkout1b_unused;
-   wire clkout2_unused;
-   wire clkout2b_unused;
-   wire clkout3_unused;
-   wire clkout3b_unused;
-   wire clkout4_unused;
-  wire        clkout5_unused;
-  wire        clkout6_unused;
-  wire        clkfbstopped_unused;
-  wire        clkinstopped_unused;
-  wire        reset_high;
-
-  MMCME2_ADV
-  #(.BANDWIDTH            ("OPTIMIZED"),
-    .CLKOUT4_CASCADE      ("FALSE"),
-    .COMPENSATION         ("ZHOLD"),
-    .STARTUP_WAIT         ("FALSE"),
-    .DIVCLK_DIVIDE        (1),
-    .CLKFBOUT_MULT_F      (8.250),
-    .CLKFBOUT_PHASE       (0.000),
-    .CLKFBOUT_USE_FINE_PS ("FALSE"),
-    .CLKOUT0_DIVIDE_F     (8.250),
-    .CLKOUT0_PHASE        (-120.000),
-    .CLKOUT0_DUTY_CYCLE   (0.500),
-    .CLKOUT0_USE_FINE_PS  ("FALSE"),
-    .CLKIN1_PERIOD        (8.000))
-  mmcm_adv_inst
-    // Output clocks
-   (
-    .CLKFBOUT            (clkfbout_clk_wiz_rgmii_rx_shift),
-    .CLKFBOUTB           (clkfboutb_unused),
-    .CLKOUT0             (clk_out_shifted_clk_wiz_rgmii_rx_shift),
-    .CLKOUT0B            (clkout0b_unused),
-    .CLKOUT1             (clkout1_unused),
-    .CLKOUT1B            (clkout1b_unused),
-    .CLKOUT2             (clkout2_unused),
-    .CLKOUT2B            (clkout2b_unused),
-    .CLKOUT3             (clkout3_unused),
-    .CLKOUT3B            (clkout3b_unused),
-    .CLKOUT4             (clkout4_unused),
-    .CLKOUT5             (clkout5_unused),
-    .CLKOUT6             (clkout6_unused),
-     // Input clock control
-    .CLKFBIN             (clkfbout_buf_clk_wiz_rgmii_rx_shift),
-    .CLKIN1              (clk_in_clk_wiz_rgmii_rx_shift),
-    .CLKIN2              (1'b0),
-     // Tied to always select the primary input clock
-    .CLKINSEL            (1'b1),
-    // Ports for dynamic reconfiguration
-    .DADDR               (7'h0),
-    .DCLK                (1'b0),
-    .DEN                 (1'b0),
-    .DI                  (16'h0),
-    .DO                  (do_unused),
-    .DRDY                (drdy_unused),
-    .DWE                 (1'b0),
-    // Ports for dynamic phase shift
-    .PSCLK               (1'b0),
-    .PSEN                (1'b0),
-    .PSINCDEC            (1'b0),
-    .PSDONE              (psdone_unused),
-    // Other control and status signals
-    .LOCKED              (locked_int),
-    .CLKINSTOPPED        (clkinstopped_unused),
-    .CLKFBSTOPPED        (clkfbstopped_unused),
-    .PWRDWN              (1'b0),
-    .RST                 (reset_high));
-  assign reset_high = ~resetn; 
-
-  assign locked = locked_int;
-// Clock Monitor clock assigning
-//--------------------------------------
- // Output buffering
-  //-----------------------------------
-
-  BUFG clkf_buf
-   (.O (clkfbout_buf_clk_wiz_rgmii_rx_shift),
-    .I (clkfbout_clk_wiz_rgmii_rx_shift));
-
-
-
-
-
-
-  BUFG clkout1_buf
-   (.O   (clk_out_shifted),
-    .I   (clk_out_shifted_clk_wiz_rgmii_rx_shift));
-
-
-
 
 endmodule

@@ -58,12 +58,7 @@ assign tx_payload_internal = (kernel_config_done) ? tx_payload_length_eth_nrz : 
 assign tx_zero_endian = (kernel_config_done) ? tx_zero_endian_eth_nrz : 0;
 assign tx_sync_word1 = (kernel_config_done) ? tx_sync_word1_eth_nrz : 0;
 assign tx_sync_word2 = (kernel_config_done) ? tx_sync_word2_eth_nrz : 0;
-// The NRZ stream writes both sync words into the ETH5 UDP payload before the
-// configured payload words.  Advertise the byte count actually written to the
-// FIFO so the Ethernet MAC drains exactly one complete NRZ packet.
-assign tx_payload_length_actual = (tx_bpw == 2'd0) ?
-                                  (tx_payload_internal + 11'd2) :
-                                  ((tx_payload_internal + 11'd2) << 1);
+assign tx_payload_length_actual = (tx_bpw == 2'd0) ? tx_payload_internal : (tx_payload_internal + tx_payload_internal) ;
 
 reg [11:0] 	word_done_buff;
 reg [3:0]  	bit_counter;
@@ -138,6 +133,27 @@ begin
     end
 end
 
+reg valid_data_nrz;
+
+always @(negedge clk_20MHz or negedge rst_n)
+begin
+    if (!rst_n)
+    begin
+        valid_data_nrz <= 1'b0;
+    end
+    else if (bkp_prg_mode_on_sync_20 || !kernel_config_done_sync_20)
+    begin
+        valid_data_nrz <= 1'b0;
+    end
+    else if (!valid_data_nrz && data_in_nrz)
+    begin
+        valid_data_nrz <= 1'b1;
+    end
+end
+
+wire nrz_capture_en_20;
+
+assign nrz_capture_en_20 = (!bkp_prg_mode_on_sync_20) && (kernel_config_done_sync_20) && (valid_data_nrz || data_in_nrz);
 
 always @ (negedge clk_20MHz or negedge rst_n)
 begin
@@ -151,7 +167,7 @@ begin
 	end
 	else
 	begin
-		if(!bkp_prg_mode_on_sync_20 && kernel_config_done_sync_20)
+		if(nrz_capture_en_20)
 		begin
 			ctrl_blk_rst_n <= 1;
 			word_in_buff <= {word_in_buff[10:0] , data_in_nrz};
@@ -720,7 +736,7 @@ cdc_pulse_toggle_sync u_eth_nrz_config_done_pulse_cdc (
 		.dst_clk	(clk_eth),
 		.rst_n		(rst_n),
 
-		.src_pulse	(config_done_pulse),
+		.src_pulse	(eth_tx_start_pulse_eth_nrz_64),
 		.dst_pulse	(config_done_pulse_eth_nrz)
 );
 
