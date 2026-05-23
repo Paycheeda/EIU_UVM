@@ -60,7 +60,7 @@ generate
 		(* IODELAY_GROUP = IODELAY_GROUP_NAME *)
 		IDELAYCTRL u_idelayctrl_eth (
 			.REFCLK (idelay_refclk_200MHz),
-			.RST    (~rst_n | ~idelay_refclk_locked),
+			.RST    (~eth_rx_rst_n),
 			.RDY    (idelayctrl_rdy)
 		);
 

@@ -261,7 +261,6 @@ begin
                 NRZ_CAPTURE_PAYLOAD_20:
                 begin
                     payload_shift_reg_20 <= payload_shift_next_20;
-
                     if(payload_bit_counter_20 < bpw_last_count_20)
                     begin
                         payload_bit_counter_20 <= payload_bit_counter_20 + 1'b1;
@@ -528,6 +527,7 @@ begin
     end
 end
 
+
 // =====================================================================================
 // CDC: ETH_NRZ start/config-done pulse from 64 MHz kernel clock to Ethernet TX clock
 // =====================================================================================
@@ -544,7 +544,7 @@ cdc_pulse_toggle_sync u_eth_nrz_config_done_pulse_cdc (
     .src_clk    (clk),
     .dst_clk    (clk_eth),
     .rst_n      (rst_n),
-    .src_pulse  (eth_tx_start_pulse_eth_nrz_64),
+    .src_pulse  (config_done_pulse),
     .dst_pulse  (config_done_pulse_eth_nrz)
 );
 

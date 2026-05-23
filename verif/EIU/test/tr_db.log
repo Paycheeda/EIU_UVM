@@ -5,11 +5,21 @@
   CREATE_STREAM @1272750000 {NAME:poll_seq T:Transactions SCOPE:uvm_test_top.env.bkp_agt.sqr STREAM:7039}
   CREATE_STREAM @3000000 {NAME:vseq T:Transactions SCOPE:uvm_test_top.vsqr STREAM:6010}
   CREATE_STREAM @3000000 {NAME:cfg_seq T:Transactions SCOPE:uvm_test_top.env.bkp_agt.sqr STREAM:6021}
-  CREATE_STREAM @1242750000 {NAME:tx_inj_seq T:Transactions SCOPE:uvm_test_top.env.bkp_agt.sqr STREAM:7013}
-  CREATE_STREAM @1242750000 {NAME:nrz_seq T:Transactions SCOPE:uvm_test_top.env.nrz_agt.sqr STREAM:7023}
-  CREATE_STREAM @1272750000 {NAME:poll_seq T:Transactions SCOPE:uvm_test_top.env.bkp_agt.sqr STREAM:7039}
+  CREATE_STREAM @1242750000 {NAME:eth_rx_seq[0] T:Transactions SCOPE:uvm_test_top.env.eth_rx_agts[0].sqr STREAM:7013}
+  CREATE_STREAM @1242750000 {NAME:tx_inj_seq T:Transactions SCOPE:uvm_test_top.env.bkp_agt.sqr STREAM:7022}
+  CREATE_STREAM @1242750000 {NAME:uart_seq[0] T:Transactions SCOPE:uvm_test_top.env.uart_rx_agts[0].sqncr STREAM:7030}
+  CREATE_STREAM @1242750000 {NAME:nrz_seq T:Transactions SCOPE:uvm_test_top.env.nrz_agt.sqr STREAM:7041}
+  CREATE_STREAM @1242750000 {NAME:tx_seq T:Transactions SCOPE:uvm_test_top.env.uart_rx_agts[0].sqncr STREAM:7062}
+  CREATE_STREAM @1248880000 {NAME:eth_rx_seq[1] T:Transactions SCOPE:uvm_test_top.env.eth_rx_agts[1].sqr STREAM:7109}
+  CREATE_STREAM @1255360000 {NAME:eth_rx_seq[2] T:Transactions SCOPE:uvm_test_top.env.eth_rx_agts[2].sqr STREAM:7146}
+  CREATE_STREAM @1261280000 {NAME:eth_rx_seq[3] T:Transactions SCOPE:uvm_test_top.env.eth_rx_agts[3].sqr STREAM:7197}
+  CREATE_STREAM @1297680000 {NAME:poll_seq T:Transactions SCOPE:uvm_test_top.env.bkp_agt.sqr STREAM:7326}
+  CREATE_STREAM @5340232900 {NAME:uart_seq[1] T:Transactions SCOPE:uvm_test_top.env.uart_rx_agts[1].sqncr STREAM:17808}
+  CREATE_STREAM @5340232900 {NAME:tx_seq T:Transactions SCOPE:uvm_test_top.env.uart_rx_agts[1].sqncr STREAM:17819}
+  CREATE_STREAM @9160562400 {NAME:uart_seq[2] T:Transactions SCOPE:uvm_test_top.env.uart_rx_agts[2].sqncr STREAM:27658}
+  CREATE_STREAM @9160562400 {NAME:tx_seq T:Transactions SCOPE:uvm_test_top.env.uart_rx_agts[2].sqncr STREAM:27669}
   CREATE_STREAM @3000000 {NAME:vseq T:Transactions SCOPE:uvm_test_top.vsqr STREAM:6010}
   CREATE_STREAM @3000000 {NAME:cfg_seq T:Transactions SCOPE:uvm_test_top.env.bkp_agt.sqr STREAM:6021}
-  CREATE_STREAM @1242750000 {NAME:tx_inj_seq T:Transactions SCOPE:uvm_test_top.env.bkp_agt.sqr STREAM:7013}
-  CREATE_STREAM @1242750000 {NAME:nrz_seq T:Transactions SCOPE:uvm_test_top.env.nrz_agt.sqr STREAM:7023}
-  CREATE_STREAM @1272750000 {NAME:poll_seq T:Transactions SCOPE:uvm_test_top.env.bkp_agt.sqr STREAM:7039}
+  CREATE_STREAM @1242750000 {NAME:eth_rx_seq[0] T:Transactions SCOPE:uvm_test_top.env.eth_rx_agts[0].sqr STREAM:7013}
+  CREATE_STREAM @1242750000 {NAME:tx_inj_seq T:Transactions SCOPE:uvm_test_top.env.bkp_agt.sqr STREAM:7022}
+  CREATE_STREAM @1278880000 {NAME:poll_seq T:Transactions SCOPE:uvm_test_top.env.bkp_agt.sqr STREAM:7236}
