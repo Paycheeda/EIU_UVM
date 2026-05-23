@@ -16,8 +16,7 @@ class uart_tx_sequence extends uvm_sequence #(tx_uart);
     endfunction
 
     virtual task body();
-        // Fetch Plusargs directly into the sequence
-        $value$plusargs("NUM_PKTS=%d", num_packets);
+        // num_packets is set by parent sequence; only fetch format plusargs here
         $value$plusargs("UART_WIDTH=%d", req_width);
         $value$plusargs("UART_PARITY_EN=%d", parity_en);
         $value$plusargs("UART_PARITY_OE=%d", parity_oe);

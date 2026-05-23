@@ -167,9 +167,155 @@ class bkp_sequence extends uvm_sequence #(bkp_item);
                     endcase
                 end
                 
-                // Keep dummy writes for unused ETH2, 3, 4
+                // ----------------------------------------------------
+                // ETHERNET 2 CONFIGURATION (Addresses 10-16)
+                // ----------------------------------------------------
+                else if (addr >= 6'd10 && addr <= 6'd16) begin
+                    bit [47:0] eth2_dest_mac    = 48'hFF_FF_FF_FF_FF_FF;
+                    bit [47:0] eth2_src_mac     = 48'h02_00_00_00_00_02;
+                    bit [31:0] eth2_dest_ip     = 32'hC0A8_0264;
+                    bit [31:0] eth2_src_ip      = 32'hC0A8_020A;
+                    bit [15:0] eth2_dest_port   = 16'h0FA1;
+                    bit [15:0] eth2_src_port    = 16'h1389;
+                    bit [11:0] eth2_payload_len = 12'd100;
+
+                    case (addr)
+                        6'd10: begin
+                            if (w == 0)      data_to_send = (eth2_dest_mac >> 36) & 12'hFFF;
+                            else if (w == 1) data_to_send = (eth2_dest_mac >> 24) & 12'hFFF;
+                            else if (w == 2) data_to_send = (eth2_dest_mac >> 12) & 12'hFFF;
+                            else if (w == 3) data_to_send = (eth2_dest_mac)       & 12'hFFF;
+                        end
+                        6'd11: begin
+                            if (w == 0)      data_to_send = (eth2_src_mac >> 36) & 12'hFFF;
+                            else if (w == 1) data_to_send = (eth2_src_mac >> 24) & 12'hFFF;
+                            else if (w == 2) data_to_send = (eth2_src_mac >> 12) & 12'hFFF;
+                            else if (w == 3) data_to_send = (eth2_src_mac)       & 12'hFFF;
+                        end
+                        6'd12: begin
+                            if (w == 0)      data_to_send = 12'h000;
+                            else if (w == 1) data_to_send = (eth2_dest_ip >> 24) & 12'hFFF;
+                            else if (w == 2) data_to_send = (eth2_dest_ip >> 12) & 12'hFFF;
+                            else if (w == 3) data_to_send = (eth2_dest_ip)       & 12'hFFF;
+                        end
+                        6'd13: begin
+                            if (w == 0)      data_to_send = 12'h000;
+                            else if (w == 1) data_to_send = (eth2_src_ip >> 24) & 12'hFFF;
+                            else if (w == 2) data_to_send = (eth2_src_ip >> 12) & 12'hFFF;
+                            else if (w == 3) data_to_send = (eth2_src_ip)       & 12'hFFF;
+                        end
+                        6'd14: begin
+                            if (w == 0)      data_to_send = (eth2_dest_port >> 12) & 12'hFFF;
+                            else if (w == 1) data_to_send = (eth2_dest_port)       & 12'hFFF;
+                        end
+                        6'd15: begin
+                            if (w == 0)      data_to_send = (eth2_src_port >> 12) & 12'hFFF;
+                            else if (w == 1) data_to_send = (eth2_src_port)       & 12'hFFF;
+                        end
+                        6'd16: data_to_send = eth2_payload_len;
+                    endcase
+                end
+
+                // ----------------------------------------------------
+                // ETHERNET 3 CONFIGURATION (Addresses 17-23)
+                // ----------------------------------------------------
+                else if (addr >= 6'd17 && addr <= 6'd23) begin
+                    bit [47:0] eth3_dest_mac    = 48'hFF_FF_FF_FF_FF_FF;
+                    bit [47:0] eth3_src_mac     = 48'h02_00_00_00_00_03;
+                    bit [31:0] eth3_dest_ip     = 32'hC0A8_0364;
+                    bit [31:0] eth3_src_ip      = 32'hC0A8_030A;
+                    bit [15:0] eth3_dest_port   = 16'h0FA2;
+                    bit [15:0] eth3_src_port    = 16'h138A;
+                    bit [11:0] eth3_payload_len = 12'd100;
+
+                    case (addr)
+                        6'd17: begin
+                            if (w == 0)      data_to_send = (eth3_dest_mac >> 36) & 12'hFFF;
+                            else if (w == 1) data_to_send = (eth3_dest_mac >> 24) & 12'hFFF;
+                            else if (w == 2) data_to_send = (eth3_dest_mac >> 12) & 12'hFFF;
+                            else if (w == 3) data_to_send = (eth3_dest_mac)       & 12'hFFF;
+                        end
+                        6'd18: begin
+                            if (w == 0)      data_to_send = (eth3_src_mac >> 36) & 12'hFFF;
+                            else if (w == 1) data_to_send = (eth3_src_mac >> 24) & 12'hFFF;
+                            else if (w == 2) data_to_send = (eth3_src_mac >> 12) & 12'hFFF;
+                            else if (w == 3) data_to_send = (eth3_src_mac)       & 12'hFFF;
+                        end
+                        6'd19: begin
+                            if (w == 0)      data_to_send = 12'h000;
+                            else if (w == 1) data_to_send = (eth3_dest_ip >> 24) & 12'hFFF;
+                            else if (w == 2) data_to_send = (eth3_dest_ip >> 12) & 12'hFFF;
+                            else if (w == 3) data_to_send = (eth3_dest_ip)       & 12'hFFF;
+                        end
+                        6'd20: begin
+                            if (w == 0)      data_to_send = 12'h000;
+                            else if (w == 1) data_to_send = (eth3_src_ip >> 24) & 12'hFFF;
+                            else if (w == 2) data_to_send = (eth3_src_ip >> 12) & 12'hFFF;
+                            else if (w == 3) data_to_send = (eth3_src_ip)       & 12'hFFF;
+                        end
+                        6'd21: begin
+                            if (w == 0)      data_to_send = (eth3_dest_port >> 12) & 12'hFFF;
+                            else if (w == 1) data_to_send = (eth3_dest_port)       & 12'hFFF;
+                        end
+                        6'd22: begin
+                            if (w == 0)      data_to_send = (eth3_src_port >> 12) & 12'hFFF;
+                            else if (w == 1) data_to_send = (eth3_src_port)       & 12'hFFF;
+                        end
+                        6'd23: data_to_send = eth3_payload_len;
+                    endcase
+                end
+
+                // ----------------------------------------------------
+                // ETHERNET 4 CONFIGURATION (Addresses 24-30)
+                // ----------------------------------------------------
+                else if (addr >= 6'd24 && addr <= 6'd30) begin
+                    bit [47:0] eth4_dest_mac    = 48'hFF_FF_FF_FF_FF_FF;
+                    bit [47:0] eth4_src_mac     = 48'h02_00_00_00_00_04;
+                    bit [31:0] eth4_dest_ip     = 32'hC0A8_0464;
+                    bit [31:0] eth4_src_ip      = 32'hC0A8_040A;
+                    bit [15:0] eth4_dest_port   = 16'h0FA3;
+                    bit [15:0] eth4_src_port    = 16'h138B;
+                    bit [11:0] eth4_payload_len = 12'd100;
+
+                    case (addr)
+                        6'd24: begin
+                            if (w == 0)      data_to_send = (eth4_dest_mac >> 36) & 12'hFFF;
+                            else if (w == 1) data_to_send = (eth4_dest_mac >> 24) & 12'hFFF;
+                            else if (w == 2) data_to_send = (eth4_dest_mac >> 12) & 12'hFFF;
+                            else if (w == 3) data_to_send = (eth4_dest_mac)       & 12'hFFF;
+                        end
+                        6'd25: begin
+                            if (w == 0)      data_to_send = (eth4_src_mac >> 36) & 12'hFFF;
+                            else if (w == 1) data_to_send = (eth4_src_mac >> 24) & 12'hFFF;
+                            else if (w == 2) data_to_send = (eth4_src_mac >> 12) & 12'hFFF;
+                            else if (w == 3) data_to_send = (eth4_src_mac)       & 12'hFFF;
+                        end
+                        6'd26: begin
+                            if (w == 0)      data_to_send = 12'h000;
+                            else if (w == 1) data_to_send = (eth4_dest_ip >> 24) & 12'hFFF;
+                            else if (w == 2) data_to_send = (eth4_dest_ip >> 12) & 12'hFFF;
+                            else if (w == 3) data_to_send = (eth4_dest_ip)       & 12'hFFF;
+                        end
+                        6'd27: begin
+                            if (w == 0)      data_to_send = 12'h000;
+                            else if (w == 1) data_to_send = (eth4_src_ip >> 24) & 12'hFFF;
+                            else if (w == 2) data_to_send = (eth4_src_ip >> 12) & 12'hFFF;
+                            else if (w == 3) data_to_send = (eth4_src_ip)       & 12'hFFF;
+                        end
+                        6'd28: begin
+                            if (w == 0)      data_to_send = (eth4_dest_port >> 12) & 12'hFFF;
+                            else if (w == 1) data_to_send = (eth4_dest_port)       & 12'hFFF;
+                        end
+                        6'd29: begin
+                            if (w == 0)      data_to_send = (eth4_src_port >> 12) & 12'hFFF;
+                            else if (w == 1) data_to_send = (eth4_src_port)       & 12'hFFF;
+                        end
+                        6'd30: data_to_send = eth4_payload_len;
+                    endcase
+                end
+
                 else begin
-                    data_to_send = 12'h000; 
+                    data_to_send = 12'h000;
                 end
                 
                 req_item.bkp_data     = data_to_send; 

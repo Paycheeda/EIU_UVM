@@ -162,17 +162,84 @@ class eiu_scoreboard extends uvm_scoreboard;
     task run_phase(uvm_phase phase);
         fork
             process_bkp_traffic();
-            
+
             process_uart_tx(0); process_uart_tx(1); process_uart_tx(2);
             process_uart_rx(0); process_uart_rx(1); process_uart_rx(2);
-            
+
             process_eth_tx(0); process_eth_tx(1); process_eth_tx(2); process_eth_tx(3);
             process_eth_rx(0); process_eth_rx(1); process_eth_rx(2); process_eth_rx(3);
-            
+
             process_nrz_tx();
             process_eth5_verif();
-        join
+        join_none
     endtask
+
+    function void print_row(string intf_name, string dir, int inj, int ver);
+        string status;
+        string line;
+        if      (inj == 0)   status = "SKIP  ";
+        else if (inj == ver) status = "PASS  ";
+        else                 status = "FAIL **";
+        line = $sformatf("| %-10s | %-3s | %8d | %8d | %8d | %-8s |",
+                         intf_name, dir, inj, ver, (inj - ver), status);
+        `uvm_info("EIU_REPORT", line, UVM_NONE)
+    endfunction
+
+    function void report_phase(uvm_phase phase);
+        int total_inj, total_ver, total_pending, failed_channels;
+        string overall;
+
+        super.report_phase(phase);
+
+        total_inj = 0; total_ver = 0; failed_channels = 0;
+
+        `uvm_info("EIU_REPORT", "\n", UVM_NONE)
+        `uvm_info("EIU_REPORT", "================================================================================", UVM_NONE)
+        `uvm_info("EIU_REPORT", "|          *** EIU SYSTEM TEST — FINAL VERIFICATION REPORT ***              |", UVM_NONE)
+        `uvm_info("EIU_REPORT", "================================================================================", UVM_NONE)
+        `uvm_info("EIU_REPORT", "| Interface  | Dir | Injected | Verified | Pending  | Status   |", UVM_NONE)
+        `uvm_info("EIU_REPORT", "|------------|-----|----------|----------|----------|----------|", UVM_NONE)
+
+        for (int i = 0; i < 3; i++) begin
+            print_row($sformatf("UART %0d", i+1), "TX", uart_tx_inj_cnt[i], uart_tx_ver_cnt[i]);
+            print_row($sformatf("UART %0d", i+1), "RX", uart_rx_inj_cnt[i], uart_rx_ver_cnt[i]);
+            total_inj += uart_tx_inj_cnt[i] + uart_rx_inj_cnt[i];
+            total_ver += uart_tx_ver_cnt[i] + uart_rx_ver_cnt[i];
+            if (uart_tx_inj_cnt[i] > 0 && uart_tx_inj_cnt[i] != uart_tx_ver_cnt[i]) failed_channels++;
+            if (uart_rx_inj_cnt[i] > 0 && uart_rx_inj_cnt[i] != uart_rx_ver_cnt[i]) failed_channels++;
+        end
+
+        for (int i = 0; i < 4; i++) begin
+            print_row($sformatf("ETH  %0d", i+1), "TX", eth_tx_inj_cnt[i], eth_tx_ver_cnt[i]);
+            print_row($sformatf("ETH  %0d", i+1), "RX", eth_rx_inj_cnt[i], eth_rx_ver_cnt[i]);
+            total_inj += eth_tx_inj_cnt[i] + eth_rx_inj_cnt[i];
+            total_ver += eth_tx_ver_cnt[i] + eth_rx_ver_cnt[i];
+            if (eth_tx_inj_cnt[i] > 0 && eth_tx_inj_cnt[i] != eth_tx_ver_cnt[i]) failed_channels++;
+            if (eth_rx_inj_cnt[i] > 0 && eth_rx_inj_cnt[i] != eth_rx_ver_cnt[i]) failed_channels++;
+        end
+
+        print_row("NRZ/ETH5", "TX", nrz_inj_cnt, nrz_ver_cnt);
+        total_inj += nrz_inj_cnt;
+        total_ver += nrz_ver_cnt;
+        if (nrz_inj_cnt > 0 && nrz_inj_cnt != nrz_ver_cnt) failed_channels++;
+
+        total_pending = total_inj - total_ver;
+        overall = (failed_channels == 0 && total_inj > 0) ? "** PASS **" : "** FAIL **";
+
+        `uvm_info("EIU_REPORT", "|------------|-----|----------|----------|----------|----------|", UVM_NONE)
+        `uvm_info("EIU_REPORT", $sformatf("| %-10s | --- | %8d | %8d | %8d | %-8s |",
+                                           "TOTAL", total_inj, total_ver, total_pending, overall), UVM_NONE)
+        `uvm_info("EIU_REPORT", "================================================================================\n", UVM_NONE)
+
+        if (failed_channels == 0 && total_inj > 0)
+            `uvm_info("EIU_REPORT",
+                "*** ALL CHANNELS VERIFIED — EIU SYSTEM TEST PASSED! ***\n", UVM_NONE)
+        else if (total_inj == 0)
+            `uvm_warning("EIU_REPORT", "No data was injected — check plusarg configuration.\n")
+        else
+            `uvm_error("EIU_REPORT",
+                $sformatf("*** %0d CHANNEL(S) FAILED — EIU SYSTEM TEST FAILED! ***\n", failed_channels))
+    endfunction
 
     // ----------------------------------------------------
     // NRZ SCORING LOGIC
@@ -352,7 +419,7 @@ class eiu_scoreboard extends uvm_scoreboard;
 
     function void compare_data(string path, int exp, int act);
         if (exp == act) begin
-             `uvm_info("SCB_PASS", $sformatf("[%s] Match! Expected: %0h | Actual: %0h", path, exp, act), UVM_HIGH) 
+            // `uvm_info("SCB_PASS", $sformatf("[%s] Match! Expected: %0h | Actual: %0h", path, exp, act), UVM_HIGH) 
         end else begin
             `uvm_error("SCB_FAIL", $sformatf("[%s] MISMATCH! Expected: %0h | Actual: %0h", path, exp, act))
         end

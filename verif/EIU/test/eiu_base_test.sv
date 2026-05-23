@@ -159,23 +159,22 @@ class eiu_base_test extends uvm_test;
     endfunction
 
     task run_phase(uvm_phase phase);
-        eiu_vseq vseq; 
+        eiu_vseq vseq;
         vseq = eiu_vseq::type_id::create("vseq");
 
         phase.raise_objection(this, "Starting End-to-End System Test");
         #300ns;
         `uvm_info("TEST", "=== BOOTING EIU_TOP SYSTEM TEST ===", UVM_LOW)
         vseq.start(vsqr);
-        #2us;
+        // Allow scoreboard TLM FIFOs to drain and all monitors to finish
+        #100us;
         phase.drop_objection(this, "System Test Complete");
     endtask
 
     function void report_phase(uvm_phase phase);
         super.report_phase(phase);
-        `uvm_info("TEST_SUMMARY", "===============================================================================", UVM_NONE)
-        `uvm_info("TEST_SUMMARY", "                 EIU SYSTEM TEST EXECUTION COMPLETE                            ", UVM_NONE)
-        `uvm_info("TEST_SUMMARY", " Check the [SCB_PASS] logs above for verification of the TX and RX pipelines.  ", UVM_NONE)
-        `uvm_info("TEST_SUMMARY", "===============================================================================", UVM_NONE)
+        // Detailed pass/fail table is printed by eiu_scoreboard.report_phase (called first)
+        `uvm_info("TEST", "=== EIU SYSTEM TEST RUN COMPLETE — see EIU_REPORT above ===\n", UVM_NONE)
     endfunction
 
 endclass
