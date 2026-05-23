@@ -1,0 +1,637 @@
+From d83e34c9f3fe82ffcd14124759cbb16b88a49a82 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sat, 23 May 2026 09:13:13 +0000
+Subject: [PATCH] Fix EIU UVM testbench: parallel injection, full channel
+ config, scoreboard report
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+- bkp_sequence.sv: add proper ETH2/3/4 header config (addr 10-30) with
+  payload_len=100 so TX frames reach the 64-byte monitor parse threshold
+- uart_tx_sequence.sv: remove NUM_PKTS plusarg override so parent-set
+  num_packets is respected
+- uart_main_sequence.sv: expose num_packets variable; remove hardcoded 50
+- eiu_vseq.sv: restructure into 3 staged phases — serial config, true
+  parallel injection (kwr + per-UART + per-ETH in separate fork threads,
+  NRZ in background join_none), then post-injection BKP polling loop
+- eiu_scoreboard.sv: change fork...join to fork...join_none so run_phase
+  returns; add report_phase with formatted per-channel PASS/FAIL table
+- eiu_base_test.sv: increase post-vseq drain to 100us; simplify
+  report_phase to defer to scoreboard summary
+
+https://claude.ai/code/session_01VYc6Gf6pcRgwKrYf5mwKL9
+---
+ verif/EIU/test/eiu_base_test.sv               |  11 +-
+ verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv |  75 +++++-
+ verif/EIU/uvm_tb/sequence/eiu_vseq.sv         | 218 +++++++++++-------
+ verif/kernel/uvm_tb/sequence/bkp_sequence.sv  | 150 +++++++++++-
+ .../uvm_tb/sequence/uart_main_sequence.sv     |  14 +-
+ .../uvm_tb/sequence/uart_tx_sequence.sv       |   3 +-
+ 6 files changed, 370 insertions(+), 101 deletions(-)
+
+diff --git a/verif/EIU/test/eiu_base_test.sv b/verif/EIU/test/eiu_base_test.sv
+index 09a8108..e20f6bc 100644
+--- a/verif/EIU/test/eiu_base_test.sv
++++ b/verif/EIU/test/eiu_base_test.sv
+@@ -159,23 +159,22 @@ class eiu_base_test extends uvm_test;
+     endfunction
+ 
+     task run_phase(uvm_phase phase);
+-        eiu_vseq vseq; 
++        eiu_vseq vseq;
+         vseq = eiu_vseq::type_id::create("vseq");
+ 
+         phase.raise_objection(this, "Starting End-to-End System Test");
+         #300ns;
+         `uvm_info("TEST", "=== BOOTING EIU_TOP SYSTEM TEST ===", UVM_LOW)
+         vseq.start(vsqr);
+-        #2us;
++        // Allow scoreboard TLM FIFOs to drain and all monitors to finish
++        #100us;
+         phase.drop_objection(this, "System Test Complete");
+     endtask
+ 
+     function void report_phase(uvm_phase phase);
+         super.report_phase(phase);
+-        `uvm_info("TEST_SUMMARY", "===============================================================================", UVM_NONE)
+-        `uvm_info("TEST_SUMMARY", "                 EIU SYSTEM TEST EXECUTION COMPLETE                            ", UVM_NONE)
+-        `uvm_info("TEST_SUMMARY", " Check the [SCB_PASS] logs above for verification of the TX and RX pipelines.  ", UVM_NONE)
+-        `uvm_info("TEST_SUMMARY", "===============================================================================", UVM_NONE)
++        // Detailed pass/fail table is printed by eiu_scoreboard.report_phase (called first)
++        `uvm_info("TEST", "=== EIU SYSTEM TEST RUN COMPLETE — see EIU_REPORT above ===\n", UVM_NONE)
+     endfunction
+ 
+ endclass
+diff --git a/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv b/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv
+index b8bb942..4964e9b 100644
+--- a/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv
++++ b/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv
+@@ -162,18 +162,85 @@ class eiu_scoreboard extends uvm_scoreboard;
+     task run_phase(uvm_phase phase);
+         fork
+             process_bkp_traffic();
+-            
++
+             process_uart_tx(0); process_uart_tx(1); process_uart_tx(2);
+             process_uart_rx(0); process_uart_rx(1); process_uart_rx(2);
+-            
++
+             process_eth_tx(0); process_eth_tx(1); process_eth_tx(2); process_eth_tx(3);
+             process_eth_rx(0); process_eth_rx(1); process_eth_rx(2); process_eth_rx(3);
+-            
++
+             process_nrz_tx();
+             process_eth5_verif();
+-        join
++        join_none
+     endtask
+ 
++    function void print_row(string intf_name, string dir, int inj, int ver);
++        string status;
++        string line;
++        if      (inj == 0)   status = "SKIP  ";
++        else if (inj == ver) status = "PASS  ";
++        else                 status = "FAIL **";
++        line = $sformatf("| %-10s | %-3s | %8d | %8d | %8d | %-8s |",
++                         intf_name, dir, inj, ver, (inj - ver), status);
++        `uvm_info("EIU_REPORT", line, UVM_NONE)
++    endfunction
++
++    function void report_phase(uvm_phase phase);
++        int total_inj, total_ver, total_pending, failed_channels;
++        string overall;
++
++        super.report_phase(phase);
++
++        total_inj = 0; total_ver = 0; failed_channels = 0;
++
++        `uvm_info("EIU_REPORT", "\n", UVM_NONE)
++        `uvm_info("EIU_REPORT", "================================================================================", UVM_NONE)
++        `uvm_info("EIU_REPORT", "|          *** EIU SYSTEM TEST — FINAL VERIFICATION REPORT ***              |", UVM_NONE)
++        `uvm_info("EIU_REPORT", "================================================================================", UVM_NONE)
++        `uvm_info("EIU_REPORT", "| Interface  | Dir | Injected | Verified | Pending  | Status   |", UVM_NONE)
++        `uvm_info("EIU_REPORT", "|------------|-----|----------|----------|----------|----------|", UVM_NONE)
++
++        for (int i = 0; i < 3; i++) begin
++            print_row($sformatf("UART %0d", i+1), "TX", uart_tx_inj_cnt[i], uart_tx_ver_cnt[i]);
++            print_row($sformatf("UART %0d", i+1), "RX", uart_rx_inj_cnt[i], uart_rx_ver_cnt[i]);
++            total_inj += uart_tx_inj_cnt[i] + uart_rx_inj_cnt[i];
++            total_ver += uart_tx_ver_cnt[i] + uart_rx_ver_cnt[i];
++            if (uart_tx_inj_cnt[i] > 0 && uart_tx_inj_cnt[i] != uart_tx_ver_cnt[i]) failed_channels++;
++            if (uart_rx_inj_cnt[i] > 0 && uart_rx_inj_cnt[i] != uart_rx_ver_cnt[i]) failed_channels++;
++        end
++
++        for (int i = 0; i < 4; i++) begin
++            print_row($sformatf("ETH  %0d", i+1), "TX", eth_tx_inj_cnt[i], eth_tx_ver_cnt[i]);
++            print_row($sformatf("ETH  %0d", i+1), "RX", eth_rx_inj_cnt[i], eth_rx_ver_cnt[i]);
++            total_inj += eth_tx_inj_cnt[i] + eth_rx_inj_cnt[i];
++            total_ver += eth_tx_ver_cnt[i] + eth_rx_ver_cnt[i];
++            if (eth_tx_inj_cnt[i] > 0 && eth_tx_inj_cnt[i] != eth_tx_ver_cnt[i]) failed_channels++;
++            if (eth_rx_inj_cnt[i] > 0 && eth_rx_inj_cnt[i] != eth_rx_ver_cnt[i]) failed_channels++;
++        end
++
++        print_row("NRZ/ETH5", "TX", nrz_inj_cnt, nrz_ver_cnt);
++        total_inj += nrz_inj_cnt;
++        total_ver += nrz_ver_cnt;
++        if (nrz_inj_cnt > 0 && nrz_inj_cnt != nrz_ver_cnt) failed_channels++;
++
++        total_pending = total_inj - total_ver;
++        overall = (failed_channels == 0 && total_inj > 0) ? "** PASS **" : "** FAIL **";
++
++        `uvm_info("EIU_REPORT", "|------------|-----|----------|----------|----------|----------|", UVM_NONE)
++        `uvm_info("EIU_REPORT", $sformatf("| %-10s | --- | %8d | %8d | %8d | %-8s |",
++                                           "TOTAL", total_inj, total_ver, total_pending, overall), UVM_NONE)
++        `uvm_info("EIU_REPORT", "================================================================================\n", UVM_NONE)
++
++        if (failed_channels == 0 && total_inj > 0)
++            `uvm_info("EIU_REPORT",
++                "*** ALL CHANNELS VERIFIED — EIU SYSTEM TEST PASSED! ***\n", UVM_NONE)
++        else if (total_inj == 0)
++            `uvm_warning("EIU_REPORT", "No data was injected — check plusarg configuration.\n")
++        else
++            `uvm_error("EIU_REPORT",
++                $sformatf("*** %0d CHANNEL(S) FAILED — EIU SYSTEM TEST FAILED! ***\n", failed_channels))
++    endfunction
++
+     // ----------------------------------------------------
+     // NRZ SCORING LOGIC
+     // ----------------------------------------------------
+diff --git a/verif/EIU/uvm_tb/sequence/eiu_vseq.sv b/verif/EIU/uvm_tb/sequence/eiu_vseq.sv
+index f94daa1..46faa58 100644
+--- a/verif/EIU/uvm_tb/sequence/eiu_vseq.sv
++++ b/verif/EIU/uvm_tb/sequence/eiu_vseq.sv
+@@ -89,18 +89,16 @@ class eiu_vseq extends uvm_sequence;
+ 
+     task body();
+         bkp_sequence         cfg_seq;
+-        bkp_smart_seq        poll_seq; 
++        bkp_smart_seq        poll_seq;
+         kwr_routing_seq      tx_inj_seq;
+         uart_main_sequence   uart_seq[3];
+-        eiu_phy_rx_seq       eth_rx_seq[4]; 
+-        
++        eiu_phy_rx_seq       eth_rx_seq[4];
+         nrz_sequence         nrz_seq;
+-        
+-        int num_packets = 10; 
++
++        int num_packets = 10;
+         int en_uart[3]  = '{0, 0, 0};
+-        int en_eth[4]   = '{1, 1, 1, 1}; 
+-        
+-        // NRZ Variables
++        int en_eth[4]   = '{1, 1, 1, 1};
++
+         int nrz_en          = 0;
+         int nrz_bpw_bits    = 8;
+         int nrz_endian      = 0;
+@@ -108,101 +106,165 @@ class eiu_vseq extends uvm_sequence;
+         int nrz_sync1_arg   = -1;
+         int nrz_sync2_arg   = -1;
+         bit [11:0] final_s1, final_s2;
+-        
+-        $value$plusargs("NUM_PKTS=%d", num_packets);
+-        $value$plusargs("EN_UART1=%d", en_uart[0]);
+-        $value$plusargs("EN_UART2=%d", en_uart[1]);
+-        $value$plusargs("EN_UART3=%d", en_uart[2]);
+-        $value$plusargs("EN_ETH1=%d", en_eth[0]);
+-        $value$plusargs("EN_ETH2=%d", en_eth[1]);
+-        $value$plusargs("EN_ETH3=%d", en_eth[2]);
+-        $value$plusargs("EN_ETH4=%d", en_eth[3]);
+-
+-        $value$plusargs("EN_NRZ=%d", nrz_en);
+-        $value$plusargs("NRZ_BPW=%d", nrz_bpw_bits);
+-        $value$plusargs("NRZ_PLEN=%d", nrz_payload_len);
+-        $value$plusargs("NRZ_ENDIAN=%d", nrz_endian);
+-        $value$plusargs("NRZ_SYNC1=%h", nrz_sync1_arg);
+-        $value$plusargs("NRZ_SYNC2=%h", nrz_sync2_arg);
+-
+-        // Auto-assign syncs if they weren't overridden
++
++        $value$plusargs("NUM_PKTS=%d",    num_packets);
++        $value$plusargs("EN_UART1=%d",    en_uart[0]);
++        $value$plusargs("EN_UART2=%d",    en_uart[1]);
++        $value$plusargs("EN_UART3=%d",    en_uart[2]);
++        $value$plusargs("EN_ETH1=%d",     en_eth[0]);
++        $value$plusargs("EN_ETH2=%d",     en_eth[1]);
++        $value$plusargs("EN_ETH3=%d",     en_eth[2]);
++        $value$plusargs("EN_ETH4=%d",     en_eth[3]);
++        $value$plusargs("EN_NRZ=%d",      nrz_en);
++        $value$plusargs("NRZ_BPW=%d",     nrz_bpw_bits);
++        $value$plusargs("NRZ_PLEN=%d",    nrz_payload_len);
++        $value$plusargs("NRZ_ENDIAN=%d",  nrz_endian);
++        $value$plusargs("NRZ_SYNC1=%h",   nrz_sync1_arg);
++        $value$plusargs("NRZ_SYNC2=%h",   nrz_sync2_arg);
++
+         get_default_nrz_syncs(nrz_bpw_bits, final_s1, final_s2);
+         if (nrz_sync1_arg != -1) final_s1 = nrz_sync1_arg;
+         if (nrz_sync2_arg != -1) final_s2 = nrz_sync2_arg;
+ 
++        // ================================================================
++        // STAGE 1: HARDWARE CONFIGURATION (serial on bkp_sqr)
++        // ================================================================
+         `uvm_info("VSEQ", "=== STAGE 1: HARDWARE CONFIGURATION ===", UVM_LOW)
++
+         cfg_seq = bkp_sequence::type_id::create("cfg_seq");
+-        cfg_seq.target_card_id = 4'h0;
+-        
+-        // Inject NRZ mapping into the hardware config sequence
++        cfg_seq.target_card_id  = 4'h0;
+         cfg_seq.nrz_bpw_code    = nrz_bpw_code(nrz_bpw_bits);
+         cfg_seq.nrz_zero_endian = nrz_endian;
+         cfg_seq.nrz_sync_word1  = final_s1;
+         cfg_seq.nrz_sync_word2  = final_s2;
+         cfg_seq.nrz_payload_len = nrz_payload_len;
+-        
+-        cfg_seq.start(p_sequencer.bkp_sqr); 
++        cfg_seq.start(p_sequencer.bkp_sqr);
+ 
+-        #100us; 
++        `uvm_info("VSEQ", "=== STAGE 1 COMPLETE: Hardware locked and configured ===", UVM_LOW)
++        #100us;
+ 
+-        `uvm_info("VSEQ", $sformatf("=== STAGE 2: EVENT-DRIVEN PING-PONG TRAFFIC (%0d Packets) ===", num_packets), UVM_LOW)
+-        
++        // ================================================================
++        // STAGE 2: CONCURRENT TRAFFIC INJECTION
++        //   - kwr (BKP TX: UART-TX + ETH-TX) on bkp_sqr
++        //   - uart_seqs (UART RX line) each on independent uart_rx_sqr[i]
++        //   - eth_rx_seqs (ETH PHY RX) each on independent eth_rx_sqr[i]
++        //   - nrz_seq runs in background (independent nrz_sqr)
++        // ================================================================
++        `uvm_info("VSEQ", $sformatf("=== STAGE 2: CONCURRENT INJECTION (%0d PKT/CHANNEL) ===", num_packets), UVM_LOW)
++
++        // Pre-build sequences so we can set properties before start()
++        tx_inj_seq = kwr_routing_seq::type_id::create("tx_inj_seq");
++        tx_inj_seq.num_packets  = num_packets;
++        tx_inj_seq.test_card_id = 4'h0;
++
++        for (int i = 0; i < 3; i++) begin
++            if (en_uart[i]) begin
++                uart_seq[i] = uart_main_sequence::type_id::create($sformatf("uart_seq_%0d", i));
++                uart_seq[i].num_packets = num_packets;
++            end
++        end
++
++        if (nrz_en == 1) begin
++            `uvm_info("VSEQ", "NRZ/ETH5 enabled — telemetry traffic will be injected", UVM_LOW)
++            nrz_seq = nrz_sequence::type_id::create("nrz_seq");
++            nrz_seq.cfg_bpw         = nrz_bpw_code(nrz_bpw_bits);
++            nrz_seq.cfg_zero_endian = nrz_endian;
++            nrz_seq.cfg_sync_word1  = final_s1;
++            nrz_seq.cfg_sync_word2  = final_s2;
++            nrz_seq.cfg_payload_len = nrz_payload_len;
++            nrz_seq.cfg_num_packets = num_packets;
++        end
++
++        // NRZ runs in background — scoreboard monitors ETH5 independently
++        if (nrz_en == 1) begin
++            fork
++                nrz_seq.start(p_sequencer.nrz_sqr);
++            join_none
++        end
++
++        // All other injection paths run concurrently, then we join
+         fork
++            // Thread 1: BKP TX injection (UART-TX bytes + ETH-TX frames via CPU)
+             begin
+-                tx_inj_seq = kwr_routing_seq::type_id::create("tx_inj_seq");
+-                tx_inj_seq.num_packets = num_packets; 
+-                tx_inj_seq.test_card_id = 4'h0; 
+                 tx_inj_seq.start(p_sequencer.bkp_sqr);
+             end
+-            for (int i = 0; i < 3; i++) begin
+-                automatic int j = i;
+-                if (en_uart[j] == 1) begin
+-                    uart_seq[j] = uart_main_sequence::type_id::create($sformatf("uart_seq[%0d]", j));
+-                    uart_seq[j].start(p_sequencer.uart_rx_sqr[j]);
+-                end
++
++            // Threads 2-4: UART RX line injection — each on its own sequencer
++            begin
++                if (en_uart[0]) uart_seq[0].start(p_sequencer.uart_rx_sqr[0]);
+             end
+-            
+-            // Generate NRZ Traffic!
+-            if (nrz_en == 1) begin
+-                `uvm_info("VSEQ", "Enabling Telemetry Traffic on ETH5 (NRZ)", UVM_LOW)
+-                nrz_seq = nrz_sequence::type_id::create("nrz_seq");
+-                nrz_seq.cfg_bpw         = nrz_bpw_code(nrz_bpw_bits);
+-                nrz_seq.cfg_zero_endian = nrz_endian;
+-                nrz_seq.cfg_sync_word1  = final_s1;
+-                nrz_seq.cfg_sync_word2  = final_s2;
+-                nrz_seq.cfg_payload_len = nrz_payload_len;
+-                nrz_seq.cfg_num_packets = num_packets; 
+-                nrz_seq.start(p_sequencer.nrz_sqr);
++            begin
++                if (en_uart[1]) uart_seq[1].start(p_sequencer.uart_rx_sqr[1]);
++            end
++            begin
++                if (en_uart[2]) uart_seq[2].start(p_sequencer.uart_rx_sqr[2]);
+             end
+-        join_none 
+-
+-        poll_seq = bkp_smart_seq::type_id::create("poll_seq");
+-        poll_seq.target_card_id = 4'h0;
+ 
+-        for (int p = 0; p < num_packets; p++) begin
+-            `uvm_info("VSEQ", $sformatf("--- ETH PING-PONG: Pushing Packet %0d/%0d to PHY ---", p+1, num_packets), UVM_LOW)
+-            
+-            fork
+-                for (int i = 0; i < 4; i++) begin
+-                    automatic int j = i;
+-                    if (en_eth[j] == 1) begin
+-                        eth_rx_seq[j] = eiu_phy_rx_seq::type_id::create($sformatf("eth_rx_seq[%0d]", j));
+-                        eth_rx_seq[j].port_id = j; 
+-                        eth_rx_seq[j].start(p_sequencer.eth_rx_sqr[j]);
++            // Threads 5-8: ETH PHY RX injection — each on its own sequencer
++            begin
++                for (int p = 0; p < num_packets; p++) begin
++                    if (en_eth[0]) begin
++                        eth_rx_seq[0] = eiu_phy_rx_seq::type_id::create("eth_rx_seq_0");
++                        eth_rx_seq[0].port_id = 0;
++                        eth_rx_seq[0].start(p_sequencer.eth_rx_sqr[0]);
++                        #2us;
++                    end
++                end
++            end
++            begin
++                for (int p = 0; p < num_packets; p++) begin
++                    if (en_eth[1]) begin
++                        eth_rx_seq[1] = eiu_phy_rx_seq::type_id::create("eth_rx_seq_1");
++                        eth_rx_seq[1].port_id = 1;
++                        eth_rx_seq[1].start(p_sequencer.eth_rx_sqr[1]);
++                        #2us;
++                    end
++                end
++            end
++            begin
++                for (int p = 0; p < num_packets; p++) begin
++                    if (en_eth[2]) begin
++                        eth_rx_seq[2] = eiu_phy_rx_seq::type_id::create("eth_rx_seq_2");
++                        eth_rx_seq[2].port_id = 2;
++                        eth_rx_seq[2].start(p_sequencer.eth_rx_sqr[2]);
++                        #2us;
+                     end
+                 end
+-            join
+-            
+-            #3us; 
+-            
+-            `uvm_info("VSEQ", $sformatf("--- ETH PING-PONG: Triggering CPU to Extract Packet %0d ---", p+1), UVM_LOW)
++            end
++            begin
++                for (int p = 0; p < num_packets; p++) begin
++                    if (en_eth[3]) begin
++                        eth_rx_seq[3] = eiu_phy_rx_seq::type_id::create("eth_rx_seq_3");
++                        eth_rx_seq[3].port_id = 3;
++                        eth_rx_seq[3].start(p_sequencer.eth_rx_sqr[3]);
++                        #2us;
++                    end
++                end
++            end
++        join
++
++        `uvm_info("VSEQ", "=== STAGE 2 COMPLETE: All injection finished ===", UVM_LOW)
++
++        // ================================================================
++        // STAGE 3: CPU READBACK POLLING
++        //   bkp_sqr is now free — kwr has finished.
++        //   Poll repeatedly to drain all RX FIFOs in the DUT.
++        // ================================================================
++        `uvm_info("VSEQ", "=== STAGE 3: POLLING FOR DATA READBACK ===", UVM_LOW)
++        #5us; // Brief settle for CDC crossing
++
++        repeat(20) begin
++            poll_seq = bkp_smart_seq::type_id::create("poll_seq");
++            poll_seq.target_card_id = 4'h0;
+             poll_seq.start(p_sequencer.bkp_sqr);
++            #10us;
+         end
+-        
+-        // Wait long enough for the NRZ packets to finish serializing!
+-        #500us;
++
++        // Give NRZ serialization time to complete, then clean up
++        if (nrz_en == 1) #500us;
+         disable fork;
+-        `uvm_info("VSEQ", "=== ALL DUPLEX STAGES COMPLETE ===", UVM_LOW)
++
++        `uvm_info("VSEQ", "=== ALL STAGES COMPLETE ===", UVM_LOW)
+     endtask
+ endclass
+ `endif
+\ No newline at end of file
+diff --git a/verif/kernel/uvm_tb/sequence/bkp_sequence.sv b/verif/kernel/uvm_tb/sequence/bkp_sequence.sv
+index df045a1..7c00425 100755
+--- a/verif/kernel/uvm_tb/sequence/bkp_sequence.sv
++++ b/verif/kernel/uvm_tb/sequence/bkp_sequence.sv
+@@ -167,9 +167,155 @@ class bkp_sequence extends uvm_sequence #(bkp_item);
+                     endcase
+                 end
+                 
+-                // Keep dummy writes for unused ETH2, 3, 4
++                // ----------------------------------------------------
++                // ETHERNET 2 CONFIGURATION (Addresses 10-16)
++                // ----------------------------------------------------
++                else if (addr >= 6'd10 && addr <= 6'd16) begin
++                    bit [47:0] eth2_dest_mac    = 48'hFF_FF_FF_FF_FF_FF;
++                    bit [47:0] eth2_src_mac     = 48'h02_00_00_00_00_02;
++                    bit [31:0] eth2_dest_ip     = 32'hC0A8_0264;
++                    bit [31:0] eth2_src_ip      = 32'hC0A8_020A;
++                    bit [15:0] eth2_dest_port   = 16'h0FA1;
++                    bit [15:0] eth2_src_port    = 16'h1389;
++                    bit [11:0] eth2_payload_len = 12'd100;
++
++                    case (addr)
++                        6'd10: begin
++                            if (w == 0)      data_to_send = (eth2_dest_mac >> 36) & 12'hFFF;
++                            else if (w == 1) data_to_send = (eth2_dest_mac >> 24) & 12'hFFF;
++                            else if (w == 2) data_to_send = (eth2_dest_mac >> 12) & 12'hFFF;
++                            else if (w == 3) data_to_send = (eth2_dest_mac)       & 12'hFFF;
++                        end
++                        6'd11: begin
++                            if (w == 0)      data_to_send = (eth2_src_mac >> 36) & 12'hFFF;
++                            else if (w == 1) data_to_send = (eth2_src_mac >> 24) & 12'hFFF;
++                            else if (w == 2) data_to_send = (eth2_src_mac >> 12) & 12'hFFF;
++                            else if (w == 3) data_to_send = (eth2_src_mac)       & 12'hFFF;
++                        end
++                        6'd12: begin
++                            if (w == 0)      data_to_send = 12'h000;
++                            else if (w == 1) data_to_send = (eth2_dest_ip >> 24) & 12'hFFF;
++                            else if (w == 2) data_to_send = (eth2_dest_ip >> 12) & 12'hFFF;
++                            else if (w == 3) data_to_send = (eth2_dest_ip)       & 12'hFFF;
++                        end
++                        6'd13: begin
++                            if (w == 0)      data_to_send = 12'h000;
++                            else if (w == 1) data_to_send = (eth2_src_ip >> 24) & 12'hFFF;
++                            else if (w == 2) data_to_send = (eth2_src_ip >> 12) & 12'hFFF;
++                            else if (w == 3) data_to_send = (eth2_src_ip)       & 12'hFFF;
++                        end
++                        6'd14: begin
++                            if (w == 0)      data_to_send = (eth2_dest_port >> 12) & 12'hFFF;
++                            else if (w == 1) data_to_send = (eth2_dest_port)       & 12'hFFF;
++                        end
++                        6'd15: begin
++                            if (w == 0)      data_to_send = (eth2_src_port >> 12) & 12'hFFF;
++                            else if (w == 1) data_to_send = (eth2_src_port)       & 12'hFFF;
++                        end
++                        6'd16: data_to_send = eth2_payload_len;
++                    endcase
++                end
++
++                // ----------------------------------------------------
++                // ETHERNET 3 CONFIGURATION (Addresses 17-23)
++                // ----------------------------------------------------
++                else if (addr >= 6'd17 && addr <= 6'd23) begin
++                    bit [47:0] eth3_dest_mac    = 48'hFF_FF_FF_FF_FF_FF;
++                    bit [47:0] eth3_src_mac     = 48'h02_00_00_00_00_03;
++                    bit [31:0] eth3_dest_ip     = 32'hC0A8_0364;
++                    bit [31:0] eth3_src_ip      = 32'hC0A8_030A;
++                    bit [15:0] eth3_dest_port   = 16'h0FA2;
++                    bit [15:0] eth3_src_port    = 16'h138A;
++                    bit [11:0] eth3_payload_len = 12'd100;
++
++                    case (addr)
++                        6'd17: begin
++                            if (w == 0)      data_to_send = (eth3_dest_mac >> 36) & 12'hFFF;
++                            else if (w == 1) data_to_send = (eth3_dest_mac >> 24) & 12'hFFF;
++                            else if (w == 2) data_to_send = (eth3_dest_mac >> 12) & 12'hFFF;
++                            else if (w == 3) data_to_send = (eth3_dest_mac)       & 12'hFFF;
++                        end
++                        6'd18: begin
++                            if (w == 0)      data_to_send = (eth3_src_mac >> 36) & 12'hFFF;
++                            else if (w == 1) data_to_send = (eth3_src_mac >> 24) & 12'hFFF;
++                            else if (w == 2) data_to_send = (eth3_src_mac >> 12) & 12'hFFF;
++                            else if (w == 3) data_to_send = (eth3_src_mac)       & 12'hFFF;
++                        end
++                        6'd19: begin
++                            if (w == 0)      data_to_send = 12'h000;
++                            else if (w == 1) data_to_send = (eth3_dest_ip >> 24) & 12'hFFF;
++                            else if (w == 2) data_to_send = (eth3_dest_ip >> 12) & 12'hFFF;
++                            else if (w == 3) data_to_send = (eth3_dest_ip)       & 12'hFFF;
++                        end
++                        6'd20: begin
++                            if (w == 0)      data_to_send = 12'h000;
++                            else if (w == 1) data_to_send = (eth3_src_ip >> 24) & 12'hFFF;
++                            else if (w == 2) data_to_send = (eth3_src_ip >> 12) & 12'hFFF;
++                            else if (w == 3) data_to_send = (eth3_src_ip)       & 12'hFFF;
++                        end
++                        6'd21: begin
++                            if (w == 0)      data_to_send = (eth3_dest_port >> 12) & 12'hFFF;
++                            else if (w == 1) data_to_send = (eth3_dest_port)       & 12'hFFF;
++                        end
++                        6'd22: begin
++                            if (w == 0)      data_to_send = (eth3_src_port >> 12) & 12'hFFF;
++                            else if (w == 1) data_to_send = (eth3_src_port)       & 12'hFFF;
++                        end
++                        6'd23: data_to_send = eth3_payload_len;
++                    endcase
++                end
++
++                // ----------------------------------------------------
++                // ETHERNET 4 CONFIGURATION (Addresses 24-30)
++                // ----------------------------------------------------
++                else if (addr >= 6'd24 && addr <= 6'd30) begin
++                    bit [47:0] eth4_dest_mac    = 48'hFF_FF_FF_FF_FF_FF;
++                    bit [47:0] eth4_src_mac     = 48'h02_00_00_00_00_04;
++                    bit [31:0] eth4_dest_ip     = 32'hC0A8_0464;
++                    bit [31:0] eth4_src_ip      = 32'hC0A8_040A;
++                    bit [15:0] eth4_dest_port   = 16'h0FA3;
++                    bit [15:0] eth4_src_port    = 16'h138B;
++                    bit [11:0] eth4_payload_len = 12'd100;
++
++                    case (addr)
++                        6'd24: begin
++                            if (w == 0)      data_to_send = (eth4_dest_mac >> 36) & 12'hFFF;
++                            else if (w == 1) data_to_send = (eth4_dest_mac >> 24) & 12'hFFF;
++                            else if (w == 2) data_to_send = (eth4_dest_mac >> 12) & 12'hFFF;
++                            else if (w == 3) data_to_send = (eth4_dest_mac)       & 12'hFFF;
++                        end
++                        6'd25: begin
++                            if (w == 0)      data_to_send = (eth4_src_mac >> 36) & 12'hFFF;
++                            else if (w == 1) data_to_send = (eth4_src_mac >> 24) & 12'hFFF;
++                            else if (w == 2) data_to_send = (eth4_src_mac >> 12) & 12'hFFF;
++                            else if (w == 3) data_to_send = (eth4_src_mac)       & 12'hFFF;
++                        end
++                        6'd26: begin
++                            if (w == 0)      data_to_send = 12'h000;
++                            else if (w == 1) data_to_send = (eth4_dest_ip >> 24) & 12'hFFF;
++                            else if (w == 2) data_to_send = (eth4_dest_ip >> 12) & 12'hFFF;
++                            else if (w == 3) data_to_send = (eth4_dest_ip)       & 12'hFFF;
++                        end
++                        6'd27: begin
++                            if (w == 0)      data_to_send = 12'h000;
++                            else if (w == 1) data_to_send = (eth4_src_ip >> 24) & 12'hFFF;
++                            else if (w == 2) data_to_send = (eth4_src_ip >> 12) & 12'hFFF;
++                            else if (w == 3) data_to_send = (eth4_src_ip)       & 12'hFFF;
++                        end
++                        6'd28: begin
++                            if (w == 0)      data_to_send = (eth4_dest_port >> 12) & 12'hFFF;
++                            else if (w == 1) data_to_send = (eth4_dest_port)       & 12'hFFF;
++                        end
++                        6'd29: begin
++                            if (w == 0)      data_to_send = (eth4_src_port >> 12) & 12'hFFF;
++                            else if (w == 1) data_to_send = (eth4_src_port)       & 12'hFFF;
++                        end
++                        6'd30: data_to_send = eth4_payload_len;
++                    endcase
++                end
++
+                 else begin
+-                    data_to_send = 12'h000; 
++                    data_to_send = 12'h000;
+                 end
+                 
+                 req_item.bkp_data     = data_to_send; 
+diff --git a/verif/uart_1/uvm_tb/sequence/uart_main_sequence.sv b/verif/uart_1/uvm_tb/sequence/uart_main_sequence.sv
+index fe69c86..15cc1f7 100755
+--- a/verif/uart_1/uvm_tb/sequence/uart_main_sequence.sv
++++ b/verif/uart_1/uvm_tb/sequence/uart_main_sequence.sv
+@@ -3,23 +3,19 @@
+ 
+ class uart_main_sequence extends uvm_sequence #(tx_uart);
+     `uvm_object_utils(uart_main_sequence)
+- 
++
+     uart_tx_sequence   tx_seq;
++    int                num_packets = 10;
+ 
+     function new (string name = "uart_main_sequence");
+-        super.new(name);    
++        super.new(name);
+     endfunction
+ 
+     virtual task body();
+-        `uvm_info("UART_MAIN_SEQ", "Starting tx_seq for EIU Stress Test...", UVM_MEDIUM)
++        `uvm_info("UART_MAIN_SEQ", $sformatf("Starting tx_seq: %0d packet(s)...", num_packets), UVM_MEDIUM)
+ 
+-        // 1. Create the worker sequence
+         tx_seq = uart_tx_sequence::type_id::create("tx_seq");
+-        
+-        // 2. Bypass legacy config DB and hardcode the stress test payload
+-        tx_seq.num_packets = 50; 
+-        
+-        // 3. Start it!
++        tx_seq.num_packets = num_packets;
+         tx_seq.start(get_sequencer());
+         
+         `uvm_info("UART_MAIN_SEQ", "tx_seq finished successfully.", UVM_MEDIUM)
+diff --git a/verif/uart_1/uvm_tb/sequence/uart_tx_sequence.sv b/verif/uart_1/uvm_tb/sequence/uart_tx_sequence.sv
+index 2a347ab..abd9c50 100755
+--- a/verif/uart_1/uvm_tb/sequence/uart_tx_sequence.sv
++++ b/verif/uart_1/uvm_tb/sequence/uart_tx_sequence.sv
+@@ -16,8 +16,7 @@ class uart_tx_sequence extends uvm_sequence #(tx_uart);
+     endfunction
+ 
+     virtual task body();
+-        // Fetch Plusargs directly into the sequence
+-        $value$plusargs("NUM_PKTS=%d", num_packets);
++        // num_packets is set by parent sequence; only fetch format plusargs here
+         $value$plusargs("UART_WIDTH=%d", req_width);
+         $value$plusargs("UART_PARITY_EN=%d", parity_en);
+         $value$plusargs("UART_PARITY_OE=%d", parity_oe);
+-- 
+2.43.0
+

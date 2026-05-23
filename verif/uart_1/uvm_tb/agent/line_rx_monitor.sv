@@ -1,84 +1,3 @@
-/*class line_rx_monitor extends uvm_monitor;
-  `uvm_component_utils(line_rx_monitor)
-
-  uvm_analysis_port#(tx_uart) mon_analysis_port;
-  virtual uart_unified_intf   vif;
-  
-  parameter clock_frequency = 32'd44_236_800;
-
-  function new(string name="line_rx_monitor", uvm_component parent=null);
-    super.new(name, parent);
-  endfunction 
-
-  virtual function void build_phase(uvm_phase phase);
-    super.build_phase(phase);
-    if (!uvm_config_db#(virtual uart_unified_intf)::get(this, "", "uart_unified_intf", vif))
-      `uvm_fatal("LINE_RX_MONITOR", "Could not get unified vif")
-      
-    mon_analysis_port = new ("mon_analysis_port", this);
-  endfunction 
-
-  // Change main_phase to run_phase!
-  virtual task run_phase(uvm_phase phase);
-    super.run_phase(phase);
-    collect_data();
-  endtask
-
-  task collect_data();
-    tx_uart pkt;
-    int clock_delay;
-    logic [31:0] shift_reg; 
-
-    forever begin
-      @(negedge vif.rx);
-
-      pkt = tx_uart::type_id::create("pkt");
-
-      pkt.baudrate        = vif.baudrate;
-      pkt.data_width      = vif.data_width;
-      pkt.parity_en       = vif.parity_en;
-      pkt.parity_odd_even = vif.parity_odd_even;
-
-      if (pkt.baudrate != 0) clock_delay = clock_frequency / pkt.baudrate;
-      else                   clock_delay = clock_frequency / 115200; 
-
-      repeat(clock_delay / 2) @(posedge vif.clk);
-      shift_reg = 0;
-
-      for (int i = 0; i < pkt.data_width; i++) begin
-        repeat(clock_delay) @(posedge vif.clk);
-        shift_reg[i] = vif.rx; 
-      end
-      pkt.data_in = shift_reg; 
-      
-      if (pkt.parity_en) begin
-        repeat(clock_delay) @(posedge vif.clk);
-        pkt.sampled_parity = vif.rx;
-      end
-
-      mon_analysis_port.write(pkt);
-
-      begin
-        string frame_str = "[0]_"; 
-        frame_str = {frame_str, "["};
-        for (int i = 0; i < pkt.data_width; i++) begin
-          frame_str = {frame_str, $sformatf("%b", pkt.data_in[i])}; 
-        end
-        frame_str = {frame_str, "]"};
-
-        if (pkt.parity_en == 1'b1) begin
-          frame_str = {frame_str, "_[", $sformatf("%b", pkt.sampled_parity), "]"}; 
-        end
-        frame_str = {frame_str, "_[1]"}; 
-
-        `uvm_info("LINE_RX_MONITOR", $sformatf("Sampled Wire Frame:   %s (Width: %0d, Baud: %0d)", 
-                  frame_str, pkt.data_width, pkt.baudrate), UVM_LOW)
-      end
-    end
-  endtask
-
-endclass*/
-
 `ifndef LINE_RX_MONITOR_SV
 `define LINE_RX_MONITOR_SV
 
@@ -91,7 +10,7 @@ class line_rx_monitor extends uvm_monitor;
   // ADDED: Handle for dynamic configuration
   uart_config cfg;
   
-  parameter clock_frequency = 32'd44_236_800;
+  parameter clock_frequency = 32'd55_296_000;
 
   function new(string name="line_rx_monitor", uvm_component parent=null);
     super.new(name, parent);

@@ -1,92 +1,3 @@
-/*`ifndef LINE_RX_DRIVER_SV
-`define LINE_RX_DRIVER_SV
-
-class line_rx_driver extends uvm_driver #(tx_uart);
-  `uvm_component_utils(line_rx_driver)
-
-  virtual uart_unified_intf vif;
-  parameter clock_frequency = 32'd44_236_800;
-
-  function new(string name = "line_rx_driver", uvm_component parent=null);
-    super.new(name, parent);
-  endfunction
-
-  virtual function void build_phase(uvm_phase phase);
-    super.build_phase(phase);
-    if (!uvm_config_db#(virtual uart_unified_intf)::get(this, "", "uart_unified_intf", vif))
-      `uvm_fatal("LINE_RX_DRIVER", "Could not get unified vif")
-  endfunction 
-
-  virtual task run_phase(uvm_phase phase);
-    super.run_phase(phase);
-    
-    vif.rx <= 1'b1; // Idle state for UART is HIGH
-
-    `uvm_info("DRV_PROBE", "Driver started. Waiting 2us for system settle...", UVM_NONE)
-    
-    // Wait 2us (Matches ETH drivers exactly)
-    #2000ns; 
-
-    `uvm_info("DRV_PROBE", "Driver awake! Entering main loop.", UVM_NONE)
-
-    forever begin
-      seq_item_port.get_next_item(req); 
-      
-      `uvm_info("DRV_PROBE", $sformatf("Got Packet! Data: 'h%0h | Baud: %0d", req.data_in, req.baudrate), UVM_NONE)
-      drive_item(req);
-      
-      seq_item_port.item_done();
-    end
-  endtask 
-
-  virtual task drive_item(tx_uart drv_pkt); 
-    int safe_data_width;
-    bit [8:0] masked_data; 
-    real bit_period_ns;
-    
-    // 1. Safety Checks
-    if (drv_pkt.baudrate == 0) drv_pkt.baudrate = 115200;
-    
-    if (drv_pkt.data_width > 9 || drv_pkt.data_width == 0) begin
-        safe_data_width = 8;
-    end else begin
-        safe_data_width = drv_pkt.data_width;
-    end
-
-    masked_data = drv_pkt.data_in & ((1 << safe_data_width) - 1);
-    
-    // Calculate exact duration of 1 bit in nanoseconds (e.g. 1000000000 / 115200 = 8680 ns)
-    bit_period_ns = 1000000000.0 / drv_pkt.baudrate;
-    
-    // 2. Start Bit (Drive Low)
-    vif.rx <= 1'b0;
-    #(bit_period_ns * 1ns);
-
-    // 3. Data Bits (LSB First)
-    for (int i = 0; i < safe_data_width; i++) begin
-      vif.rx <= masked_data[i];
-      #(bit_period_ns * 1ns);
-    end
-
-    // 4. Parity Bit
-    if (drv_pkt.parity_en) begin
-        vif.rx <= drv_pkt.expected_parity; 
-        #(bit_period_ns * 1ns);
-    end
-
-    // 5. Stop Bit (Drive High)
-    vif.rx <= 1'b1;
-    #(bit_period_ns * 1ns);
-    
-    // Gap: Wait 2 full bit periods to ensure the RTL state machine completely resets
-    #(bit_period_ns * 2 * 1ns);
-
-    `uvm_info("DRV_PROBE", "=== Packet Successfully Transmitted ===", UVM_NONE)
-  endtask
-endclass
-
-`endif*/
-
 `ifndef LINE_RX_DRIVER_SV
 `define LINE_RX_DRIVER_SV
 
@@ -96,7 +7,7 @@ class line_rx_driver extends uvm_driver #(tx_uart);
   virtual uart_unified_intf vif;
   uart_config cfg;
   
-  parameter clock_frequency = 32'd44_236_800;
+  parameter clock_frequency = 32'd55_296_000;
 
   function new(string name = "line_rx_driver", uvm_component parent=null);
     super.new(name, parent);

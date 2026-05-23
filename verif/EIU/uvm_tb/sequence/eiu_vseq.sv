@@ -193,7 +193,7 @@ class eiu_vseq extends uvm_sequence;
                 end
             join
             
-            #3us; 
+            #2000us; 
             
             `uvm_info("VSEQ", $sformatf("--- ETH PING-PONG: Triggering CPU to Extract Packet %0d ---", p+1), UVM_LOW)
             poll_seq.start(p_sequencer.bkp_sqr);
