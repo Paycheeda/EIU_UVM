@@ -182,7 +182,7 @@ class eiu_vseq extends uvm_sequence;
             join_none
         end
 
-        // All other injection paths run concurrently, then we join
+        // UART TX + UART RX injection run concurrently; ETH TX (kwr) also here
         fork
             // Thread 1: BKP TX injection (UART-TX bytes + ETH-TX frames via CPU)
             begin
@@ -199,59 +199,42 @@ class eiu_vseq extends uvm_sequence;
             begin
                 if (en_uart[2]) uart_seq[2].start(p_sequencer.uart_rx_sqr[2]);
             end
-
-            // Threads 5-8: ETH PHY RX injection — each on its own sequencer
-            begin
-                for (int p = 0; p < num_packets; p++) begin
-                    if (en_eth[0]) begin
-                        eth_rx_seq[0] = eiu_phy_rx_seq::type_id::create("eth_rx_seq_0");
-                        eth_rx_seq[0].port_id = 0;
-                        eth_rx_seq[0].start(p_sequencer.eth_rx_sqr[0]);
-                        #2us;
-                    end
-                end
-            end
-            begin
-                for (int p = 0; p < num_packets; p++) begin
-                    if (en_eth[1]) begin
-                        eth_rx_seq[1] = eiu_phy_rx_seq::type_id::create("eth_rx_seq_1");
-                        eth_rx_seq[1].port_id = 1;
-                        eth_rx_seq[1].start(p_sequencer.eth_rx_sqr[1]);
-                        #2us;
-                    end
-                end
-            end
-            begin
-                for (int p = 0; p < num_packets; p++) begin
-                    if (en_eth[2]) begin
-                        eth_rx_seq[2] = eiu_phy_rx_seq::type_id::create("eth_rx_seq_2");
-                        eth_rx_seq[2].port_id = 2;
-                        eth_rx_seq[2].start(p_sequencer.eth_rx_sqr[2]);
-                        #2us;
-                    end
-                end
-            end
-            begin
-                for (int p = 0; p < num_packets; p++) begin
-                    if (en_eth[3]) begin
-                        eth_rx_seq[3] = eiu_phy_rx_seq::type_id::create("eth_rx_seq_3");
-                        eth_rx_seq[3].port_id = 3;
-                        eth_rx_seq[3].start(p_sequencer.eth_rx_sqr[3]);
-                        #2us;
-                    end
-                end
-            end
         join
 
-        `uvm_info("VSEQ", "=== STAGE 2 COMPLETE: All injection finished ===", UVM_LOW)
+        `uvm_info("VSEQ", "=== STAGE 2 COMPLETE: UART/ETH-TX injection finished ===", UVM_LOW)
 
         // ================================================================
-        // STAGE 3: CPU READBACK POLLING
-        //   bkp_sqr is now free — kwr has finished.
-        //   Poll repeatedly to drain all RX FIFOs in the DUT.
+        // STAGE 3: ETH RX — inject one packet, immediately read it back,
+        //   then inject the next. The DUT RX FIFO is live-stream: each new
+        //   incoming packet overwrites the previous one, so burst-then-poll
+        //   would lose all packets except the last.
+        //   bkp_sqr is free here (kwr finished in Stage 2).
         // ================================================================
-        `uvm_info("VSEQ", "=== STAGE 3: POLLING FOR DATA READBACK ===", UVM_LOW)
-        #5us; // Brief settle for CDC crossing
+        `uvm_info("VSEQ", "=== STAGE 3: ETH RX INTERLEAVED INJECT+POLL ===", UVM_LOW)
+
+        for (int i = 0; i < 4; i++) begin
+            if (en_eth[i]) begin
+                `uvm_info("VSEQ", $sformatf("ETH%0d: injecting and reading %0d packet(s) one at a time", i+1, num_packets), UVM_LOW)
+                for (int p = 0; p < num_packets; p++) begin
+                    eth_rx_seq[i] = eiu_phy_rx_seq::type_id::create($sformatf("eth_rx_seq_%0d_pkt%0d", i, p));
+                    eth_rx_seq[i].port_id = i;
+                    eth_rx_seq[i].start(p_sequencer.eth_rx_sqr[i]);
+                    #5us; // CDC settle before readback
+                    poll_seq = bkp_smart_seq::type_id::create("poll_seq");
+                    poll_seq.target_card_id = 4'h0;
+                    poll_seq.eth_target = i;
+                    poll_seq.start(p_sequencer.bkp_sqr);
+                end
+            end
+        end
+
+        `uvm_info("VSEQ", "=== STAGE 3 COMPLETE: ETH RX verified ===", UVM_LOW)
+
+        // ================================================================
+        // STAGE 4: UART RX READBACK — drain remaining bytes from UART FIFOs.
+        // ================================================================
+        `uvm_info("VSEQ", "=== STAGE 4: UART RX POLLING ===", UVM_LOW)
+        #5us;
 
         repeat(20) begin
             poll_seq = bkp_smart_seq::type_id::create("poll_seq");

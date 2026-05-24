@@ -44,19 +44,21 @@ class bkp_sequence extends uvm_sequence #(bkp_item);
         // Dynamic Parameters (Defaults)
         int req_baud = 115200;
         int req_width_val = 8;
-        int req_width_rtl = 8;     
-        int req_parity_en = 0; 
-        int req_odd_even = 0;  
-        
+        int req_width_rtl = 8;
+        int req_parity_en = 0;
+        int req_odd_even = 0;
+        int eth_payload_len = 100;
+
         int baud_div, ctrl_bits, b0, b1, b2, b3;
 
         `uvm_info("BKP_SEQ", ">>> Starting FULL Hardware Initialization Sequence...", UVM_LOW)
         
         // Fetch terminal Plusargs!
-        $value$plusargs("UART_BAUD=%d", req_baud);
-        $value$plusargs("UART_WIDTH=%d", req_width_val); 
+        $value$plusargs("UART_BAUD=%d",     req_baud);
+        $value$plusargs("UART_WIDTH=%d",    req_width_val);
         $value$plusargs("UART_PARITY_EN=%d", req_parity_en);
         $value$plusargs("UART_PARITY_OE=%d", req_odd_even);
+        $value$plusargs("ETH_PLEN=%d",      eth_payload_len);
         
         req_width_rtl = req_width_val; 
         
@@ -101,7 +103,7 @@ class bkp_sequence extends uvm_sequence #(bkp_item);
                     bit [31:0] eth1_src_ip   = 32'hC0A8_010A;         
                     bit [15:0] eth1_dest_port= 16'h0FA0;              
                     bit [15:0] eth1_src_port = 16'h1388;              
-                    bit [11:0] eth1_payload_len = 12'd100;            
+                    bit [11:0] eth1_payload_len = eth_payload_len[11:0];            
 
                     case (addr)
                         6'd3: begin // Dest MAC
@@ -177,7 +179,7 @@ class bkp_sequence extends uvm_sequence #(bkp_item);
                     bit [31:0] eth2_src_ip      = 32'hC0A8_020A;
                     bit [15:0] eth2_dest_port   = 16'h0FA1;
                     bit [15:0] eth2_src_port    = 16'h1389;
-                    bit [11:0] eth2_payload_len = 12'd100;
+                    bit [11:0] eth2_payload_len = eth_payload_len[11:0];
 
                     case (addr)
                         6'd10: begin
@@ -226,7 +228,7 @@ class bkp_sequence extends uvm_sequence #(bkp_item);
                     bit [31:0] eth3_src_ip      = 32'hC0A8_030A;
                     bit [15:0] eth3_dest_port   = 16'h0FA2;
                     bit [15:0] eth3_src_port    = 16'h138A;
-                    bit [11:0] eth3_payload_len = 12'd100;
+                    bit [11:0] eth3_payload_len = eth_payload_len[11:0];
 
                     case (addr)
                         6'd17: begin
@@ -275,7 +277,7 @@ class bkp_sequence extends uvm_sequence #(bkp_item);
                     bit [31:0] eth4_src_ip      = 32'hC0A8_040A;
                     bit [15:0] eth4_dest_port   = 16'h0FA3;
                     bit [15:0] eth4_src_port    = 16'h138B;
-                    bit [11:0] eth4_payload_len = 12'd100;
+                    bit [11:0] eth4_payload_len = eth_payload_len[11:0];
 
                     case (addr)
                         6'd24: begin

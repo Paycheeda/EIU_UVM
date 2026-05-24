@@ -5,27 +5,33 @@ class bkp_smart_seq extends uvm_sequence #(bkp_item);
     `uvm_object_utils(bkp_smart_seq)
 
     bit [3:0] target_card_id;
+    // When >= 0, only polls that ETH port (0=ETH1 .. 3=ETH4). -1 = poll all.
+    int eth_target = -1;
 
-    function new(string name = "bkp_smart_seq"); 
-        super.new(name); 
+    function new(string name = "bkp_smart_seq");
+        super.new(name);
         target_card_id = 4'h0;
     endfunction
 
     task body();
-        // `uvm_info("SMART_SEQ", ">>> WAKING UP: CPU Backplane Polling Routine Started...", UVM_LOW)
-
-        // Poll UARTs
-        poll_and_read(6'd1, 6'd0, "UART1");
-        poll_and_read(6'd4, 6'd3, "UART2");
-        poll_and_read(6'd7, 6'd6, "UART3");
-        
-        // Poll ALL Ethernet Ports
-        poll_and_read(6'd10, 6'd9,  "ETH1");
-        poll_and_read(6'd13, 6'd12, "ETH2");
-        poll_and_read(6'd16, 6'd15, "ETH3");
-        poll_and_read(6'd19, 6'd18, "ETH4");
-
-        // `uvm_info("SMART_SEQ", "<<< SLEEPING: Polling Routine Complete.\n", UVM_LOW)
+        if (eth_target == -1) begin
+            // Full poll: UARTs + all ETH ports
+            poll_and_read(6'd1, 6'd0, "UART1");
+            poll_and_read(6'd4, 6'd3, "UART2");
+            poll_and_read(6'd7, 6'd6, "UART3");
+            poll_and_read(6'd10, 6'd9,  "ETH1");
+            poll_and_read(6'd13, 6'd12, "ETH2");
+            poll_and_read(6'd16, 6'd15, "ETH3");
+            poll_and_read(6'd19, 6'd18, "ETH4");
+        end else begin
+            // Targeted: single ETH port only (used for interleaved RX inject+poll)
+            case (eth_target)
+                0: poll_and_read(6'd10, 6'd9,  "ETH1");
+                1: poll_and_read(6'd13, 6'd12, "ETH2");
+                2: poll_and_read(6'd16, 6'd15, "ETH3");
+                3: poll_and_read(6'd19, 6'd18, "ETH4");
+            endcase
+        end
     endtask
 
     task poll_and_read(input bit [5:0] count_addr, input bit [5:0] data_addr, input string intf_name);

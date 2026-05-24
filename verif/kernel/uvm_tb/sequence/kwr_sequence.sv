@@ -16,14 +16,16 @@ class kwr_routing_seq extends uvm_sequence #(bkp_item);
     endfunction
    
     task body();
-        bit [8:0] rand_uart_payload; 
+        bit [8:0] rand_uart_payload;
         bit [7:0] rand_eth_payload;
         int req_width = 8;
-        
+        int eth_plen  = 100;
+
         // Fetch Plusargs
-        $value$plusargs("NUM_PKTS=%d", num_packets);
+        $value$plusargs("NUM_PKTS=%d",  num_packets);
         $value$plusargs("UART_WIDTH=%d", req_width);
-        
+        $value$plusargs("ETH_PLEN=%d",  eth_plen);
+
         $value$plusargs("EN_UART1=%d", en_uart[0]);
         $value$plusargs("EN_UART2=%d", en_uart[1]);
         $value$plusargs("EN_UART3=%d", en_uart[2]);
@@ -95,7 +97,7 @@ class kwr_routing_seq extends uvm_sequence #(bkp_item);
                 if (!en_eth[eth_idx]) continue;
 
                 // Push Payload Bytes into the FIFO
-                for (int byte_idx = 0; byte_idx < 100; byte_idx++) begin
+                for (int byte_idx = 0; byte_idx < eth_plen; byte_idx++) begin
                     rand_eth_payload = $urandom_range(0, 255); 
                     
                     req = bkp_item::type_id::create("req");
