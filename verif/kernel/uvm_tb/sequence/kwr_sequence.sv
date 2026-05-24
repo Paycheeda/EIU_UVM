@@ -116,29 +116,15 @@ class kwr_routing_seq extends uvm_sequence #(bkp_item);
                 // ---> FIX 1: Let the 100 bytes cross the CDC into the FIFO <---
                 #5us; 
 
-                // ---> FIX 2: Send Command to data_addr (Addr 44) <---
+                // Send Command to data_addr
                 req = bkp_item::type_id::create("req");
                 start_item(req);
-                req.trans_type   = BKP_DATA_WRITE; 
-                req.bkp_address  = data_addr; 
+                req.trans_type   = BKP_DATA_WRITE;
+                req.bkp_address  = data_addr;
                 req.bkp_card_id  = test_card_id;
                 req.fpga_card_id = test_card_id;
                 req.bkp_data_dir = 1'b1;
                 req.bkp_data     = 12'h100; // Bit 8 = 1 (Triggers the TX)
-                req.delay_cycles = 0;
-                finish_item(req);
-
-                // ---> FIX 3: Wait for the MAC to latch the command, then CLEAR IT! <---
-                #1us;
-                
-                req = bkp_item::type_id::create("req");
-                start_item(req);
-                req.trans_type   = BKP_DATA_WRITE; 
-                req.bkp_address  = data_addr; 
-                req.bkp_card_id  = test_card_id;
-                req.fpga_card_id = test_card_id;
-                req.bkp_data_dir = 1'b1;
-                req.bkp_data     = 12'h000; // Bit 8 = 0 (Clears the start flag to stop ghost packets)
                 req.delay_cycles = 0;
                 finish_item(req);
             end

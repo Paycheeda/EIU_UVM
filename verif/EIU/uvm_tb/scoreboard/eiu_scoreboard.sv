@@ -39,8 +39,6 @@ class eiu_scoreboard extends uvm_scoreboard;
     int nrz_inj_cnt = 0;
     int nrz_ver_cnt = 0;
 
-    // After seeing ETH TX send (12'h100), absorb the following clear (12'h000)
-    bit eth_tx_clear_pending[4] = '{0, 0, 0, 0};
 
     function new(string name, uvm_component parent);
         super.new(name, parent);
@@ -315,31 +313,10 @@ class eiu_scoreboard extends uvm_scoreboard;
                         6'd41: begin exp_uart_tx_q[0].push_back(item.bkp_data[8:0]); uart_tx_inj_cnt[0]++; print_counts(0, "UART"); end
                         6'd42: begin exp_uart_tx_q[1].push_back(item.bkp_data[8:0]); uart_tx_inj_cnt[1]++; print_counts(1, "UART"); end
                         6'd43: begin exp_uart_tx_q[2].push_back(item.bkp_data[8:0]); uart_tx_inj_cnt[2]++; print_counts(2, "UART"); end
-                        // ETH TX: absorb the clear write (12'h000) that follows every send (12'h100)
-                        6'd44: begin
-                            if (eth_tx_clear_pending[0]) eth_tx_clear_pending[0] = 0;
-                            else begin exp_eth_tx_q[0].push_back(item.bkp_data[7:0]); eth_tx_inj_cnt[0]++; print_counts(0, "ETH"); end
-                        end
-                        6'd45: begin
-                            if (eth_tx_clear_pending[1]) eth_tx_clear_pending[1] = 0;
-                            else begin exp_eth_tx_q[1].push_back(item.bkp_data[7:0]); eth_tx_inj_cnt[1]++; print_counts(1, "ETH"); end
-                        end
-                        6'd46: begin
-                            if (eth_tx_clear_pending[2]) eth_tx_clear_pending[2] = 0;
-                            else begin exp_eth_tx_q[2].push_back(item.bkp_data[7:0]); eth_tx_inj_cnt[2]++; print_counts(2, "ETH"); end
-                        end
-                        6'd47: begin
-                            if (eth_tx_clear_pending[3]) eth_tx_clear_pending[3] = 0;
-                            else begin exp_eth_tx_q[3].push_back(item.bkp_data[7:0]); eth_tx_inj_cnt[3]++; print_counts(3, "ETH"); end
-                        end
-                    endcase
-                end else begin
-                    // Send command seen — mark that next write to this ETH addr is the clear
-                    case (item.bkp_address)
-                        6'd44: eth_tx_clear_pending[0] = 1;
-                        6'd45: eth_tx_clear_pending[1] = 1;
-                        6'd46: eth_tx_clear_pending[2] = 1;
-                        6'd47: eth_tx_clear_pending[3] = 1;
+                        6'd44: begin exp_eth_tx_q[0].push_back(item.bkp_data[7:0]); eth_tx_inj_cnt[0]++; print_counts(0, "ETH"); end
+                        6'd45: begin exp_eth_tx_q[1].push_back(item.bkp_data[7:0]); eth_tx_inj_cnt[1]++; print_counts(1, "ETH"); end
+                        6'd46: begin exp_eth_tx_q[2].push_back(item.bkp_data[7:0]); eth_tx_inj_cnt[2]++; print_counts(2, "ETH"); end
+                        6'd47: begin exp_eth_tx_q[3].push_back(item.bkp_data[7:0]); eth_tx_inj_cnt[3]++; print_counts(3, "ETH"); end
                     endcase
                 end
             end

@@ -38,13 +38,12 @@ class nrz_sequence extends uvm_sequence #(nrz_item);
             
             // Generate the dynamic payload based on the requested length plusarg
             req.generate_payload((cfg_payload_len-2), cfg_bpw);
-            
-            finish_item(req);
-            
-            // =================================================================
-            // BACKDOOR INJECTION: Push the Golden NRZ Packet to Scoreboard
-            // =================================================================
+
+            // Push golden data before driving so the scoreboard has it ready
+            // before the ETH5 frame arrives (driver serializes for ~20us at 20MHz).
             if (g_q != null) g_q.push_back(req);
+
+            finish_item(req);
             
             get_response(rsp);
             
