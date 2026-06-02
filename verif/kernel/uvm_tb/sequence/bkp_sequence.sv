@@ -49,6 +49,7 @@ class bkp_sequence extends uvm_sequence #(bkp_item);
         int req_odd_even = 0;  
         
         int baud_div, ctrl_bits, b0, b1, b2, b3;
+        int eth_payload_len = 100;
 
         `uvm_info("BKP_SEQ", ">>> Starting FULL Hardware Initialization Sequence...", UVM_LOW)
         
@@ -57,6 +58,12 @@ class bkp_sequence extends uvm_sequence #(bkp_item);
         $value$plusargs("UART_WIDTH=%d", req_width_val); 
         $value$plusargs("UART_PARITY_EN=%d", req_parity_en);
         $value$plusargs("UART_PARITY_OE=%d", req_odd_even);
+        $value$plusargs("ETH_PLEN=%d", eth_payload_len);
+        if (eth_payload_len < 0) eth_payload_len = 0;
+        if (eth_payload_len > 2047) begin
+            `uvm_warning("BKP_SEQ", $sformatf("ETH_PLEN=%0d is larger than the 11-bit RTL field; clamping to 2047", eth_payload_len))
+            eth_payload_len = 2047;
+        end
         
         req_width_rtl = req_width_val; 
         
@@ -92,52 +99,67 @@ class bkp_sequence extends uvm_sequence #(bkp_item);
                 end 
                 
                 // ----------------------------------------------------
-                // ETHERNET 1 CONFIGURATION (Addresses 3-9)
+                // ETHERNET 1-4 CONFIGURATION (Addresses 3-30)
                 // ----------------------------------------------------
-                else if (addr >= 6'd3 && addr <= 6'd9) begin
-                    bit [47:0] eth1_dest_mac = 48'hFF_FF_FF_FF_FF_FF;
-                    bit [47:0] eth1_src_mac  = 48'h02_00_00_00_00_01; 
-                    bit [31:0] eth1_dest_ip  = 32'hC0A8_0164;         
-                    bit [31:0] eth1_src_ip   = 32'hC0A8_010A;         
-                    bit [15:0] eth1_dest_port= 16'h0FA0;              
-                    bit [15:0] eth1_src_port = 16'h1388;              
-                    bit [11:0] eth1_payload_len = 12'd100;            
+                else if (addr >= 6'd3 && addr <= 6'd30) begin
+                    int eth_port;
+                    int eth_cfg_field;
+                    bit [47:0] eth_dest_mac;
+                    bit [47:0] eth_src_mac;
+                    bit [31:0] eth_src_ip;
+                    bit [31:0] eth_dest_ip;
+                    bit [15:0] eth_src_port;
+                    bit [15:0] eth_dest_port;
 
-                    case (addr)
-                        6'd3: begin // Dest MAC
-                            if (w == 0)      data_to_send = (eth1_dest_mac >> 36) & 12'hFFF;
-                            else if (w == 1) data_to_send = (eth1_dest_mac >> 24) & 12'hFFF;
-                            else if (w == 2) data_to_send = (eth1_dest_mac >> 12) & 12'hFFF;
-                            else if (w == 3) data_to_send = (eth1_dest_mac)       & 12'hFFF;
+                    eth_port      = (addr - 3) / 7; // 0=ETH1, 1=ETH2, 2=ETH3, 3=ETH4
+                    eth_cfg_field = (addr - 3) % 7;
+
+                    // All four ETH TX ports must be configured.  The previous code
+                    // only configured ETH1 and wrote zeros for ETH2/3/4, leaving their
+                    // payload length at 0; those ports transmitted header-only frames
+                    // that the UVM monitor ignored.
+                    eth_dest_mac  = 48'hFF_FF_FF_FF_FF_FF;
+                    eth_src_mac   = 48'h02_00_00_00_00_00 | (eth_port + 1);
+                    eth_src_ip    = 32'hC0A8_010A + eth_port;
+                    eth_dest_ip   = 32'hC0A8_0164 + eth_port;
+                    eth_src_port  = 16'h1388 + eth_port;
+                    eth_dest_port = 16'h0FA0 + eth_port;
+
+                    case (eth_cfg_field)
+                        0: begin // Dest MAC, 12-bit chunks
+                            if (w == 0)      data_to_send = (eth_dest_mac >> 36) & 12'hFFF;
+                            else if (w == 1) data_to_send = (eth_dest_mac >> 24) & 12'hFFF;
+                            else if (w == 2) data_to_send = (eth_dest_mac >> 12) & 12'hFFF;
+                            else if (w == 3) data_to_send = (eth_dest_mac)       & 12'hFFF;
                         end
-                        6'd4: begin // Src MAC
-                            if (w == 0)      data_to_send = (eth1_src_mac >> 36) & 12'hFFF;
-                            else if (w == 1) data_to_send = (eth1_src_mac >> 24) & 12'hFFF;
-                            else if (w == 2) data_to_send = (eth1_src_mac >> 12) & 12'hFFF;
-                            else if (w == 3) data_to_send = (eth1_src_mac)       & 12'hFFF;
+                        1: begin // Src MAC, 12-bit chunks
+                            if (w == 0)      data_to_send = (eth_src_mac >> 36) & 12'hFFF;
+                            else if (w == 1) data_to_send = (eth_src_mac >> 24) & 12'hFFF;
+                            else if (w == 2) data_to_send = (eth_src_mac >> 12) & 12'hFFF;
+                            else if (w == 3) data_to_send = (eth_src_mac)       & 12'hFFF;
                         end
-                        6'd5: begin // Dest IP
-                            if (w == 0)      data_to_send = 12'h000;
-                            else if (w == 1) data_to_send = (eth1_dest_ip >> 24) & 12'hFFF;
-                            else if (w == 2) data_to_send = (eth1_dest_ip >> 12) & 12'hFFF;
-                            else if (w == 3) data_to_send = (eth1_dest_ip)       & 12'hFFF;
+                        2: begin // Source IP, byte chunks
+                            if (w == 0)      data_to_send = (eth_src_ip >> 24) & 12'h0FF;
+                            else if (w == 1) data_to_send = (eth_src_ip >> 16) & 12'h0FF;
+                            else if (w == 2) data_to_send = (eth_src_ip >> 8)  & 12'h0FF;
+                            else if (w == 3) data_to_send = (eth_src_ip)       & 12'h0FF;
                         end
-                        6'd6: begin // Src IP
-                            if (w == 0)      data_to_send = 12'h000;
-                            else if (w == 1) data_to_send = (eth1_src_ip >> 24) & 12'hFFF;
-                            else if (w == 2) data_to_send = (eth1_src_ip >> 12) & 12'hFFF;
-                            else if (w == 3) data_to_send = (eth1_src_ip)       & 12'hFFF;
+                        3: begin // Destination IP, byte chunks
+                            if (w == 0)      data_to_send = (eth_dest_ip >> 24) & 12'h0FF;
+                            else if (w == 1) data_to_send = (eth_dest_ip >> 16) & 12'h0FF;
+                            else if (w == 2) data_to_send = (eth_dest_ip >> 8)  & 12'h0FF;
+                            else if (w == 3) data_to_send = (eth_dest_ip)       & 12'h0FF;
                         end
-                        6'd7: begin // Dest Port 
-                            if (w == 0)      data_to_send = (eth1_dest_port >> 12) & 12'hFFF;
-                            else if (w == 1) data_to_send = (eth1_dest_port)       & 12'hFFF;
+                        4: begin // Source Port, byte chunks
+                            if (w == 0)      data_to_send = (eth_src_port >> 8) & 12'h0FF;
+                            else if (w == 1) data_to_send = (eth_src_port)      & 12'h0FF;
                         end
-                        6'd8: begin // Src Port 
-                            if (w == 0)      data_to_send = (eth1_src_port >> 12) & 12'hFFF;
-                            else if (w == 1) data_to_send = (eth1_src_port)       & 12'hFFF;
+                        5: begin // Destination Port, byte chunks
+                            if (w == 0)      data_to_send = (eth_dest_port >> 8) & 12'h0FF;
+                            else if (w == 1) data_to_send = (eth_dest_port)      & 12'h0FF;
                         end
-                        6'd9: begin // Payload Length
-                            data_to_send = eth1_payload_len;
+                        6: begin // Payload Length
+                            data_to_send = eth_payload_len[10:0];
                         end
                     endcase
                 end

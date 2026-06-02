@@ -39,13 +39,16 @@ class nrz_sequence extends uvm_sequence #(nrz_item);
             // Generate the dynamic payload based on the requested length plusarg
             req.generate_payload((cfg_payload_len-2), cfg_bpw);
             
-            finish_item(req);
-            
             // =================================================================
             // BACKDOOR INJECTION: Push the Golden NRZ Packet to Scoreboard
+            // before finish_item() releases it to the driver.  ETH5 can transmit
+            // quickly after the serial input completes; preloading the golden
+            // queue removes the race where the monitor sees actual payload before
+            // expected payload has been packed.
             // =================================================================
             if (g_q != null) g_q.push_back(req);
             
+            finish_item(req);
             get_response(rsp);
             
             // Inter-packet gap (Reduced slightly to keep EIU simulation fast)

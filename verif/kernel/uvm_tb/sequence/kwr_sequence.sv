@@ -19,10 +19,17 @@ class kwr_routing_seq extends uvm_sequence #(bkp_item);
         bit [8:0] rand_uart_payload; 
         bit [7:0] rand_eth_payload;
         int req_width = 8;
+        int eth_payload_len = 100;
         
         // Fetch Plusargs
         $value$plusargs("NUM_PKTS=%d", num_packets);
         $value$plusargs("UART_WIDTH=%d", req_width);
+        $value$plusargs("ETH_PLEN=%d", eth_payload_len);
+        if (eth_payload_len < 0) eth_payload_len = 0;
+        if (eth_payload_len > 2047) begin
+            `uvm_warning("SEQ", $sformatf("ETH_PLEN=%0d is larger than the 11-bit RTL field; clamping to 2047", eth_payload_len))
+            eth_payload_len = 2047;
+        end
         
         $value$plusargs("EN_UART1=%d", en_uart[0]);
         $value$plusargs("EN_UART2=%d", en_uart[1]);
@@ -33,7 +40,7 @@ class kwr_routing_seq extends uvm_sequence #(bkp_item);
         $value$plusargs("EN_ETH3=%d", en_eth[2]);
         $value$plusargs("EN_ETH4=%d", en_eth[3]);
         
-        `uvm_info("SEQ", $sformatf("Starting BACK-TO-BACK Burst Test with RANDOM Data: %0d Packets per FIFO...", num_packets), UVM_LOW)
+        `uvm_info("SEQ", $sformatf("Starting BACK-TO-BACK Burst Test with RANDOM Data: %0d packet(s), %0d ETH byte(s) per enabled FIFO...", num_packets, eth_payload_len), UVM_LOW)
 
         for (int p = 1; p <= num_packets; p++) begin
             
@@ -94,8 +101,9 @@ class kwr_routing_seq extends uvm_sequence #(bkp_item);
                 
                 if (!en_eth[eth_idx]) continue;
 
-                // Push Payload Bytes into the FIFO
-                for (int byte_idx = 0; byte_idx < 100; byte_idx++) begin
+                // Push Payload Bytes into the FIFO.  Keep this aligned with the
+                // ETH_PLEN value programmed into kernel_config by bkp_sequence.
+                for (int byte_idx = 0; byte_idx < eth_payload_len; byte_idx++) begin
                     rand_eth_payload = $urandom_range(0, 255); 
                     
                     req = bkp_item::type_id::create("req");

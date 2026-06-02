@@ -1,0 +1,318 @@
+diff --git a/verif/EIU/uvm_tb/sequence/eiu_vseq.sv b/verif/EIU/uvm_tb/sequence/eiu_vseq.sv
+index cb7ff6a..1f7c5e6 100644
+--- a/verif/EIU/uvm_tb/sequence/eiu_vseq.sv
++++ b/verif/EIU/uvm_tb/sequence/eiu_vseq.sv
+@@ -45,13 +45,15 @@ class eiu_phy_rx_seq extends uvm_sequence #(phy_rx_seq_item);
+         
+         req.total_length = 16'(p_size + 28);
+         
+-        finish_item(req);
+-        
+         if (uvm_config_db#(uvm_queue#(phy_rx_seq_item))::get(null, "", $sformatf("golden_eth_rx_q_%0d", port_id), g_q)) begin
++            // Push expected data before the driver starts consuming the item so the
++            // scoreboard cannot be beaten by a fast DUT/backplane poll.
+             g_q.push_back(req);
+         end else begin
+             `uvm_error("VSEQ", $sformatf("CRITICAL: Could not find golden_eth_rx_q_%0d in config DB!", port_id))
+         end
++
++        finish_item(req);
+     endtask
+ endclass
+ 
+diff --git a/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv b/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv
+index 771165a..2341f5c 100755
+--- a/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv
++++ b/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv
+@@ -67,7 +67,10 @@ class eth_tx_monitor extends uvm_monitor;
+             `uvm_info("TX_MON", $sformatf("tx_ctl went LOW. Captured %0d bytes from physical pins.", raw_packet.size()), UVM_LOW)
+ 
+             // PACKET PARSER
+-            if (raw_packet.size() > 64) begin 
++            // Accept small but valid IPv4/UDP frames too.  ETH2/3/4 were previously
++            // silently ignored when misconfigured to payload length 0 because those
++            // frames are only ~54 physical bytes including preamble and FCS.
++            if (raw_packet.size() >= 50) begin
+                 item = eth_tx_seq_item::type_id::create("item");
+                 idx = 0;
+ 
+@@ -100,8 +103,10 @@ class eth_tx_monitor extends uvm_monitor;
+                         idx+=2; // UDP Len
+                         idx+=2; // UDP Chksum
+                         
+-                        // Extract Payload 
+-                        if (raw_packet.size() > idx + 4) begin
++                        // Extract Payload.  A zero-length UDP payload is legal and
++                        // should still be broadcast so missing ETH configuration is
++                        // visible instead of being hidden by this monitor.
++                        if (raw_packet.size() >= idx + 4) begin
+                             int payload_len = raw_packet.size() - idx - 4;
+                             item.payload = new[payload_len];
+                             for (int i = 0; i < payload_len; i++) begin
+diff --git a/verif/kernel/uvm_tb/sequence/bkp_sequence.sv b/verif/kernel/uvm_tb/sequence/bkp_sequence.sv
+index df045a1..af36f42 100755
+--- a/verif/kernel/uvm_tb/sequence/bkp_sequence.sv
++++ b/verif/kernel/uvm_tb/sequence/bkp_sequence.sv
+@@ -49,6 +49,7 @@ class bkp_sequence extends uvm_sequence #(bkp_item);
+         int req_odd_even = 0;  
+         
+         int baud_div, ctrl_bits, b0, b1, b2, b3;
++        int eth_payload_len = 100;
+ 
+         `uvm_info("BKP_SEQ", ">>> Starting FULL Hardware Initialization Sequence...", UVM_LOW)
+         
+@@ -57,6 +58,12 @@ class bkp_sequence extends uvm_sequence #(bkp_item);
+         $value$plusargs("UART_WIDTH=%d", req_width_val); 
+         $value$plusargs("UART_PARITY_EN=%d", req_parity_en);
+         $value$plusargs("UART_PARITY_OE=%d", req_odd_even);
++        $value$plusargs("ETH_PLEN=%d", eth_payload_len);
++        if (eth_payload_len < 0) eth_payload_len = 0;
++        if (eth_payload_len > 2047) begin
++            `uvm_warning("BKP_SEQ", $sformatf("ETH_PLEN=%0d is larger than the 11-bit RTL field; clamping to 2047", eth_payload_len))
++            eth_payload_len = 2047;
++        end
+         
+         req_width_rtl = req_width_val; 
+         
+@@ -92,52 +99,67 @@ class bkp_sequence extends uvm_sequence #(bkp_item);
+                 end 
+                 
+                 // ----------------------------------------------------
+-                // ETHERNET 1 CONFIGURATION (Addresses 3-9)
++                // ETHERNET 1-4 CONFIGURATION (Addresses 3-30)
+                 // ----------------------------------------------------
+-                else if (addr >= 6'd3 && addr <= 6'd9) begin
+-                    bit [47:0] eth1_dest_mac = 48'hFF_FF_FF_FF_FF_FF;
+-                    bit [47:0] eth1_src_mac  = 48'h02_00_00_00_00_01; 
+-                    bit [31:0] eth1_dest_ip  = 32'hC0A8_0164;         
+-                    bit [31:0] eth1_src_ip   = 32'hC0A8_010A;         
+-                    bit [15:0] eth1_dest_port= 16'h0FA0;              
+-                    bit [15:0] eth1_src_port = 16'h1388;              
+-                    bit [11:0] eth1_payload_len = 12'd100;            
++                else if (addr >= 6'd3 && addr <= 6'd30) begin
++                    int eth_port;
++                    int eth_cfg_field;
++                    bit [47:0] eth_dest_mac;
++                    bit [47:0] eth_src_mac;
++                    bit [31:0] eth_src_ip;
++                    bit [31:0] eth_dest_ip;
++                    bit [15:0] eth_src_port;
++                    bit [15:0] eth_dest_port;
+ 
+-                    case (addr)
+-                        6'd3: begin // Dest MAC
+-                            if (w == 0)      data_to_send = (eth1_dest_mac >> 36) & 12'hFFF;
+-                            else if (w == 1) data_to_send = (eth1_dest_mac >> 24) & 12'hFFF;
+-                            else if (w == 2) data_to_send = (eth1_dest_mac >> 12) & 12'hFFF;
+-                            else if (w == 3) data_to_send = (eth1_dest_mac)       & 12'hFFF;
++                    eth_port      = (addr - 3) / 7; // 0=ETH1, 1=ETH2, 2=ETH3, 3=ETH4
++                    eth_cfg_field = (addr - 3) % 7;
++
++                    // All four ETH TX ports must be configured.  The previous code
++                    // only configured ETH1 and wrote zeros for ETH2/3/4, leaving their
++                    // payload length at 0; those ports transmitted header-only frames
++                    // that the UVM monitor ignored.
++                    eth_dest_mac  = 48'hFF_FF_FF_FF_FF_FF;
++                    eth_src_mac   = 48'h02_00_00_00_00_00 | (eth_port + 1);
++                    eth_src_ip    = 32'hC0A8_010A + eth_port;
++                    eth_dest_ip   = 32'hC0A8_0164 + eth_port;
++                    eth_src_port  = 16'h1388 + eth_port;
++                    eth_dest_port = 16'h0FA0 + eth_port;
++
++                    case (eth_cfg_field)
++                        0: begin // Dest MAC, 12-bit chunks
++                            if (w == 0)      data_to_send = (eth_dest_mac >> 36) & 12'hFFF;
++                            else if (w == 1) data_to_send = (eth_dest_mac >> 24) & 12'hFFF;
++                            else if (w == 2) data_to_send = (eth_dest_mac >> 12) & 12'hFFF;
++                            else if (w == 3) data_to_send = (eth_dest_mac)       & 12'hFFF;
+                         end
+-                        6'd4: begin // Src MAC
+-                            if (w == 0)      data_to_send = (eth1_src_mac >> 36) & 12'hFFF;
+-                            else if (w == 1) data_to_send = (eth1_src_mac >> 24) & 12'hFFF;
+-                            else if (w == 2) data_to_send = (eth1_src_mac >> 12) & 12'hFFF;
+-                            else if (w == 3) data_to_send = (eth1_src_mac)       & 12'hFFF;
++                        1: begin // Src MAC, 12-bit chunks
++                            if (w == 0)      data_to_send = (eth_src_mac >> 36) & 12'hFFF;
++                            else if (w == 1) data_to_send = (eth_src_mac >> 24) & 12'hFFF;
++                            else if (w == 2) data_to_send = (eth_src_mac >> 12) & 12'hFFF;
++                            else if (w == 3) data_to_send = (eth_src_mac)       & 12'hFFF;
+                         end
+-                        6'd5: begin // Dest IP
+-                            if (w == 0)      data_to_send = 12'h000;
+-                            else if (w == 1) data_to_send = (eth1_dest_ip >> 24) & 12'hFFF;
+-                            else if (w == 2) data_to_send = (eth1_dest_ip >> 12) & 12'hFFF;
+-                            else if (w == 3) data_to_send = (eth1_dest_ip)       & 12'hFFF;
++                        2: begin // Source IP, byte chunks
++                            if (w == 0)      data_to_send = (eth_src_ip >> 24) & 12'h0FF;
++                            else if (w == 1) data_to_send = (eth_src_ip >> 16) & 12'h0FF;
++                            else if (w == 2) data_to_send = (eth_src_ip >> 8)  & 12'h0FF;
++                            else if (w == 3) data_to_send = (eth_src_ip)       & 12'h0FF;
+                         end
+-                        6'd6: begin // Src IP
+-                            if (w == 0)      data_to_send = 12'h000;
+-                            else if (w == 1) data_to_send = (eth1_src_ip >> 24) & 12'hFFF;
+-                            else if (w == 2) data_to_send = (eth1_src_ip >> 12) & 12'hFFF;
+-                            else if (w == 3) data_to_send = (eth1_src_ip)       & 12'hFFF;
++                        3: begin // Destination IP, byte chunks
++                            if (w == 0)      data_to_send = (eth_dest_ip >> 24) & 12'h0FF;
++                            else if (w == 1) data_to_send = (eth_dest_ip >> 16) & 12'h0FF;
++                            else if (w == 2) data_to_send = (eth_dest_ip >> 8)  & 12'h0FF;
++                            else if (w == 3) data_to_send = (eth_dest_ip)       & 12'h0FF;
+                         end
+-                        6'd7: begin // Dest Port 
+-                            if (w == 0)      data_to_send = (eth1_dest_port >> 12) & 12'hFFF;
+-                            else if (w == 1) data_to_send = (eth1_dest_port)       & 12'hFFF;
++                        4: begin // Source Port, byte chunks
++                            if (w == 0)      data_to_send = (eth_src_port >> 8) & 12'h0FF;
++                            else if (w == 1) data_to_send = (eth_src_port)      & 12'h0FF;
+                         end
+-                        6'd8: begin // Src Port 
+-                            if (w == 0)      data_to_send = (eth1_src_port >> 12) & 12'hFFF;
+-                            else if (w == 1) data_to_send = (eth1_src_port)       & 12'hFFF;
++                        5: begin // Destination Port, byte chunks
++                            if (w == 0)      data_to_send = (eth_dest_port >> 8) & 12'h0FF;
++                            else if (w == 1) data_to_send = (eth_dest_port)      & 12'h0FF;
+                         end
+-                        6'd9: begin // Payload Length
+-                            data_to_send = eth1_payload_len;
++                        6: begin // Payload Length
++                            data_to_send = eth_payload_len[10:0];
+                         end
+                     endcase
+                 end
+diff --git a/verif/kernel/uvm_tb/sequence/bkp_smart_seq.sv b/verif/kernel/uvm_tb/sequence/bkp_smart_seq.sv
+index a39b3b4..9a5fd4c 100644
+--- a/verif/kernel/uvm_tb/sequence/bkp_smart_seq.sv
++++ b/verif/kernel/uvm_tb/sequence/bkp_smart_seq.sv
+@@ -35,33 +35,58 @@ class bkp_smart_seq extends uvm_sequence #(bkp_item);
+         req_item = bkp_item::type_id::create("req_item");
+         start_item(req_item);
+         req_item.randomize_item();
+-        req_item.trans_type = BKP_READ; 
++        req_item.trans_type = BKP_READ;
+         req_item.bkp_address = count_addr;
+         req_item.bkp_card_id = target_card_id;
+         req_item.fpga_card_id = target_card_id;
+         req_item.apply_trans_type_rules();
+         finish_item(req_item);
+-        
++
+         curr_cnt = req_item.bkp_data;
+-        
+-        // [FIXED] Increased the limit to safely accommodate full MTU standard Ethernet frames (up to 2048 bytes)
++
++        // The updated kernel_read reports ETH RX bytes as "bytes still unread"
++        // (valid_eth_frame - internal_read_count).  After the last byte is read,
++        // the RTL only clears its internal ETH read counter when the count address
++        // is polled again and returns zero.  Without this post-drain poll, the next
++        // ETH packet can be compared against the previous packet's read counter,
++        // causing underflow/large byte counts and scoreboard mismatches.
+         if (curr_cnt > 0 && curr_cnt <= 2048) begin
+             `uvm_info("SMART_SEQ", $sformatf("\t*** %0d BYTES WAITING ON %s! Initiating Burst Read ***", curr_cnt, intf_name), UVM_LOW)
+-            
++
+             for (int i = 0; i < curr_cnt; i++) begin
+                 req_item = bkp_item::type_id::create("req_item");
+                 start_item(req_item);
+                 req_item.randomize_item();
+-                req_item.trans_type = BKP_READ; 
++                req_item.trans_type = BKP_READ;
+                 req_item.bkp_address = data_addr;
+                 req_item.bkp_card_id = target_card_id;
+                 req_item.fpga_card_id = target_card_id;
+                 req_item.apply_trans_type_rules();
+                 finish_item(req_item);
+-                
++
+                 // Keep this UVM_HIGH so it doesn't flood the terminal
+                 `uvm_info("SMART_SEQ", $sformatf("\t\t-> %s Burst [%0d/%0d] Data Extracted: 'h%0h", intf_name, i+1, curr_cnt, req_item.bkp_data), UVM_HIGH)
+             end
++
++            // Post-drain zero-count poll.  This read is intentionally not used by
++            // the scoreboard; it exists to let the new kernel_read clear its ETH
++            // RX byte-count bookkeeping before the next packet arrives.
++            req_item = bkp_item::type_id::create("req_item_clear_count");
++            start_item(req_item);
++            req_item.randomize_item();
++            req_item.trans_type = BKP_READ;
++            req_item.bkp_address = count_addr;
++            req_item.bkp_card_id = target_card_id;
++            req_item.fpga_card_id = target_card_id;
++            req_item.apply_trans_type_rules();
++            finish_item(req_item);
++
++            if (req_item.bkp_data != 12'd0) begin
++                `uvm_warning("SMART_SEQ", $sformatf("%s post-drain count poll returned %0d instead of 0", intf_name, req_item.bkp_data))
++            end
++        end
++        else if (curr_cnt > 2048) begin
++            `uvm_warning("SMART_SEQ", $sformatf("Ignoring impossible %s RX byte count %0d. This usually means the previous ETH drain did not clear the new kernel_read counter.", intf_name, curr_cnt))
+         end
+     endtask
+ endclass
+diff --git a/verif/kernel/uvm_tb/sequence/kwr_sequence.sv b/verif/kernel/uvm_tb/sequence/kwr_sequence.sv
+index c83f683..eea31fa 100755
+--- a/verif/kernel/uvm_tb/sequence/kwr_sequence.sv
++++ b/verif/kernel/uvm_tb/sequence/kwr_sequence.sv
+@@ -19,10 +19,17 @@ class kwr_routing_seq extends uvm_sequence #(bkp_item);
+         bit [8:0] rand_uart_payload; 
+         bit [7:0] rand_eth_payload;
+         int req_width = 8;
++        int eth_payload_len = 100;
+         
+         // Fetch Plusargs
+         $value$plusargs("NUM_PKTS=%d", num_packets);
+         $value$plusargs("UART_WIDTH=%d", req_width);
++        $value$plusargs("ETH_PLEN=%d", eth_payload_len);
++        if (eth_payload_len < 0) eth_payload_len = 0;
++        if (eth_payload_len > 2047) begin
++            `uvm_warning("SEQ", $sformatf("ETH_PLEN=%0d is larger than the 11-bit RTL field; clamping to 2047", eth_payload_len))
++            eth_payload_len = 2047;
++        end
+         
+         $value$plusargs("EN_UART1=%d", en_uart[0]);
+         $value$plusargs("EN_UART2=%d", en_uart[1]);
+@@ -33,7 +40,7 @@ class kwr_routing_seq extends uvm_sequence #(bkp_item);
+         $value$plusargs("EN_ETH3=%d", en_eth[2]);
+         $value$plusargs("EN_ETH4=%d", en_eth[3]);
+         
+-        `uvm_info("SEQ", $sformatf("Starting BACK-TO-BACK Burst Test with RANDOM Data: %0d Packets per FIFO...", num_packets), UVM_LOW)
++        `uvm_info("SEQ", $sformatf("Starting BACK-TO-BACK Burst Test with RANDOM Data: %0d packet(s), %0d ETH byte(s) per enabled FIFO...", num_packets, eth_payload_len), UVM_LOW)
+ 
+         for (int p = 1; p <= num_packets; p++) begin
+             
+@@ -94,8 +101,9 @@ class kwr_routing_seq extends uvm_sequence #(bkp_item);
+                 
+                 if (!en_eth[eth_idx]) continue;
+ 
+-                // Push Payload Bytes into the FIFO
+-                for (int byte_idx = 0; byte_idx < 100; byte_idx++) begin
++                // Push Payload Bytes into the FIFO.  Keep this aligned with the
++                // ETH_PLEN value programmed into kernel_config by bkp_sequence.
++                for (int byte_idx = 0; byte_idx < eth_payload_len; byte_idx++) begin
+                     rand_eth_payload = $urandom_range(0, 255); 
+                     
+                     req = bkp_item::type_id::create("req");
+diff --git a/verif/kernel/uvm_tb/sequence/nrz_sequence.sv b/verif/kernel/uvm_tb/sequence/nrz_sequence.sv
+index 9b1686e..6cff7eb 100644
+--- a/verif/kernel/uvm_tb/sequence/nrz_sequence.sv
++++ b/verif/kernel/uvm_tb/sequence/nrz_sequence.sv
+@@ -39,13 +39,16 @@ class nrz_sequence extends uvm_sequence #(nrz_item);
+             // Generate the dynamic payload based on the requested length plusarg
+             req.generate_payload((cfg_payload_len-2), cfg_bpw);
+             
+-            finish_item(req);
+-            
+             // =================================================================
+             // BACKDOOR INJECTION: Push the Golden NRZ Packet to Scoreboard
++            // before finish_item() releases it to the driver.  ETH5 can transmit
++            // quickly after the serial input completes; preloading the golden
++            // queue removes the race where the monitor sees actual payload before
++            // expected payload has been packed.
+             // =================================================================
+             if (g_q != null) g_q.push_back(req);
+             
++            finish_item(req);
+             get_response(rsp);
+             
+             // Inter-packet gap (Reduced slightly to keep EIU simulation fast)

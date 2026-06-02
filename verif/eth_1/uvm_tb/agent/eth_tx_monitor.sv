@@ -67,7 +67,10 @@ class eth_tx_monitor extends uvm_monitor;
             `uvm_info("TX_MON", $sformatf("tx_ctl went LOW. Captured %0d bytes from physical pins.", raw_packet.size()), UVM_LOW)
 
             // PACKET PARSER
-            if (raw_packet.size() > 64) begin 
+            // Accept small but valid IPv4/UDP frames too.  ETH2/3/4 were previously
+            // silently ignored when misconfigured to payload length 0 because those
+            // frames are only ~54 physical bytes including preamble and FCS.
+            if (raw_packet.size() >= 50) begin
                 item = eth_tx_seq_item::type_id::create("item");
                 idx = 0;
 
@@ -100,8 +103,10 @@ class eth_tx_monitor extends uvm_monitor;
                         idx+=2; // UDP Len
                         idx+=2; // UDP Chksum
                         
-                        // Extract Payload 
-                        if (raw_packet.size() > idx + 4) begin
+                        // Extract Payload.  A zero-length UDP payload is legal and
+                        // should still be broadcast so missing ETH configuration is
+                        // visible instead of being hidden by this monitor.
+                        if (raw_packet.size() >= idx + 4) begin
                             int payload_len = raw_packet.size() - idx - 4;
                             item.payload = new[payload_len];
                             for (int i = 0; i < payload_len; i++) begin

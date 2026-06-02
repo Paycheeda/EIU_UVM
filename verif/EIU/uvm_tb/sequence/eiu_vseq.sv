@@ -45,13 +45,15 @@ class eiu_phy_rx_seq extends uvm_sequence #(phy_rx_seq_item);
         
         req.total_length = 16'(p_size + 28);
         
-        finish_item(req);
-        
         if (uvm_config_db#(uvm_queue#(phy_rx_seq_item))::get(null, "", $sformatf("golden_eth_rx_q_%0d", port_id), g_q)) begin
+            // Push expected data before the driver starts consuming the item so the
+            // scoreboard cannot be beaten by a fast DUT/backplane poll.
             g_q.push_back(req);
         end else begin
             `uvm_error("VSEQ", $sformatf("CRITICAL: Could not find golden_eth_rx_q_%0d in config DB!", port_id))
         end
+
+        finish_item(req);
     endtask
 endclass
 
