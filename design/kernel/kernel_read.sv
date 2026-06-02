@@ -132,6 +132,27 @@ wire tx_data_sent_eth_nrz_kernel;
 reg [10:0] count_uart1;
 reg [10:0] count_uart2;
 reg [10:0] count_uart3;
+reg [10:0] count_eth1;
+reg [10:0] count_eth2;
+reg [10:0] count_eth3;
+reg [10:0] count_eth4;
+
+wire [10:0] remaining_bytes_eth1;
+wire [10:0] remaining_bytes_eth2;
+wire [10:0] remaining_bytes_eth3;
+wire [10:0] remaining_bytes_eth4;
+
+assign remaining_bytes_eth1 = (rx_fifo_empty_eth1 || (count_eth1 >= rx_eth_valid_bytes_eth1_kernel)) ? 
+                                11'd0 : (rx_eth_valid_bytes_eth1_kernel - count_eth1);
+                                
+assign remaining_bytes_eth2 = (rx_fifo_empty_eth2 || (count_eth2 >= rx_eth_valid_bytes_eth2_kernel)) ? 
+                                11'd0 : (rx_eth_valid_bytes_eth2_kernel - count_eth2);
+
+assign remaining_bytes_eth3 = (rx_fifo_empty_eth3 || (count_eth3 >= rx_eth_valid_bytes_eth3_kernel)) ? 
+                                11'd0 : (rx_eth_valid_bytes_eth3_kernel - count_eth3);
+                                
+assign remaining_bytes_eth4 = (rx_fifo_empty_eth4 || (count_eth4 >= rx_eth_valid_bytes_eth4_kernel)) ? 
+                                11'd0 : (rx_eth_valid_bytes_eth4_kernel - count_eth4);
 
 reg [11:0] bkp_data_reg;
 
@@ -183,6 +204,10 @@ begin
         count_uart1 <= 0;
         count_uart2 <= 0;
         count_uart3 <= 0;
+        count_eth1 <= 0;
+        count_eth2 <= 0;
+        count_eth3 <= 0;
+        count_eth4 <= 0;
         state <= IDLE;
     end
     else
@@ -246,6 +271,7 @@ begin
                                 if (!rx_fifo_empty_eth1)
                                 begin
                                     rx_fifo_rd_en_eth1 <= 1'b1;
+                                    count_eth1 <= count_eth1 + 1;
                                     state <= FIFO_WAIT_STATE;
                                 end
                                 else
@@ -260,6 +286,7 @@ begin
                                 if (!rx_fifo_empty_eth2)
                                 begin
                                     rx_fifo_rd_en_eth2 <= 1'b1;
+                                    count_eth2 <= count_eth2 + 1;
                                     state <= FIFO_WAIT_STATE;
                                 end
                                 else
@@ -274,6 +301,7 @@ begin
                                 if (!rx_fifo_empty_eth3)
                                 begin
                                     rx_fifo_rd_en_eth3 <= 1'b1;
+                                    count_eth3 <= count_eth3 + 1;
                                     state <= FIFO_WAIT_STATE;
                                 end
                                 else
@@ -288,6 +316,7 @@ begin
                                 if (!rx_fifo_empty_eth4)
                                 begin
                                     rx_fifo_rd_en_eth4 <= 1'b1;
+                                    count_eth4 <= count_eth4 + 1;
                                     state <= FIFO_WAIT_STATE;
                                 end
                                 else
@@ -399,7 +428,11 @@ begin
                     
                     6'd10:
                     begin
-                        bkp_data_reg[10:0] <= rx_eth_valid_bytes_eth1_kernel;
+                        bkp_data_reg[10:0] <= remaining_bytes_eth1;
+                        if(remaining_bytes_eth1 == 0)
+                        begin
+                            count_eth1 <= 0;
+                        end
                         bkp_data_reg[11] <= 1'b0;
                     end
                     
@@ -417,7 +450,11 @@ begin
                     
                     6'd13:
                     begin
-                        bkp_data_reg[10:0] <= rx_eth_valid_bytes_eth2_kernel;
+                        bkp_data_reg[10:0] <= remaining_bytes_eth2;
+                        if(remaining_bytes_eth2 == 0)
+                        begin
+                            count_eth2 <= 0;
+                        end
                         bkp_data_reg[11] <= 1'b0;
                     end
                     
@@ -435,7 +472,11 @@ begin
                     
                     6'd16:
                     begin
-                        bkp_data_reg[10:0] <= rx_eth_valid_bytes_eth3_kernel;
+                        bkp_data_reg[10:0] <= remaining_bytes_eth3;
+                        if(remaining_bytes_eth3 == 0)
+                        begin
+                            count_eth3 <= 0;
+                        end
                         bkp_data_reg[11] <= 1'b0;
                     end
                     
@@ -453,7 +494,11 @@ begin
                     
                     6'd19:
                     begin
-                        bkp_data_reg[10:0] <= rx_eth_valid_bytes_eth4_kernel;
+                        bkp_data_reg[10:0] <= remaining_bytes_eth4;
+                        if(remaining_bytes_eth4 == 0)
+                        begin
+                            count_eth4 <= 0;
+                        end
                         bkp_data_reg[11] <= 1'b0;
                     end
                     
