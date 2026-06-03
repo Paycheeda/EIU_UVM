@@ -1,0 +1,636 @@
+diff --git a/verif/EIU/test/Makefile b/verif/EIU/test/Makefile
+--- a/verif/EIU/test/Makefile
++++ b/verif/EIU/test/Makefile
+@@ -26,6 +26,7 @@ ifeq "$(TEST_NAME)" ""
+ endif
+ 
+ UART_WIDTH ?= 9
++DEBUG ?= 0
+ 
+ GUI  := 0
+ PLUSARGS ?=
+@@ -51,8 +52,10 @@ else
+ endif
+ 
+ SIM_OPT := $(SIM_OPT) +UVM_TESTNAME=$(TEST_NAME)
+-SIM_OPT := $(SIM_OPT) +UVM_CONFIG_DB_TRACE
+-SIM_OPT := $(SIM_OPT) -classdebug
++ifeq ($(DEBUG), 1)
++SIM_OPT := $(SIM_OPT) +UVM_CONFIG_DB_TRACE
++SIM_OPT := $(SIM_OPT) -classdebug
++endif
+ SIM_OPT := $(SIM_OPT) -l $(TEST_NAME).log
+ 
+ ifeq ($(SIMULATOR), questa)
+diff --git a/verif/EIU/test/eiu_base_test.sv b/verif/EIU/test/eiu_base_test.sv
+--- a/verif/EIU/test/eiu_base_test.sv
++++ b/verif/EIU/test/eiu_base_test.sv
+@@ -161,14 +161,17 @@ class eiu_base_test extends uvm_test;
+ 
+     task run_phase(uvm_phase phase);
+         eiu_vseq vseq; 
++        int drain_timeout_us = 2000;
+         vseq = eiu_vseq::type_id::create("vseq");
++        $value$plusargs("SCB_DRAIN_TIMEOUT_US=%d", drain_timeout_us);
++        if (drain_timeout_us < 1) drain_timeout_us = 1;
+ 
+         phase.raise_objection(this, "Starting End-to-End System Test");
+         #300ns;
+         `uvm_info("TEST", "=== BOOTING EIU_TOP SYSTEM TEST ===", UVM_LOW)
+         vseq.start(vsqr);
+-        #2us;
++        env.scb.wait_for_done(drain_timeout_us * 1us);
+         phase.drop_objection(this, "System Test Complete");
+     endtask
+ 
+diff --git a/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv b/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv
+--- a/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv
++++ b/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv
+@@ -34,6 +34,8 @@ class eiu_scoreboard extends uvm_scoreboard;
+     int nrz_inj_cnt = 0;
+     int nrz_ver_cnt = 0;
+ 
++    bit eth_ignore_clear_next[4] = '{0, 0, 0, 0};
++
+     function new(string name, uvm_component parent);
+         super.new(name, parent);
+     endfunction
+@@ -72,13 +74,124 @@ class eiu_scoreboard extends uvm_scoreboard;
+     function void print_counts(int id, string proto);
+         if (proto == "UART") begin
+             `uvm_info("SCB_TRACKER", $sformatf("UART %0d Live Count -> TX [Inj: %0d, Ver: %0d] | RX [Inj: %0d, Ver: %0d]", 
+-                id+1, uart_tx_inj_cnt[id], uart_tx_ver_cnt[id], uart_rx_inj_cnt[id], uart_rx_ver_cnt[id]), UVM_LOW)
++                id+1, uart_tx_inj_cnt[id], uart_tx_ver_cnt[id], uart_rx_inj_cnt[id], uart_rx_ver_cnt[id]), UVM_HIGH)
+         end else if (proto == "ETH") begin
+             `uvm_info("SCB_TRACKER", $sformatf("ETH %0d Live Count -> TX [Inj: %0d, Ver: %0d] | RX [Inj: %0d, Ver: %0d]", 
+-                id+1, eth_tx_inj_cnt[id], eth_tx_ver_cnt[id], eth_rx_inj_cnt[id], eth_rx_ver_cnt[id]), UVM_LOW)
++                id+1, eth_tx_inj_cnt[id], eth_tx_ver_cnt[id], eth_rx_inj_cnt[id], eth_rx_ver_cnt[id]), UVM_HIGH)
+         end else if (proto == "NRZ") begin
+             `uvm_info("SCB_TRACKER", $sformatf("NRZ/ETH5 Live Count -> Payload Bytes [Inj: %0d, Ver: %0d]", 
+-                nrz_inj_cnt, nrz_ver_cnt), UVM_LOW)
++                nrz_inj_cnt, nrz_ver_cnt), UVM_HIGH)
+         end
+     endfunction
++
++    function bit counts_match();
++        bit ok = 1'b1;
++
++        for (int i = 0; i < 3; i++) begin
++            if (uart_tx_inj_cnt[i] != uart_tx_ver_cnt[i]) ok = 1'b0;
++            if (uart_rx_inj_cnt[i] != uart_rx_ver_cnt[i]) ok = 1'b0;
++        end
++
++        for (int i = 0; i < 4; i++) begin
++            if (eth_tx_inj_cnt[i] != eth_tx_ver_cnt[i]) ok = 1'b0;
++            if (eth_rx_inj_cnt[i] != eth_rx_ver_cnt[i]) ok = 1'b0;
++        end
++
++        if (nrz_inj_cnt != nrz_ver_cnt) ok = 1'b0;
++        return ok;
++    endfunction
++
++    function bit queues_empty();
++        bit empty = 1'b1;
++
++        if (bkp_fifo.used() != 0) empty = 1'b0;
++        if (eth_nrz_fifo.used() != 0) empty = 1'b0;
++
++        if (exp_eth_nrz_q.size() != 0) empty = 1'b0;
++        if (golden_nrz_q != null && golden_nrz_q.size() != 0) empty = 1'b0;
++
++        for (int i = 0; i < 3; i++) begin
++            if (uart_rx_fifo[i].used() != 0) empty = 1'b0;
++            if (uart_tx_fifo[i].used() != 0) empty = 1'b0;
++            if (exp_uart_tx_q[i].size() != 0) empty = 1'b0;
++            if (exp_uart_rx_q[i].size() != 0) empty = 1'b0;
++        end
++
++        for (int i = 0; i < 4; i++) begin
++            if (eth_rx_fifo[i].used() != 0) empty = 1'b0;
++            if (eth_tx_fifo[i].used() != 0) empty = 1'b0;
++            if (exp_eth_tx_q[i].size() != 0) empty = 1'b0;
++            if (exp_eth_rx_q[i].size() != 0) empty = 1'b0;
++            if (golden_q[i] != null && golden_q[i].size() != 0) empty = 1'b0;
++        end
++
++        return empty;
++    endfunction
++
++    function bit is_idle_complete();
++        return (counts_match() && queues_empty());
++    endfunction
++
++    function string pending_summary();
++        string s;
++
++        s = "\n---------------- EIU SCOREBOARD DRAIN STATUS ----------------\n";
++        for (int i = 0; i < 3; i++) begin
++            s = {s, $sformatf("UART%0d TX inj/ver=%0d/%0d exp_q=%0d fifo=%0d | RX inj/ver=%0d/%0d exp_q=%0d fifo=%0d\n",
++                i+1,
++                uart_tx_inj_cnt[i], uart_tx_ver_cnt[i], exp_uart_tx_q[i].size(), uart_tx_fifo[i].used(),
++                uart_rx_inj_cnt[i], uart_rx_ver_cnt[i], exp_uart_rx_q[i].size(), uart_rx_fifo[i].used())};
++        end
++
++        for (int i = 0; i < 4; i++) begin
++            s = {s, $sformatf("ETH%0d  TX inj/ver=%0d/%0d exp_q=%0d fifo=%0d | RX inj/ver=%0d/%0d exp_q=%0d golden_q=%0d fifo=%0d\n",
++                i+1,
++                eth_tx_inj_cnt[i], eth_tx_ver_cnt[i], exp_eth_tx_q[i].size(), eth_tx_fifo[i].used(),
++                eth_rx_inj_cnt[i], eth_rx_ver_cnt[i], exp_eth_rx_q[i].size(),
++                (golden_q[i] == null) ? 0 : golden_q[i].size(), eth_rx_fifo[i].used())};
++        end
++
++        s = {s, $sformatf("NRZ/ETH5 inj/ver=%0d/%0d exp_q=%0d golden_q=%0d fifo=%0d\n",
++            nrz_inj_cnt, nrz_ver_cnt, exp_eth_nrz_q.size(),
++            (golden_nrz_q == null) ? 0 : golden_nrz_q.size(), eth_nrz_fifo.used())};
++        s = {s, $sformatf("Backplane analysis fifo pending=%0d\n", bkp_fifo.used())};
++        s = {s, "----------------------------------------------------------------\n"};
++        return s;
++    endfunction
++
++    task wait_for_done(time timeout);
++        time deadline;
++        int stable_count;
++
++        deadline = $time + timeout;
++        stable_count = 0;
++
++        `uvm_info("SCB_DRAIN", $sformatf("Waiting up to %0t for scoreboard queues/counters to drain", timeout), UVM_LOW)
++
++        forever begin
++            if (is_idle_complete()) begin
++                stable_count++;
++                if (stable_count >= 5) begin
++                    `uvm_info("SCB_DRAIN", {"Scoreboard drained successfully.", pending_summary()}, UVM_LOW)
++                    return;
++                end
++            end else begin
++                stable_count = 0;
++            end
++
++            if ($time >= deadline) begin
++                `uvm_error("SCB_DRAIN_TIMEOUT", {"Scoreboard did not drain before timeout.", pending_summary()})
++                return;
++            end
++
++            #1us;
++        end
++    endtask
++
++    function void check_phase(uvm_phase phase);
++        super.check_phase(phase);
++        if (!is_idle_complete()) begin
++            `uvm_error("SCB_NOT_DONE", {"Simulation ended with pending scoreboard work.", pending_summary()})
++        end else begin
++            `uvm_info("SCB_DONE", "All expected UART, ETH, and NRZ traffic was verified before end-of-test.", UVM_LOW)
++        end
++    endfunction
+ 
+     function void push_golden_eth_rx(int id, phy_rx_seq_item inj_item);
+         bit [15:0] ip_chk, udp_chk;
+@@ -252,25 +365,49 @@ class eiu_scoreboard extends uvm_scoreboard;
+     task process_bkp_traffic();
+         bkp_item item;
+         bit is_send_cmd;
++        bit is_eth_data_addr;
++        int eth_wr_id;
+         forever begin
+             bkp_fifo.get(item);
+             
+             if (item.trans_type == BKP_DATA_WRITE) begin
+                 is_send_cmd = (item.bkp_data[9] == 1'b1 || (item.bkp_data[8] == 1'b1 && item.bkp_data[9] == 1'b0 && item.bkp_data[7:0] == 8'h00));
+-                
+-                if (!is_send_cmd) begin
++
++                is_eth_data_addr = (item.bkp_address >= 6'd44 && item.bkp_address <= 6'd47);
++                eth_wr_id = item.bkp_address - 6'd44;
++
++                if (is_eth_data_addr) begin
++                    if (is_send_cmd) begin
++                        // ETH TX uses a start command followed by a 12'h000 clear.
++                        // The clear is a control write, not a zero payload byte.
++                        eth_ignore_clear_next[eth_wr_id] = 1'b1;
++                    end else if (eth_ignore_clear_next[eth_wr_id] && item.bkp_data == 12'h000) begin
++                        eth_ignore_clear_next[eth_wr_id] = 1'b0;
++                        `uvm_info("SCB_CTRL", $sformatf("Ignoring ETH%0d TX start-clear control write", eth_wr_id+1), UVM_HIGH)
++                    end else begin
++                        if (eth_ignore_clear_next[eth_wr_id]) begin
++                            `uvm_warning("SCB_CTRL", $sformatf("ETH%0d expected a TX clear write but saw data 0x%0h; treating it as payload", eth_wr_id+1, item.bkp_data))
++                            eth_ignore_clear_next[eth_wr_id] = 1'b0;
++                        end
++
++                        exp_eth_tx_q[eth_wr_id].push_back(item.bkp_data[7:0]);
++                        eth_tx_inj_cnt[eth_wr_id]++;
++                        print_counts(eth_wr_id, "ETH");
++                    end
++                end else if (!is_send_cmd) begin
+                     case (item.bkp_address)
+                         6'd41: begin exp_uart_tx_q[0].push_back(item.bkp_data[8:0]); uart_tx_inj_cnt[0]++; print_counts(0, "UART"); end
+                         6'd42: begin exp_uart_tx_q[1].push_back(item.bkp_data[8:0]); uart_tx_inj_cnt[1]++; print_counts(1, "UART"); end
+                         6'd43: begin exp_uart_tx_q[2].push_back(item.bkp_data[8:0]); uart_tx_inj_cnt[2]++; print_counts(2, "UART"); end
+-                        
+-                        6'd44: begin exp_eth_tx_q[0].push_back(item.bkp_data[7:0]); eth_tx_inj_cnt[0]++; print_counts(0, "ETH"); end
+-                        6'd45: begin exp_eth_tx_q[1].push_back(item.bkp_data[7:0]); eth_tx_inj_cnt[1]++; print_counts(1, "ETH"); end
+-                        6'd46: begin exp_eth_tx_q[2].push_back(item.bkp_data[7:0]); eth_tx_inj_cnt[2]++; print_counts(2, "ETH"); end
+-                        6'd47: begin exp_eth_tx_q[3].push_back(item.bkp_data[7:0]); eth_tx_inj_cnt[3]++; print_counts(3, "ETH"); end
+                     endcase
+                 end
+             end 
+             else if (item.trans_type == BKP_READ) begin
+diff --git a/verif/EIU/uvm_tb/sequence/eiu_vseq.sv b/verif/EIU/uvm_tb/sequence/eiu_vseq.sv
+--- a/verif/EIU/uvm_tb/sequence/eiu_vseq.sv
++++ b/verif/EIU/uvm_tb/sequence/eiu_vseq.sv
+@@ -111,6 +111,12 @@ class eiu_vseq extends uvm_sequence;
+         int nrz_sync2_arg   = -1;
+         bit [11:0] final_s1, final_s2;
+         
++        bit tx_done = 0;
++        bit uart_done[3] = '{0, 0, 0};
++        bit nrz_done = 0;
++        int bg_timeout_us = 20000;
++        int final_drain_passes = 5;
++        int final_drain_gap_us = 10;
++
+         $value$plusargs("NUM_PKTS=%d", num_packets);
+         $value$plusargs("EN_UART1=%d", en_uart[0]);
+         $value$plusargs("EN_UART2=%d", en_uart[1]);
+@@ -129,6 +135,16 @@ class eiu_vseq extends uvm_sequence;
+         $value$plusargs("NRZ_SYNC1=%h", nrz_sync1_arg);
+         $value$plusargs("NRZ_SYNC2=%h", nrz_sync2_arg);
+ 
++        $value$plusargs("BG_TIMEOUT_US=%d", bg_timeout_us);
++        $value$plusargs("FINAL_DRAIN_PASSES=%d", final_drain_passes);
++        $value$plusargs("FINAL_DRAIN_GAP_US=%d", final_drain_gap_us);
++        if (bg_timeout_us < 1) bg_timeout_us = 1;
++        if (final_drain_passes < 1) final_drain_passes = 1;
++        if (final_drain_gap_us < 0) final_drain_gap_us = 0;
++
++        for (int i = 0; i < 3; i++) uart_done[i] = (en_uart[i] == 0);
++        nrz_done = (nrz_en == 0);
++
+         // Auto-assign syncs if they weren't overridden
+         get_default_nrz_syncs(nrz_bpw_bits, final_s1, final_s2);
+         if (nrz_sync1_arg != -1) final_s1 = nrz_sync1_arg;
+@@ -158,18 +174,26 @@ class eiu_vseq extends uvm_sequence;
+                 tx_inj_seq = kwr_routing_seq::type_id::create("tx_inj_seq");
+                 tx_inj_seq.num_packets = num_packets; 
+                 tx_inj_seq.test_card_id = 4'h0; 
+                 tx_inj_seq.start(p_sequencer.bkp_sqr);
++                tx_done = 1;
+             end
+-            for (int i = 0; i < 3; i++) begin
+-                automatic int j = i;
+-                if (en_uart[j] == 1) begin
+-                    uart_seq[j] = uart_main_sequence::type_id::create($sformatf("uart_seq[%0d]", j));
+-                    uart_seq[j].start(p_sequencer.uart_rx_sqr[j]);
+-                end
++            begin
++                if (en_uart[0] == 1) begin uart_seq[0] = uart_main_sequence::type_id::create("uart_seq[0]"); uart_seq[0].start(p_sequencer.uart_rx_sqr[0]); end
++                uart_done[0] = 1;
++            end
++            begin
++                if (en_uart[1] == 1) begin uart_seq[1] = uart_main_sequence::type_id::create("uart_seq[1]"); uart_seq[1].start(p_sequencer.uart_rx_sqr[1]); end
++                uart_done[1] = 1;
++            end
++            begin
++                if (en_uart[2] == 1) begin uart_seq[2] = uart_main_sequence::type_id::create("uart_seq[2]"); uart_seq[2].start(p_sequencer.uart_rx_sqr[2]); end
++                uart_done[2] = 1;
+             end
+             
+             // Generate NRZ Traffic!
+-            if (nrz_en == 1) begin
+-                `uvm_info("VSEQ", "Enabling Telemetry Traffic on ETH5 (NRZ)", UVM_LOW)
+-                nrz_seq = nrz_sequence::type_id::create("nrz_seq");
+-                nrz_seq.cfg_bpw         = nrz_bpw_code(nrz_bpw_bits);
+-                nrz_seq.cfg_zero_endian = nrz_endian;
+-                nrz_seq.cfg_sync_word1  = final_s1;
+-                nrz_seq.cfg_sync_word2  = final_s2;
+-                nrz_seq.cfg_payload_len = nrz_payload_len;
+-                nrz_seq.cfg_num_packets = num_packets; 
+-                nrz_seq.start(p_sequencer.nrz_sqr);
++            begin
++                if (nrz_en == 1) begin
++                    `uvm_info("VSEQ", "Enabling Telemetry Traffic on ETH5 (NRZ)", UVM_LOW)
++                    nrz_seq = nrz_sequence::type_id::create("nrz_seq");
++                    nrz_seq.cfg_bpw         = nrz_bpw_code(nrz_bpw_bits);
++                    nrz_seq.cfg_zero_endian = nrz_endian;
++                    nrz_seq.cfg_sync_word1  = final_s1;
++                    nrz_seq.cfg_sync_word2  = final_s2;
++                    nrz_seq.cfg_payload_len = nrz_payload_len;
++                    nrz_seq.cfg_num_packets = num_packets; 
++                    nrz_seq.start(p_sequencer.nrz_sqr);
++                end
++                nrz_done = 1;
+             end
+         join_none 
+ 
+-        poll_seq = bkp_smart_seq::type_id::create("poll_seq");
+-        poll_seq.target_card_id = 4'h0;
+-
+         for (int p = 0; p < num_packets; p++) begin
+             `uvm_info("VSEQ", $sformatf("--- ETH PING-PONG: Pushing Packet %0d/%0d to PHY ---", p+1, num_packets), UVM_LOW)
+             
+             fork
+-                for (int i = 0; i < 4; i++) begin
+-                    automatic int j = i;
+-                    if (en_eth[j] == 1) begin
+-                        eth_rx_seq[j] = eiu_phy_rx_seq::type_id::create($sformatf("eth_rx_seq[%0d]", j));
+-                        eth_rx_seq[j].port_id = j; 
+-                        eth_rx_seq[j].start(p_sequencer.eth_rx_sqr[j]);
+-                    end
++                begin
++                    if (en_eth[0] == 1) begin eth_rx_seq[0] = eiu_phy_rx_seq::type_id::create("eth_rx_seq[0]"); eth_rx_seq[0].port_id = 0; eth_rx_seq[0].start(p_sequencer.eth_rx_sqr[0]); end
++                end
++                begin
++                    if (en_eth[1] == 1) begin eth_rx_seq[1] = eiu_phy_rx_seq::type_id::create("eth_rx_seq[1]"); eth_rx_seq[1].port_id = 1; eth_rx_seq[1].start(p_sequencer.eth_rx_sqr[1]); end
++                end
++                begin
++                    if (en_eth[2] == 1) begin eth_rx_seq[2] = eiu_phy_rx_seq::type_id::create("eth_rx_seq[2]"); eth_rx_seq[2].port_id = 2; eth_rx_seq[2].start(p_sequencer.eth_rx_sqr[2]); end
++                end
++                begin
++                    if (en_eth[3] == 1) begin eth_rx_seq[3] = eiu_phy_rx_seq::type_id::create("eth_rx_seq[3]"); eth_rx_seq[3].port_id = 3; eth_rx_seq[3].start(p_sequencer.eth_rx_sqr[3]); end
+                 end
+             join
+             
+-            #2000us; 
+-            
+             `uvm_info("VSEQ", $sformatf("--- ETH PING-PONG: Triggering CPU to Extract Packet %0d ---", p+1), UVM_LOW)
++            poll_seq = bkp_smart_seq::type_id::create($sformatf("poll_seq_pkt_%0d", p));
++            poll_seq.target_card_id = 4'h0;
++            for (int i = 0; i < 4; i++) poll_seq.wait_for_eth[i] = en_eth[i];
+             poll_seq.start(p_sequencer.bkp_sqr);
+         end
+         
+-        // Wait long enough for the NRZ packets to finish serializing!
+-        #500us;
+-        disable fork;
++        begin
++            bit bg_timeout_hit = 0;
++            fork
++                begin
++                    wait (tx_done && uart_done[0] && uart_done[1] && uart_done[2] && nrz_done);
++                end
++                begin
++                    #(bg_timeout_us * 1us);
++                    bg_timeout_hit = 1;
++                    `uvm_error("VSEQ_TIMEOUT", $sformatf("Background traffic did not finish within %0d us. TX=%0d UART_DONE=%0d%0d%0d NRZ=%0d",
++                        bg_timeout_us, tx_done, uart_done[0], uart_done[1], uart_done[2], nrz_done))
++                end
++            join_any
++            disable fork;
++
++            if (bg_timeout_hit) begin
++                return;
++            end
++        end
++
++        `uvm_info("VSEQ", "Background traffic generators complete. Performing final CPU RX drain.", UVM_LOW)
++        for (int drain = 0; drain < final_drain_passes; drain++) begin
++            #(final_drain_gap_us * 1us);
++            poll_seq = bkp_smart_seq::type_id::create($sformatf("final_poll_seq_%0d", drain));
++            poll_seq.target_card_id = 4'h0;
++            poll_seq.start(p_sequencer.bkp_sqr);
++            if (poll_seq.total_bytes_read == 0) begin
++                `uvm_info("VSEQ", $sformatf("Final drain pass %0d found no pending CPU RX data.", drain+1), UVM_HIGH)
++            end
++        end
++
+         `uvm_info("VSEQ", "=== ALL DUPLEX STAGES COMPLETE ===", UVM_LOW)
+     endtask
+ endclass
+diff --git a/verif/EIU/vlib/tb_top.sv b/verif/EIU/vlib/tb_top.sv
+--- a/verif/EIU/vlib/tb_top.sv
++++ b/verif/EIU/vlib/tb_top.sv
+@@ -230,10 +230,13 @@ module tb_top;
+     // 6. RAW PHYSICAL PIN DEBUG MONITORS (Bypasses UVM entirely)
+     // =========================================================
+     
++    bit debug_pins;
++    initial debug_pins = $test$plusargs("DEBUG_PINS");
++
+     // PROBE A: See exactly what the Backplane asserts to the EIU
+     always @(posedge clk_20MHz) begin
+-        if (bkp_if.word_start_strobe) begin
++        if (debug_pins && bkp_if.word_start_strobe) begin
+             $display("[PIN_PROBE_BKP] @%0t: BKP %s -> Addr: %0d | Data: 0x%0h",
+                      $time, bkp_if.bkp_data_dir ? "WRITE" : "READ", bkp_if.bkp_address, bkp_if.bkp_data);
+         end
+@@ -245,13 +248,13 @@ module tb_top;
+     bit [3:0] eth1_lower_nibble;
+ 
+     always @(posedge eth_tx_if[0].tx_c) begin
+-        if (eth_tx_if[0].tx_ctl) begin
++        if (debug_pins && eth_tx_if[0].tx_ctl) begin
+             if (!eth1_tx_active) begin
+                 $display("[PIN_PROBE_ETH1] @%0t: MAC 1 STARTED TRANSMITTING", $time);
+                 eth1_tx_active = 1;
+                 eth1_tx_byte_count = 0;
+             end
+             eth1_lower_nibble <= eth_tx_if[0].txd;
+-        end else if (!eth_tx_if[0].tx_ctl && eth1_tx_active) begin
++        end else if (debug_pins && !eth_tx_if[0].tx_ctl && eth1_tx_active) begin
+             $display("[PIN_PROBE_ETH1] @%0t: MAC 1 STOPPED TRANSMITTING. Total Physical Bytes: %0d", $time, eth1_tx_byte_count);
+             eth1_tx_active = 0;
+         end
+@@ -259,7 +262,7 @@ module tb_top;
+ 
+     always @(negedge eth_tx_if[0].tx_c) begin
+-        if (eth_tx_if[0].tx_ctl) begin
++        if (debug_pins && eth_tx_if[0].tx_ctl) begin
+             eth1_tx_byte_count++;
+             $display("[PIN_PROBE_ETH1_DATA] @%0t: Byte %0d = 0x%0h", 
+                      $time, eth1_tx_byte_count, {eth_tx_if[0].txd, eth1_lower_nibble});
+diff --git a/verif/kernel/uvm_tb/sequence/bkp_smart_seq.sv b/verif/kernel/uvm_tb/sequence/bkp_smart_seq.sv
+--- a/verif/kernel/uvm_tb/sequence/bkp_smart_seq.sv
++++ b/verif/kernel/uvm_tb/sequence/bkp_smart_seq.sv
+@@ -5,6 +5,13 @@ class bkp_smart_seq extends uvm_sequence #(bkp_item);
+ 
+     bit [3:0] target_card_id;
+ 
++    int wait_for_uart[3] = '{0, 0, 0};
++    int wait_for_eth[4]  = '{0, 0, 0, 0};
++    int poll_timeout_us  = 2000;
++    int poll_interval_us = 5;
++    int total_bytes_read = 0;
++    bit timed_out = 0;
++
+     function new(string name = "bkp_smart_seq"); 
+         super.new(name); 
+         target_card_id = 4'h0;
+@@ -12,26 +19,46 @@ class bkp_smart_seq extends uvm_sequence #(bkp_item);
+ 
+     task body();
+         // `uvm_info("SMART_SEQ", ">>> WAKING UP: CPU Backplane Polling Routine Started...", UVM_LOW)
++
++        $value$plusargs("RX_POLL_TIMEOUT_US=%d", poll_timeout_us);
++        $value$plusargs("RX_POLL_INTERVAL_US=%d", poll_interval_us);
++        if (poll_timeout_us < 1) poll_timeout_us = 1;
++        if (poll_interval_us < 1) poll_interval_us = 1;
++
++        total_bytes_read = 0;
++        timed_out = 0;
+ 
+         // Poll UARTs
+-        poll_and_read(6'd1, 6'd0, "UART1");
+-        poll_and_read(6'd4, 6'd3, "UART2");
+-        poll_and_read(6'd7, 6'd6, "UART3");
++        poll_and_read(6'd1, 6'd0, "UART1", wait_for_uart[0]);
++        poll_and_read(6'd4, 6'd3, "UART2", wait_for_uart[1]);
++        poll_and_read(6'd7, 6'd6, "UART3", wait_for_uart[2]);
+         
+         // Poll ALL Ethernet Ports
+-        poll_and_read(6'd10, 6'd9,  "ETH1");
+-        poll_and_read(6'd13, 6'd12, "ETH2");
+-        poll_and_read(6'd16, 6'd15, "ETH3");
+-        poll_and_read(6'd19, 6'd18, "ETH4");
++        poll_and_read(6'd10, 6'd9,  "ETH1", wait_for_eth[0]);
++        poll_and_read(6'd13, 6'd12, "ETH2", wait_for_eth[1]);
++        poll_and_read(6'd16, 6'd15, "ETH3", wait_for_eth[2]);
++        poll_and_read(6'd19, 6'd18, "ETH4", wait_for_eth[3]);
+ 
+         // `uvm_info("SMART_SEQ", "<<< SLEEPING: Polling Routine Complete.\n", UVM_LOW)
+     endtask
+ 
+-    task poll_and_read(input bit [5:0] count_addr, input bit [5:0] data_addr, input string intf_name);
+-        int curr_cnt;
++    task read_count(input bit [5:0] count_addr, output int curr_cnt);
+         bkp_item req_item;
+ 
+         req_item = bkp_item::type_id::create("req_item");
+         start_item(req_item);
+-        req_item.randomize_item();
+         req_item.trans_type = BKP_READ;
+         req_item.bkp_address = count_addr;
++        req_item.bkp_data = 12'h000;
++        req_item.delay_cycles = 0;
+         req_item.bkp_card_id = target_card_id;
+         req_item.fpga_card_id = target_card_id;
+         req_item.apply_trans_type_rules();
+         finish_item(req_item);
+ 
+         curr_cnt = req_item.bkp_data;
++    endtask
++
++    task poll_and_read(input bit [5:0] count_addr, input bit [5:0] data_addr, input string intf_name, input int wait_for_data = 0);
++        int curr_cnt;
++        time deadline;
++        bkp_item req_item;
++
++        deadline = $time + (poll_timeout_us * 1us);
++
++        forever begin
++            read_count(count_addr, curr_cnt);
+ 
+-        // The updated kernel_read reports ETH RX bytes as "bytes still unread"
+-        // (valid_eth_frame - internal_read_count).  After the last byte is read,
+-        // the RTL only clears its internal ETH read counter when the count address
+-        // is polled again and returns zero.  Without this post-drain poll, the next
+-        // ETH packet can be compared against the previous packet's read counter,
+-        // causing underflow/large byte counts and scoreboard mismatches.
+-        if (curr_cnt > 0 && curr_cnt <= 2048) begin
++            // The updated kernel_read reports ETH RX bytes as "bytes still unread"
++            // (valid_eth_frame - internal_read_count).  After the last byte is read,
++            // the RTL only clears its internal ETH read counter when the count address
++            // is polled again and returns zero.  Without this post-drain poll, the next
++            // ETH packet can be compared against the previous packet's read counter,
++            // causing underflow/large byte counts and scoreboard mismatches.
++            if (curr_cnt > 0 && curr_cnt <= 2048) begin
+             `uvm_info("SMART_SEQ", $sformatf("\t*** %0d BYTES WAITING ON %s! Initiating Burst Read ***", curr_cnt, intf_name), UVM_LOW)
++            total_bytes_read += curr_cnt;
+ 
+             for (int i = 0; i < curr_cnt; i++) begin
+                 req_item = bkp_item::type_id::create("req_item");
+                 start_item(req_item);
+-                req_item.randomize_item();
+                 req_item.trans_type = BKP_READ;
+                 req_item.bkp_address = data_addr;
++                req_item.bkp_data = 12'h000;
++                req_item.delay_cycles = 0;
+                 req_item.bkp_card_id = target_card_id;
+                 req_item.fpga_card_id = target_card_id;
+                 req_item.apply_trans_type_rules();
+@@ -49,10 +76,11 @@ class bkp_smart_seq extends uvm_sequence #(bkp_item);
+             req_item = bkp_item::type_id::create("req_item_clear_count");
+             start_item(req_item);
+-            req_item.randomize_item();
+             req_item.trans_type = BKP_READ;
+             req_item.bkp_address = count_addr;
++            req_item.bkp_data = 12'h000;
++            req_item.delay_cycles = 0;
+             req_item.bkp_card_id = target_card_id;
+             req_item.fpga_card_id = target_card_id;
+             req_item.apply_trans_type_rules();
+@@ -62,10 +90,25 @@ class bkp_smart_seq extends uvm_sequence #(bkp_item);
+             if (req_item.bkp_data != 12'd0) begin
+                 `uvm_warning("SMART_SEQ", $sformatf("%s post-drain count poll returned %0d instead of 0", intf_name, req_item.bkp_data))
+             end
+-        end
+-        else if (curr_cnt > 2048) begin
+-            `uvm_warning("SMART_SEQ", $sformatf("Ignoring impossible %s RX byte count %0d. This usually means the previous ETH drain did not clear the new kernel_read counter.", intf_name, curr_cnt))
++                return;
++            end
++            else if (curr_cnt > 2048) begin
++                `uvm_warning("SMART_SEQ", $sformatf("Ignoring impossible %s RX byte count %0d. This usually means the previous ETH drain did not clear the new kernel_read counter.", intf_name, curr_cnt))
++                return;
++            end
++
++            if (!wait_for_data) begin
++                return;
++            end
++
++            if ($time >= deadline) begin
++                timed_out = 1'b1;
++                `uvm_error("SMART_SEQ_TIMEOUT", $sformatf("Timed out after %0d us waiting for %s RX count to become non-zero", poll_timeout_us, intf_name))
++                return;
++            end
++
++            #(poll_interval_us * 1us);
+         end
+     endtask
+ endclass
+diff --git a/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv b/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv
+--- a/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv
++++ b/verif/eth_1/uvm_tb/agent/eth_rx_if_driver.sv
+@@ -16,18 +16,18 @@ class eth_rx_if_driver extends uvm_driver #(phy_rx_seq_item);
+     endfunction
+ 
+     virtual task run_phase(uvm_phase phase);
+-        `uvm_info("RX_DRV", "Driver starting... Waiting for reset.", UVM_NONE)
++        `uvm_info("RX_DRV", "Driver starting... Waiting for reset.", UVM_LOW)
+         vif.rxd <= 0; vif.rx_dv <= 0; vif.rx_er <= 0;
+         wait(vif.rst_n == 1'b1);
+-        `uvm_info("RX_DRV", "Reset cleared! Entering main loop.", UVM_NONE)
++        `uvm_info("RX_DRV", "Reset cleared! Entering main loop.", UVM_LOW)
+ 
+         forever begin
+             seq_item_port.get_next_item(req);
+-            `uvm_info("RX_DRV", "Received new packet from sequence. Generating Checksums and Driving...", UVM_NONE)
++            `uvm_info("RX_DRV", "Received new packet from sequence. Generating Checksums and Driving...", UVM_HIGH)
+             drive_packet(req);
+             seq_item_port.item_done();
+         end
+@@ -79,7 +79,7 @@ class eth_rx_if_driver extends uvm_driver #(phy_rx_seq_item);
+         // 4. TRUE DDR PHYSICAL TRANSMISSION (Phase-Shifted)
+         // ========================================================
+-        `uvm_info("RX_DRV", "Driving TRUE DDR Preamble...", UVM_NONE)
++        `uvm_info("RX_DRV", "Driving TRUE DDR Preamble...", UVM_HIGH)
+         
+         // Setup for the very first POSEDGE (Change on Negedge)
+         @(posedge vif.clk);
+@@ -100,7 +100,7 @@ class eth_rx_if_driver extends uvm_driver #(phy_rx_seq_item);
+         @(posedge vif.clk); vif.rxd <= 4'h5; // Lower Nibble
+         @(negedge vif.clk); vif.rxd <= 4'hD; // Upper Nibble
+ 
+-        `uvm_info("RX_DRV", $sformatf("Driving %0d bytes of DDR Frame Data...", frame_data.size()), UVM_NONE)
++        `uvm_info("RX_DRV", $sformatf("Driving %0d bytes of DDR Frame Data...", frame_data.size()), UVM_HIGH)
+         
+         while(frame_data.size() > 0) begin
+            current_byte = frame_data.pop_front();
+@@ -139,7 +139,7 @@ class eth_rx_if_driver extends uvm_driver #(phy_rx_seq_item);
+         fork
+             begin
+                 wait(vif.rx_transaction_done_pulse == 1'b1);
+-                `uvm_info("RX_DRV", "SUCCESS: RTL pulsed transaction done!", UVM_NONE)
++                `uvm_info("RX_DRV", "SUCCESS: RTL pulsed transaction done!", UVM_HIGH)
+             end
+             begin
+                 repeat(400) @(posedge vif.clk); 

@@ -237,9 +237,12 @@ module tb_top;
     // 6. RAW PHYSICAL PIN DEBUG MONITORS (Bypasses UVM entirely)
     // =========================================================
     
+    bit debug_pins;
+    initial debug_pins = $test$plusargs("DEBUG_PINS");
+
     // PROBE A: See exactly what the Backplane asserts to the EIU
     always @(posedge clk_20MHz) begin
-        if (bkp_if.word_start_strobe) begin
+        if (debug_pins && bkp_if.word_start_strobe) begin
             $display("[PIN_PROBE_BKP] @%0t: BKP %s -> Addr: %0d | Data: 0x%0h",
                      $time, bkp_if.bkp_data_dir ? "WRITE" : "READ", bkp_if.bkp_address, bkp_if.bkp_data);
         end
@@ -251,21 +254,21 @@ module tb_top;
     bit [3:0] eth1_lower_nibble;
 
     always @(posedge eth_tx_if[0].tx_c) begin
-        if (eth_tx_if[0].tx_ctl) begin
+        if (debug_pins && eth_tx_if[0].tx_ctl) begin
             if (!eth1_tx_active) begin
                 $display("[PIN_PROBE_ETH1] @%0t: MAC 1 STARTED TRANSMITTING", $time);
                 eth1_tx_active = 1;
                 eth1_tx_byte_count = 0;
             end
             eth1_lower_nibble <= eth_tx_if[0].txd;
-        end else if (!eth_tx_if[0].tx_ctl && eth1_tx_active) begin
+        end else if (debug_pins && !eth_tx_if[0].tx_ctl && eth1_tx_active) begin
             $display("[PIN_PROBE_ETH1] @%0t: MAC 1 STOPPED TRANSMITTING. Total Physical Bytes: %0d", $time, eth1_tx_byte_count);
             eth1_tx_active = 0;
         end
     end
 
     always @(negedge eth_tx_if[0].tx_c) begin
-        if (eth_tx_if[0].tx_ctl) begin
+        if (debug_pins && eth_tx_if[0].tx_ctl) begin
             eth1_tx_byte_count++;
             $display("[PIN_PROBE_ETH1_DATA] @%0t: Byte %0d = 0x%0h", 
                      $time, eth1_tx_byte_count, {eth_tx_if[0].txd, eth1_lower_nibble});

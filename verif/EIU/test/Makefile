@@ -29,6 +29,7 @@ ifeq "$(TEST_NAME)" ""
 endif
 
 UART_WIDTH ?= 9
+DEBUG ?= 0
 
 GUI  := 0
 PLUSARGS ?=
@@ -56,8 +57,10 @@ else
 endif
 
 SIM_OPT := $(SIM_OPT) +UVM_TESTNAME=$(TEST_NAME)
+ifeq ($(DEBUG), 1)
 SIM_OPT := $(SIM_OPT) +UVM_CONFIG_DB_TRACE
 SIM_OPT := $(SIM_OPT) -classdebug
+endif
 SIM_OPT := $(SIM_OPT) -l $(TEST_NAME).log
 
 ifeq ($(SIMULATOR), questa)

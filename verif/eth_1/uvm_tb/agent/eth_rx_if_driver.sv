@@ -16,14 +16,14 @@ class eth_rx_if_driver extends uvm_driver #(phy_rx_seq_item);
     endfunction
 
     virtual task run_phase(uvm_phase phase);
-        `uvm_info("RX_DRV", "Driver starting... Waiting for reset.", UVM_NONE)
+        `uvm_info("RX_DRV", "Driver starting... Waiting for reset.", UVM_LOW)
         vif.rxd <= 0; vif.rx_dv <= 0; vif.rx_er <= 0;
         wait(vif.rst_n == 1'b1);
-        `uvm_info("RX_DRV", "Reset cleared! Entering main loop.", UVM_NONE)
+        `uvm_info("RX_DRV", "Reset cleared! Entering main loop.", UVM_LOW)
 
         forever begin
             seq_item_port.get_next_item(req);
-            `uvm_info("RX_DRV", "Received new packet from sequence. Generating Checksums and Driving...", UVM_NONE)
+            `uvm_info("RX_DRV", "Received new packet from sequence. Generating Checksums and Driving...", UVM_HIGH)
             drive_packet(req);
             seq_item_port.item_done();
         end
@@ -86,7 +86,7 @@ class eth_rx_if_driver extends uvm_driver #(phy_rx_seq_item);
         // ========================================================
         // 4. TRUE DDR PHYSICAL TRANSMISSION (Phase-Shifted)
         // ========================================================
-        `uvm_info("RX_DRV", "Driving TRUE DDR Preamble...", UVM_NONE)
+        `uvm_info("RX_DRV", "Driving TRUE DDR Preamble...", UVM_HIGH)
         
         // Setup for the very first POSEDGE (Change on Negedge)
         @(posedge vif.clk);
@@ -107,7 +107,7 @@ class eth_rx_if_driver extends uvm_driver #(phy_rx_seq_item);
         @(posedge vif.clk); vif.rxd <= 4'h5; // Lower Nibble
         @(negedge vif.clk); vif.rxd <= 4'hD; // Upper Nibble
 
-        `uvm_info("RX_DRV", $sformatf("Driving %0d bytes of DDR Frame Data...", frame_data.size()), UVM_NONE)
+        `uvm_info("RX_DRV", $sformatf("Driving %0d bytes of DDR Frame Data...", frame_data.size()), UVM_HIGH)
         
         while(frame_data.size() > 0) begin
            current_byte = frame_data.pop_front();
@@ -140,7 +140,7 @@ class eth_rx_if_driver extends uvm_driver #(phy_rx_seq_item);
         fork
             begin
                 wait(vif.rx_transaction_done_pulse == 1'b1);
-                `uvm_info("RX_DRV", "SUCCESS: RTL pulsed transaction done!", UVM_NONE)
+                `uvm_info("RX_DRV", "SUCCESS: RTL pulsed transaction done!", UVM_HIGH)
             end
             begin
                 repeat(400) @(posedge vif.clk); 

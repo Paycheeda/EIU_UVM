@@ -160,13 +160,16 @@ class eiu_base_test extends uvm_test;
 
     task run_phase(uvm_phase phase);
         eiu_vseq vseq; 
+        int drain_timeout_us = 2000;
         vseq = eiu_vseq::type_id::create("vseq");
+        $value$plusargs("SCB_DRAIN_TIMEOUT_US=%d", drain_timeout_us);
+        if (drain_timeout_us < 1) drain_timeout_us = 1;
 
         phase.raise_objection(this, "Starting End-to-End System Test");
         #300ns;
         `uvm_info("TEST", "=== BOOTING EIU_TOP SYSTEM TEST ===", UVM_LOW)
         vseq.start(vsqr);
-        #2us;
+        env.scb.wait_for_done(drain_timeout_us * 1us);
         phase.drop_objection(this, "System Test Complete");
     endtask
 

@@ -111,6 +111,13 @@ class eiu_vseq extends uvm_sequence;
         int nrz_sync2_arg   = -1;
         bit [11:0] final_s1, final_s2;
         
+        bit tx_done = 0;
+        bit uart_done[3] = '{0, 0, 0};
+        bit nrz_done = 0;
+        int bg_timeout_us = 20000;
+        int final_drain_passes = 5;
+        int final_drain_gap_us = 10;
+
         $value$plusargs("NUM_PKTS=%d", num_packets);
         $value$plusargs("EN_UART1=%d", en_uart[0]);
         $value$plusargs("EN_UART2=%d", en_uart[1]);
@@ -126,6 +133,16 @@ class eiu_vseq extends uvm_sequence;
         $value$plusargs("NRZ_ENDIAN=%d", nrz_endian);
         $value$plusargs("NRZ_SYNC1=%h", nrz_sync1_arg);
         $value$plusargs("NRZ_SYNC2=%h", nrz_sync2_arg);
+
+        $value$plusargs("BG_TIMEOUT_US=%d", bg_timeout_us);
+        $value$plusargs("FINAL_DRAIN_PASSES=%d", final_drain_passes);
+        $value$plusargs("FINAL_DRAIN_GAP_US=%d", final_drain_gap_us);
+        if (bg_timeout_us < 1) bg_timeout_us = 1;
+        if (final_drain_passes < 1) final_drain_passes = 1;
+        if (final_drain_gap_us < 0) final_drain_gap_us = 0;
+
+        for (int i = 0; i < 3; i++) uart_done[i] = (en_uart[i] == 0);
+        nrz_done = (nrz_en == 0);
 
         // Auto-assign syncs if they weren't overridden
         get_default_nrz_syncs(nrz_bpw_bits, final_s1, final_s2);
@@ -155,55 +172,94 @@ class eiu_vseq extends uvm_sequence;
                 tx_inj_seq.num_packets = num_packets; 
                 tx_inj_seq.test_card_id = 4'h0; 
                 tx_inj_seq.start(p_sequencer.bkp_sqr);
+                tx_done = 1;
             end
-            for (int i = 0; i < 3; i++) begin
-                automatic int j = i;
-                if (en_uart[j] == 1) begin
-                    uart_seq[j] = uart_main_sequence::type_id::create($sformatf("uart_seq[%0d]", j));
-                    uart_seq[j].start(p_sequencer.uart_rx_sqr[j]);
-                end
+            begin
+                if (en_uart[0] == 1) begin uart_seq[0] = uart_main_sequence::type_id::create("uart_seq[0]"); uart_seq[0].start(p_sequencer.uart_rx_sqr[0]); end
+                uart_done[0] = 1;
+            end
+            begin
+                if (en_uart[1] == 1) begin uart_seq[1] = uart_main_sequence::type_id::create("uart_seq[1]"); uart_seq[1].start(p_sequencer.uart_rx_sqr[1]); end
+                uart_done[1] = 1;
+            end
+            begin
+                if (en_uart[2] == 1) begin uart_seq[2] = uart_main_sequence::type_id::create("uart_seq[2]"); uart_seq[2].start(p_sequencer.uart_rx_sqr[2]); end
+                uart_done[2] = 1;
             end
             
             // Generate NRZ Traffic!
-            if (nrz_en == 1) begin
-                `uvm_info("VSEQ", "Enabling Telemetry Traffic on ETH5 (NRZ)", UVM_LOW)
-                nrz_seq = nrz_sequence::type_id::create("nrz_seq");
-                nrz_seq.cfg_bpw         = nrz_bpw_code(nrz_bpw_bits);
-                nrz_seq.cfg_zero_endian = nrz_endian;
-                nrz_seq.cfg_sync_word1  = final_s1;
-                nrz_seq.cfg_sync_word2  = final_s2;
-                nrz_seq.cfg_payload_len = nrz_payload_len;
-                nrz_seq.cfg_num_packets = num_packets; 
-                nrz_seq.start(p_sequencer.nrz_sqr);
+            begin
+                if (nrz_en == 1) begin
+                    `uvm_info("VSEQ", "Enabling Telemetry Traffic on ETH5 (NRZ)", UVM_LOW)
+                    nrz_seq = nrz_sequence::type_id::create("nrz_seq");
+                    nrz_seq.cfg_bpw         = nrz_bpw_code(nrz_bpw_bits);
+                    nrz_seq.cfg_zero_endian = nrz_endian;
+                    nrz_seq.cfg_sync_word1  = final_s1;
+                    nrz_seq.cfg_sync_word2  = final_s2;
+                    nrz_seq.cfg_payload_len = nrz_payload_len;
+                    nrz_seq.cfg_num_packets = num_packets; 
+                    nrz_seq.start(p_sequencer.nrz_sqr);
+                end
+                nrz_done = 1;
             end
         join_none 
-
-        poll_seq = bkp_smart_seq::type_id::create("poll_seq");
-        poll_seq.target_card_id = 4'h0;
 
         for (int p = 0; p < num_packets; p++) begin
             `uvm_info("VSEQ", $sformatf("--- ETH PING-PONG: Pushing Packet %0d/%0d to PHY ---", p+1, num_packets), UVM_LOW)
             
             fork
-                for (int i = 0; i < 4; i++) begin
-                    automatic int j = i;
-                    if (en_eth[j] == 1) begin
-                        eth_rx_seq[j] = eiu_phy_rx_seq::type_id::create($sformatf("eth_rx_seq[%0d]", j));
-                        eth_rx_seq[j].port_id = j; 
-                        eth_rx_seq[j].start(p_sequencer.eth_rx_sqr[j]);
-                    end
+                begin
+                    if (en_eth[0] == 1) begin eth_rx_seq[0] = eiu_phy_rx_seq::type_id::create("eth_rx_seq[0]"); eth_rx_seq[0].port_id = 0; eth_rx_seq[0].start(p_sequencer.eth_rx_sqr[0]); end
+                end
+                begin
+                    if (en_eth[1] == 1) begin eth_rx_seq[1] = eiu_phy_rx_seq::type_id::create("eth_rx_seq[1]"); eth_rx_seq[1].port_id = 1; eth_rx_seq[1].start(p_sequencer.eth_rx_sqr[1]); end
+                end
+                begin
+                    if (en_eth[2] == 1) begin eth_rx_seq[2] = eiu_phy_rx_seq::type_id::create("eth_rx_seq[2]"); eth_rx_seq[2].port_id = 2; eth_rx_seq[2].start(p_sequencer.eth_rx_sqr[2]); end
+                end
+                begin
+                    if (en_eth[3] == 1) begin eth_rx_seq[3] = eiu_phy_rx_seq::type_id::create("eth_rx_seq[3]"); eth_rx_seq[3].port_id = 3; eth_rx_seq[3].start(p_sequencer.eth_rx_sqr[3]); end
                 end
             join
             
-            #2000us; 
-            
             `uvm_info("VSEQ", $sformatf("--- ETH PING-PONG: Triggering CPU to Extract Packet %0d ---", p+1), UVM_LOW)
+            poll_seq = bkp_smart_seq::type_id::create($sformatf("poll_seq_pkt_%0d", p));
+            poll_seq.target_card_id = 4'h0;
+            for (int i = 0; i < 4; i++) poll_seq.wait_for_eth[i] = en_eth[i];
             poll_seq.start(p_sequencer.bkp_sqr);
         end
         
-        // Wait long enough for the NRZ packets to finish serializing!
-        #500us;
-        disable fork;
+        begin
+            bit bg_timeout_hit = 0;
+            fork
+                begin
+                    wait (tx_done && uart_done[0] && uart_done[1] && uart_done[2] && nrz_done);
+                end
+                begin
+                    #(bg_timeout_us * 1us);
+                    bg_timeout_hit = 1;
+                    `uvm_error("VSEQ_TIMEOUT", $sformatf("Background traffic did not finish within %0d us. TX=%0d UART_DONE=%0d%0d%0d NRZ=%0d",
+                        bg_timeout_us, tx_done, uart_done[0], uart_done[1], uart_done[2], nrz_done))
+                end
+            join_any
+            disable fork;
+
+            if (bg_timeout_hit) begin
+                return;
+            end
+        end
+
+        `uvm_info("VSEQ", "Background traffic generators complete. Performing final CPU RX drain.", UVM_LOW)
+        for (int drain = 0; drain < final_drain_passes; drain++) begin
+            #(final_drain_gap_us * 1us);
+            poll_seq = bkp_smart_seq::type_id::create($sformatf("final_poll_seq_%0d", drain));
+            poll_seq.target_card_id = 4'h0;
+            poll_seq.start(p_sequencer.bkp_sqr);
+            if (poll_seq.total_bytes_read == 0) begin
+                `uvm_info("VSEQ", $sformatf("Final drain pass %0d found no pending CPU RX data.", drain+1), UVM_HIGH)
+            end
+        end
+
         `uvm_info("VSEQ", "=== ALL DUPLEX STAGES COMPLETE ===", UVM_LOW)
     endtask
 endclass
