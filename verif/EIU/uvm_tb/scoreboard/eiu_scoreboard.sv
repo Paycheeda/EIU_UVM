@@ -39,8 +39,6 @@ class eiu_scoreboard extends uvm_scoreboard;
     int nrz_inj_cnt = 0;
     int nrz_ver_cnt = 0;
 
-    bit eth_ignore_clear_next[4] = '{0, 0, 0, 0};
-
     function new(string name, uvm_component parent);
         super.new(name, parent);
     endfunction
@@ -361,19 +359,10 @@ class eiu_scoreboard extends uvm_scoreboard;
                 eth_wr_id = item.bkp_address - 6'd44;
 
                 if (is_eth_data_addr) begin
-                    if (is_send_cmd) begin
-                        // ETH TX uses a start command followed by a 12'h000 clear.
-                        // The clear is a control write, not a zero payload byte.
-                        eth_ignore_clear_next[eth_wr_id] = 1'b1;
-                    end else if (eth_ignore_clear_next[eth_wr_id] && item.bkp_data == 12'h000) begin
-                        eth_ignore_clear_next[eth_wr_id] = 1'b0;
-                        `uvm_info("SCB_CTRL", $sformatf("Ignoring ETH%0d TX start-clear control write", eth_wr_id+1), UVM_HIGH)
-                    end else begin
-                        if (eth_ignore_clear_next[eth_wr_id]) begin
-                            `uvm_warning("SCB_CTRL", $sformatf("ETH%0d expected a TX clear write but saw data 0x%0h; treating it as payload", eth_wr_id+1, item.bkp_data))
-                            eth_ignore_clear_next[eth_wr_id] = 1'b0;
-                        end
-
+                    if (!is_send_cmd) begin
+                        // ETH data-address writes with bit[8]=0 are payload bytes.
+                        // Only 12'h100 is the TX start command; there is no
+                        // follow-up clear write to ignore.
                         exp_eth_tx_q[eth_wr_id].push_back(item.bkp_data[7:0]);
                         eth_tx_inj_cnt[eth_wr_id]++;
                         print_counts(eth_wr_id, "ETH");

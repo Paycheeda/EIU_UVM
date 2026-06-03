@@ -134,19 +134,11 @@ class kwr_routing_seq extends uvm_sequence #(bkp_item);
                 req.delay_cycles = 0;
                 finish_item(req);
 
-                // ---> FIX 3: Wait for the MAC to latch the command, then CLEAR IT! <---
+                // Do NOT write 12'h000 here.  On ETH data addresses bit[8]=0 is
+                // payload data, not a control clear, so that write inserts an
+                // extra 0x00 into the TX FIFO.  The next frame then starts with
+                // that stale zero and every following byte is shifted by one.
                 #1us;
-                
-                req = bkp_item::type_id::create("req");
-                start_item(req);
-                req.trans_type   = BKP_DATA_WRITE; 
-                req.bkp_address  = data_addr; 
-                req.bkp_card_id  = test_card_id;
-                req.fpga_card_id = test_card_id;
-                req.bkp_data_dir = 1'b1;
-                req.bkp_data     = 12'h000; // Bit 8 = 0 (Clears the start flag to stop ghost packets)
-                req.delay_cycles = 0;
-                finish_item(req);
             end
 
             #10us; 
