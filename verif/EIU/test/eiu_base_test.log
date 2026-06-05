@@ -1,6 +1,6 @@
 # vsim -c tb_top glbl -modelsimini /home/ahmed/modelsim_2020_libs/modelsim.ini -L unisims_ver -L unimacro_ver -L secureip -L xpm -sv_lib /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/lib/uvm_dpi -work /home/ahmed/uvm_training/verif/EIU/test/work "+NUM_PKTS=5" "+EN_UART1=1" "+EN_UART2=1" "+EN_UART3=1" "+UART_WIDTH=8" "+UART_PARITY_EN=1" "+UART_PARITY_OE=0" "+EN_ETH1=1" "+EN_ETH2=1" "+EN_ETH3=1" "+EN_ETH4=1" "+EN_NRZ=1" "+NRZ_BPW=8" "+NRZ_PLEN=50" "+NRZ_ENDIAN=0" "+ETH_PLEN=100" "+UVM_TESTNAME=eiu_base_test" -l eiu_base_test.log -do "run -a; q" 
-# Start time: 03:12:43 on Jun 04,2026
-# Loading /tmp/root@ahmedpc_dpi_10891/linuxaloem_gcc-7.4.0/export_tramp.so
+# Start time: 04:01:14 on Jun 04,2026
+# Loading /tmp/root@ahmedpc_dpi_12236/linuxaloem_gcc-7.4.0/export_tramp.so
 # ** Note: (vsim-8785) UVM-aware debugging capabilities will be disabled since no compiled "questa_uvm_pkg" can be found.
 # This also means that later if you turn on UVM-aware debugging your debug simulations may have
 # different random seeds from your non-debug simulations.
@@ -236,10 +236,10 @@
 # ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(234): [TFMPC] - Missing connection for port 'clk_eth3'.
 # ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(234): [TFMPC] - Missing connection for port 'clk_eth4'.
 # ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(234): [TFMPC] - Missing connection for port 'rst_n'.
-# Compiling /tmp/root@ahmedpc_dpi_10891/linuxaloem_gcc-7.4.0/exportwrapper.c
-# Loading /tmp/root@ahmedpc_dpi_10891/linuxaloem_gcc-7.4.0/vsim_auto_compile.so
+# Compiling /tmp/root@ahmedpc_dpi_12236/linuxaloem_gcc-7.4.0/exportwrapper.c
+# Loading /tmp/root@ahmedpc_dpi_12236/linuxaloem_gcc-7.4.0/vsim_auto_compile.so
 # Loading /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/lib/uvm_dpi.so
-# ** Warning: Design size of 83375 statements exceeds ModelSim-Intel FPGA Starter Edition recommended capacity.
+# ** Warning: Design size of 83680 statements exceeds ModelSim-Intel FPGA Starter Edition recommended capacity.
 # Expect performance to be adversely affected.
 # run -a
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_root.svh(392) @ 0: reporter [UVM/RELNOTES] 
@@ -464,8 +464,8 @@
 # UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/kwr_sequence.sv(147) @ 15194250000: uvm_test_top.env.bkp_agt.sqr@@tx_inj_seq [SEQ] Random Burst Sequence Complete! Pipeline flushing...
 # UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(252) @ 15194250000: uvm_test_top.vsqr@@vseq [VSEQ] Background traffic generators complete. Performing final CPU RX drain.
 # UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(263) @ 15904250000: uvm_test_top.vsqr@@vseq [VSEQ] === ALL DUPLEX STAGES COMPLETE ===
-# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv(162) @ 15904250000: uvm_test_top.env.scb [SCB_DRAIN] Waiting up to 20000000000 for scoreboard queues/counters to drain
-# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv(168) @ 15944250000: uvm_test_top.env.scb [SCB_DRAIN] Scoreboard drained successfully.
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv(185) @ 15904250000: uvm_test_top.env.scb [SCB_DRAIN] Waiting up to 20000000000 for scoreboard queues/counters to drain
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv(191) @ 15944250000: uvm_test_top.env.scb [SCB_DRAIN] Scoreboard drained successfully.
 # ---------------- EIU SCOREBOARD DRAIN STATUS ----------------
 # UART1 TX inj/ver=5/5 exp_q=0 fifo=0 | RX inj/ver=5/5 exp_q=0 fifo=0
 # UART2 TX inj/ver=5/5 exp_q=0 fifo=0 | RX inj/ver=5/5 exp_q=0 fifo=0
@@ -479,7 +479,34 @@
 # ----------------------------------------------------------------
 # 
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_objection.svh(1270) @ 15944250000: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
-# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv(189) @ 15944250000: uvm_test_top.env.scb [SCB_DONE] All expected UART, ETH, and NRZ traffic was verified before end-of-test.
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv(326) @ 15944250000: uvm_test_top.env.scb [SCB_DONE] All expected UART, ETH, and NRZ traffic was verified before end-of-test.
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv(333) @ 15944250000: uvm_test_top.env.scb [SCB_FINAL_REPORT] 
+# +----------------------------------------------------------------------------------------------------------+
+# |                                      EIU SCOREBOARD FINAL REPORT                                      |
+# +----------------------------------------------------------------------------------------------------------+
+# | Overall Result: PASS                                                                                 |
+# +----------+-----+------------+------------+------------+------------+----------+---------+--------+
+# | Interface| Dir | Inj Pkts   | Ver Pkts   | Inj Bytes  | Ver Bytes  | Fails    | Pending | Result |
+# +----------+-----+------------+------------+------------+------------+----------+---------+--------+
+# | UART1    | TX  |          5 |          5 |          5 |          5 |        0 |       0 | PASS   |
+# | UART1    | RX  |          5 |          5 |          5 |          5 |        0 |       0 | PASS   |
+# | UART2    | TX  |          5 |          5 |          5 |          5 |        0 |       0 | PASS   |
+# | UART2    | RX  |          5 |          5 |          5 |          5 |        0 |       0 | PASS   |
+# | UART3    | TX  |          5 |          5 |          5 |          5 |        0 |       0 | PASS   |
+# | UART3    | RX  |          5 |          5 |          5 |          5 |        0 |       0 | PASS   |
+# | ETH1     | TX  |          5 |          5 |        500 |        500 |        0 |       0 | PASS   |
+# | ETH1     | RX  |          5 |          5 |        357 |        357 |        0 |       0 | PASS   |
+# | ETH2     | TX  |          5 |          5 |        500 |        500 |        0 |       0 | PASS   |
+# | ETH2     | RX  |          5 |          5 |        367 |        367 |        0 |       0 | PASS   |
+# | ETH3     | TX  |          5 |          5 |        500 |        500 |        0 |       0 | PASS   |
+# | ETH3     | RX  |          5 |          5 |        367 |        367 |        0 |       0 | PASS   |
+# | ETH4     | TX  |          5 |          5 |        500 |        500 |        0 |       0 | PASS   |
+# | ETH4     | RX  |          5 |          5 |        362 |        362 |        0 |       0 | PASS   |
+# | ETH5     | NRZ |          5 |          5 |        250 |        250 |        0 |       0 | PASS   |
+# +----------+-----+------------+------------+------------+------------+----------+---------+--------+
+# | PASS requires: injected packets == verified packets, injected bytes == verified bytes, zero fails, zero pending. |
+# +----------------------------------------------------------------------------------------------------------+
+# 
 # UVM_INFO /home/ahmed/uvm_training/verif/EIU/test/eiu_base_test.sv(178) @ 15944250000: uvm_test_top [TEST_SUMMARY] ===============================================================================
 # UVM_INFO /home/ahmed/uvm_training/verif/EIU/test/eiu_base_test.sv(179) @ 15944250000: uvm_test_top [TEST_SUMMARY]                  EIU SYSTEM TEST EXECUTION COMPLETE                            
 # UVM_INFO /home/ahmed/uvm_training/verif/EIU/test/eiu_base_test.sv(180) @ 15944250000: uvm_test_top [TEST_SUMMARY]  Check the [SCB_PASS] logs above for verification of the TX and RX pipelines.  
@@ -488,7 +515,7 @@
 # --- UVM Report Summary ---
 # 
 # ** Report counts by severity
-# UVM_INFO :  208
+# UVM_INFO :  209
 # UVM_WARNING :    1
 # UVM_ERROR :    0
 # UVM_FATAL :    0
@@ -503,6 +530,7 @@
 # [RX_DRV]     8
 # [SCB_DONE]     1
 # [SCB_DRAIN]     2
+# [SCB_FINAL_REPORT]     1
 # [SEQ]     2
 # [SMART_SEQ]    30
 # [TEST]     1
@@ -517,5 +545,5 @@
 # 
 # ** Note: $finish    : /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_root.svh(517)
 #    Time: 1594425 ns  Iteration: 71  Instance: /tb_top
-# End time: 03:37:02 on Jun 04,2026, Elapsed time: 0:24:19
+# End time: 04:25:32 on Jun 04,2026, Elapsed time: 0:24:18
 # Errors: 0, Warnings: 95
