@@ -15,7 +15,7 @@ module uart_RX #(
 				output reg 									rx_fifo_wr_en,
 				
 				output reg 									rx_acq_done,
-				output reg[10:0]							rx_corrupt_byte_count,
+				output reg[11:0]							rx_corrupt_byte_count,//
 				output reg 									uart_rx_busy
 				);
 

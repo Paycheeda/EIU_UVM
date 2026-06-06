@@ -93,7 +93,7 @@ cov:
 # =====================================================================
 compile:
 	@echo "=== 1. Compiling UVM Base & RTL Base ==="
-	$(BUILD_CMD) $(COMMON_OPT) /home/ahmed/modelsim_2020_libs/glbl.v /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/uvm_pkg.sv $(UVM_TRAINING)/design/kernel/dual_port_FIFO.sv $(UVM_TRAINING)/design/kernel/cdc_*.sv
+	$(BUILD_CMD) $(COMMON_OPT) /home/ahmed/modelsim_2020_libs/glbl.v /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/uvm_pkg.sv $(UVM_TRAINING)/design/kernel/dual_port_FIFO.sv $(UVM_TRAINING)/design/kernel/cdc_*.sv $(UVM_TRAINING)/design/mdio/*.sv
 	
 	@echo "=== 2. Compiling UART Subsystem ==="
 	$(BUILD_CMD) $(COMMON_OPT) +define+UART_WIDTH=$(UART_WIDTH) \

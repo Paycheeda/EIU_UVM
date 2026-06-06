@@ -23,9 +23,9 @@ module eth#(
 		output [7:0] 	rx_fifo_data_in,
 		output 			rx_fifo_rst_n,
 		
-		output [10:0]	rx_eth_corrupt_frame_count,
+		output [11:0]	rx_eth_corrupt_frame_count,
 		output 			eth_rx_data_valid,
-		output [10:0] 	rx_eth_valid_bytes,
+		output [11:0] 	rx_eth_valid_bytes,
 		
 		
 		output [3:0] 	txd,
@@ -47,7 +47,9 @@ module eth#(
 		input 			tx_fifo_empty,
 		input [7:0] 	tx_fifo_data_out,
 
-		output 			eth_tx_data_sent
+		output 			eth_tx_data_sent,
+		
+		input [11:0]	count_eth
 
 );
 
@@ -84,7 +86,8 @@ generate
 
 			.eth_rx_data_valid            (eth_rx_data_valid),
 			.corrupt_packet_counter       (rx_eth_corrupt_frame_count),
-			.valid_eth_frame              (rx_eth_valid_bytes)
+			.valid_eth_bytes_count        (rx_eth_valid_bytes),
+			.count_eth					  (count_eth)
 		);
 
 	end 
@@ -95,9 +98,9 @@ generate
 		assign rx_fifo_data_in            = 8'd0;
 		assign rx_fifo_rst_n              = eth_rx_rst_n;
 
-		assign rx_eth_corrupt_frame_count = 11'd0;
+		assign rx_eth_corrupt_frame_count = 12'd0;
 		assign eth_rx_data_valid          = 1'b0;
-		assign rx_eth_valid_bytes         = 11'd0;
+		assign rx_eth_valid_bytes         = 12'd0;
 
 	end
 endgenerate

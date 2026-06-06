@@ -1,47 +1,49 @@
 module eth_mac_rx#(
         parameter IODELAY_GROUP_NAME = "ETH1_IDELAY_GROUP",
-                parameter integer RXD0_IDELAY_VALUE   = 0,
-        parameter integer RXD1_IDELAY_VALUE   = 0,
-        parameter integer RXD2_IDELAY_VALUE   = 0,
-        parameter integer RXD3_IDELAY_VALUE   = 0,
-        parameter integer RXCTL_IDELAY_VALUE  = 0
+        parameter integer RXD0_IDELAY_VALUE   = 22,
+        parameter integer RXD1_IDELAY_VALUE   = 20,
+        parameter integer RXD2_IDELAY_VALUE   = 20,
+        parameter integer RXD3_IDELAY_VALUE   = 20,
+        parameter integer RXCTL_IDELAY_VALUE  = 20
 )(
-                
-                input                   clk,
-                input                   rst_n,
-                
-                input [3:0]     rxd,
-                input                   rx_ctl,
-                
-                output                  rx_fifo_wr_en,
-                output                  rx_fifo_rst_n,
-                output [7:0]    rx_fifo_data_in,
-                
-                output                  eth_rx_data_valid,
-                output [10:0]   corrupt_packet_counter,
-                output [10:0]   valid_eth_frame
-                
-        );
+        
+        input           clk,
+        input           rst_n,
+        
+        input [3:0]     rxd,
+        input           rx_ctl,
+        
+        output          rx_fifo_wr_en,
+        output          rx_fifo_rst_n,
+        output [7:0]    rx_fifo_data_in,
+        
+        output          eth_rx_data_valid,
+        output [11:0]   corrupt_packet_counter,
+        output [11:0]   valid_eth_bytes_count,
+        
+        input  [11:0]   count_eth
+        
+    );
 
-wire [7:0]      iddr_out;
-wire            rx_dv;
-wire            rx_er;
+wire [7:0]  iddr_out;
+wire        rx_dv;
+wire        rx_er;
 
-wire            crc_first;
-wire            crc_valid;
-wire            crc_last;
+wire        crc_first;
+wire        crc_valid;
+wire        crc_last;
 wire [31:0] crc_calc;
-wire            crc_done_flag;
+wire        crc_done_flag;
 
-wire            int_fifo_wr_en;
-wire [7:0]      int_fifo_data_in;
-wire            int_fifo_rd_en;
-wire [7:0]      int_fifo_data_out;
+wire        int_fifo_wr_en;
+wire [7:0]  int_fifo_data_in;
+wire        int_fifo_rd_en;
+wire [7:0]  int_fifo_data_out;
 
 wire [10:0] payload_length;
 wire [10:0] invalid_bytes;
-wire            rx_transaction_done_pulse;
-wire            packet_received_corrupt_out;
+wire        rx_transaction_done_pulse;
+wire        packet_received_corrupt_out;
 
 wire        metadata_fifo_rd_en;
 wire [22:0] metadata_fifo_data_out;
@@ -50,11 +52,11 @@ wire        metadata_fifo_empty;
 
 iddr_rx #(
     .IODELAY_GROUP_NAME(IODELAY_GROUP_NAME),
-        .RXD0_IDELAY_VALUE(RXD0_IDELAY_VALUE),
-        .RXD1_IDELAY_VALUE(RXD1_IDELAY_VALUE),
-        .RXD2_IDELAY_VALUE(RXD2_IDELAY_VALUE),
-        .RXD3_IDELAY_VALUE(RXD3_IDELAY_VALUE),
-        .RXCTL_IDELAY_VALUE(RXCTL_IDELAY_VALUE)
+    .RXD0_IDELAY_VALUE(RXD0_IDELAY_VALUE),
+    .RXD1_IDELAY_VALUE(RXD1_IDELAY_VALUE),
+    .RXD2_IDELAY_VALUE(RXD2_IDELAY_VALUE),
+    .RXD3_IDELAY_VALUE(RXD3_IDELAY_VALUE),
+    .RXCTL_IDELAY_VALUE(RXCTL_IDELAY_VALUE)
 ) u_iddr_rx (
     .clk      (clk),
     .rst_n    (rst_n),
@@ -136,7 +138,8 @@ eth_rx_fifo_IF u_eth_rx_fifo_IF (
     .metadata_fifo_data_out (metadata_fifo_data_out),
 
     .eth_rx_data_valid      (eth_rx_data_valid),
-    .valid_eth_frame        (valid_eth_frame),
+    .valid_eth_bytes_count  (valid_eth_bytes_count),
+    .count_eth              (count_eth),
 
     .rx_fifo_wr_en          (rx_fifo_wr_en),
     .rx_fifo_data_in        (rx_fifo_data_in),

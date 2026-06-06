@@ -24,7 +24,9 @@ module kernel(
 		inout [11:0]	bkp_data_bus,
 		input 			word_start_strobe_pulse,
 		
-		output 			config_done_uart,
+		output 			config_done_uart1,
+		output 			config_done_uart2,
+		output 			config_done_uart3,
 		output 			config_done_eth1,
 		output 			config_done_eth2,
 		output 			config_done_eth3,
@@ -130,21 +132,21 @@ module kernel(
 		input [7:0] 	rx_fifo_data_out_eth3,
 		input [7:0] 	rx_fifo_data_out_eth4,
 		
-		input [10:0]	uart1_rx_valid_count,
-		input [10:0]	uart2_rx_valid_count,
-		input [10:0]	uart3_rx_valid_count,
-		input [10:0] 	rx_eth_valid_bytes_eth1,
-		input [10:0] 	rx_eth_valid_bytes_eth2,
-		input [10:0] 	rx_eth_valid_bytes_eth3,
-		input [10:0] 	rx_eth_valid_bytes_eth4,
+		input [11:0]	uart1_rx_valid_count,
+		input [11:0]	uart2_rx_valid_count,
+		input [11:0]	uart3_rx_valid_count,
+		input [11:0] 	rx_eth_valid_bytes_eth1,
+		input [11:0] 	rx_eth_valid_bytes_eth2,
+		input [11:0] 	rx_eth_valid_bytes_eth3,
+		input [11:0] 	rx_eth_valid_bytes_eth4,
 		
-		input [10:0]	uart1_rx_corrupt_count,
-		input [10:0]	uart2_rx_corrupt_count,
-		input [10:0]	uart3_rx_corrupt_count,
-		input [10:0]	rx_eth_corrupt_frame_count_eth1,
-		input [10:0]	rx_eth_corrupt_frame_count_eth2,
-		input [10:0]	rx_eth_corrupt_frame_count_eth3,
-		input [10:0]	rx_eth_corrupt_frame_count_eth4,
+		input [11:0]	uart1_rx_corrupt_count,
+		input [11:0]	uart2_rx_corrupt_count,
+		input [11:0]	uart3_rx_corrupt_count,
+		input [11:0]	rx_eth_corrupt_frame_count_eth1,
+		input [11:0]	rx_eth_corrupt_frame_count_eth2,
+		input [11:0]	rx_eth_corrupt_frame_count_eth3,
+		input [11:0]	rx_eth_corrupt_frame_count_eth4,
 		
 		input 			tx_fifo_full_uart1,
 		input 			tx_fifo_full_uart2,
@@ -183,7 +185,15 @@ module kernel(
 		input 			eth_tx_data_sent_eth2,
 		input 			eth_tx_data_sent_eth3,
 		input 			eth_tx_data_sent_eth4,
-		input 			eth_tx_data_sent_eth_nrz
+		input 			eth_tx_data_sent_eth_nrz,
+		
+		output [11:0]	count_uart1,
+		output [11:0]	count_uart2,
+		output [11:0]	count_uart3,
+		output [11:0]	count_eth1,
+		output [11:0]	count_eth2,
+		output [11:0]	count_eth3,
+		output [11:0]	count_eth4
 	);
 	
 wire data_width_uart1_raw;
@@ -219,7 +229,9 @@ kernel_config u_kernel_config (
         .bkp_address(bkp_address),
         .bkp_data(bkp_data_bus),
 		.config_done_pulse(config_done_pulse),
-        .config_done_uart(config_done_uart),
+        .config_done_uart1(config_done_uart1),
+		.config_done_uart2(config_done_uart2),
+		.config_done_uart3(config_done_uart3),
 		.config_done_eth1(config_done_eth1),
 		.config_done_eth2(config_done_eth2),
 		.config_done_eth3(config_done_eth3),
@@ -439,7 +451,14 @@ kernel_read u_kernel_read (
 		.tx_data_sent_eth2(eth_tx_data_sent_eth2),
 		.tx_data_sent_eth3(eth_tx_data_sent_eth3),
 		.tx_data_sent_eth4(eth_tx_data_sent_eth4),
-		.tx_data_sent_eth_nrz(eth_tx_data_sent_eth_nrz)
+		.tx_data_sent_eth_nrz(eth_tx_data_sent_eth_nrz),
+		.count_uart1(count_uart1),
+		.count_uart2(count_uart2),
+		.count_uart3(count_uart3),
+		.count_eth1(count_eth1),
+		.count_eth2(count_eth2),
+		.count_eth3(count_eth3),
+		.count_eth4(count_eth4)
     );
 
 

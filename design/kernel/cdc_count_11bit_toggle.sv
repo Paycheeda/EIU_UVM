@@ -1,16 +1,16 @@
-module cdc_count_11bit_toggle(
+module cdc_count_12bit_toggle(
 
         input  wire        src_clk,
         input  wire        dst_clk,
         input  wire        rst_n,
 
-        input  wire [10:0] src_count,
+        input  wire [11:0] src_count,
 
-        output reg  [10:0] dst_count
+        output reg  [11:0] dst_count
 );
 
-reg [10:0] src_count_d;
-reg [10:0] src_count_shadow;
+reg [11:0] src_count_d;
+reg [11:0] src_count_shadow;
 reg        src_toggle;
 
 (* ASYNC_REG = "TRUE" *) reg dst_toggle_meta;
@@ -30,8 +30,8 @@ always @(posedge src_clk or negedge rst_n)
 begin
     if (!rst_n)
     begin
-        src_count_d      <= 11'd0;
-        src_count_shadow <= 11'd0;
+        src_count_d      <= 12'd0;
+        src_count_shadow <= 12'd0;
         src_toggle       <= 1'b0;
     end
     else
@@ -58,7 +58,7 @@ begin
         dst_toggle_meta   <= 1'b0;
         dst_toggle_sync   <= 1'b0;
         dst_toggle_sync_d <= 1'b0;
-        dst_count         <= 11'd0;
+        dst_count         <= 12'd0;
     end
     else
     begin

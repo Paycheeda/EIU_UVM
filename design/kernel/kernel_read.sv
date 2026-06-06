@@ -23,21 +23,21 @@ module kernel_read(
         input [7:0]                       rx_fifo_data_out_eth3,
         input [7:0]                       rx_fifo_data_out_eth4,
         
-        input [10:0]                      rx_valid_byte_count_uart1,
-        input [10:0]                      rx_valid_byte_count_uart2,
-        input [10:0]                      rx_valid_byte_count_uart3,
-        input [10:0]                      rx_eth_valid_bytes_eth1,
-        input [10:0]                      rx_eth_valid_bytes_eth2,
-        input [10:0]                      rx_eth_valid_bytes_eth3,
-        input [10:0]                      rx_eth_valid_bytes_eth4,
+        input [11:0]                      rx_valid_byte_count_uart1,
+        input [11:0]                      rx_valid_byte_count_uart2,
+        input [11:0]                      rx_valid_byte_count_uart3,
+        input [11:0]                      rx_eth_valid_bytes_eth1,
+        input [11:0]                      rx_eth_valid_bytes_eth2,
+        input [11:0]                      rx_eth_valid_bytes_eth3,
+        input [11:0]                      rx_eth_valid_bytes_eth4,
         
-        input [10:0]                      rx_corrupt_byte_count_uart1,
-        input [10:0]                      rx_corrupt_byte_count_uart2,
-        input [10:0]                      rx_corrupt_byte_count_uart3,
-        input [10:0]                      rx_eth_corrupt_frame_count_eth1,
-        input [10:0]                      rx_eth_corrupt_frame_count_eth2,
-        input [10:0]                      rx_eth_corrupt_frame_count_eth3,
-        input [10:0]                      rx_eth_corrupt_frame_count_eth4,
+        input [11:0]                      rx_corrupt_byte_count_uart1,
+        input [11:0]                      rx_corrupt_byte_count_uart2,
+        input [11:0]                      rx_corrupt_byte_count_uart3,
+        input [11:0]                      rx_eth_corrupt_frame_count_eth1,
+        input [11:0]                      rx_eth_corrupt_frame_count_eth2,
+        input [11:0]                      rx_eth_corrupt_frame_count_eth3,
+        input [11:0]                      rx_eth_corrupt_frame_count_eth4,
         
         input                             tx_fifo_full_uart1,
         input                             tx_fifo_full_uart2,
@@ -89,25 +89,33 @@ module kernel_read(
         input                             tx_data_sent_eth2,
         input                             tx_data_sent_eth3,
         input                             tx_data_sent_eth4,
-        input                             tx_data_sent_eth_nrz
+        input                             tx_data_sent_eth_nrz,
+        
+        output [11:0]   count_uart1,
+        output [11:0]   count_uart2,
+        output [11:0]   count_uart3,
+        output [11:0]   count_eth1,
+        output [11:0]   count_eth2,
+        output [11:0]   count_eth3,
+        output [11:0]   count_eth4
         
 );
 
 
-wire [10:0] rx_valid_byte_count_uart1_kernel;
-wire [10:0] rx_valid_byte_count_uart2_kernel;
-wire [10:0] rx_valid_byte_count_uart3_kernel;
-wire [10:0] rx_eth_valid_bytes_eth1_kernel;
-wire [10:0] rx_eth_valid_bytes_eth2_kernel;
-wire [10:0] rx_eth_valid_bytes_eth3_kernel;
-wire [10:0] rx_eth_valid_bytes_eth4_kernel;
-wire [10:0] rx_corrupt_byte_count_uart1_kernel;
-wire [10:0] rx_corrupt_byte_count_uart2_kernel;
-wire [10:0] rx_corrupt_byte_count_uart3_kernel;
-wire [10:0] rx_eth_corrupt_frame_count_eth1_kernel;
-wire [10:0] rx_eth_corrupt_frame_count_eth2_kernel;
-wire [10:0] rx_eth_corrupt_frame_count_eth3_kernel;
-wire [10:0] rx_eth_corrupt_frame_count_eth4_kernel;
+wire [11:0] rx_valid_byte_count_uart1_kernel;
+wire [11:0] rx_valid_byte_count_uart2_kernel;
+wire [11:0] rx_valid_byte_count_uart3_kernel;
+wire [11:0] rx_eth_valid_bytes_eth1_kernel;
+wire [11:0] rx_eth_valid_bytes_eth2_kernel;
+wire [11:0] rx_eth_valid_bytes_eth3_kernel;
+wire [11:0] rx_eth_valid_bytes_eth4_kernel;
+wire [11:0] rx_corrupt_byte_count_uart1_kernel;
+wire [11:0] rx_corrupt_byte_count_uart2_kernel;
+wire [11:0] rx_corrupt_byte_count_uart3_kernel;
+wire [11:0] rx_eth_corrupt_frame_count_eth1_kernel;
+wire [11:0] rx_eth_corrupt_frame_count_eth2_kernel;
+wire [11:0] rx_eth_corrupt_frame_count_eth3_kernel;
+wire [11:0] rx_eth_corrupt_frame_count_eth4_kernel;
 wire tx_fifo_empty_uart1_kernel;
 wire tx_fifo_empty_uart2_kernel;
 wire tx_fifo_empty_uart3_kernel;
@@ -129,30 +137,35 @@ wire tx_data_sent_eth3_kernel;
 wire tx_data_sent_eth4_kernel;
 wire tx_data_sent_eth_nrz_kernel;
 
-reg [10:0] count_uart1;
-reg [10:0] count_uart2;
-reg [10:0] count_uart3;
-reg [10:0] count_eth1;
-reg [10:0] count_eth2;
-reg [10:0] count_eth3;
-reg [10:0] count_eth4;
+reg [11:0] count_uart1_kernel;
+reg [11:0] count_uart2_kernel;
+reg [11:0] count_uart3_kernel;
+reg [11:0] count_eth1_kernel;
+reg [11:0] count_eth2_kernel;
+reg [11:0] count_eth3_kernel;
+reg [11:0] count_eth4_kernel;
 
-wire [10:0] remaining_bytes_eth1;
-wire [10:0] remaining_bytes_eth2;
-wire [10:0] remaining_bytes_eth3;
-wire [10:0] remaining_bytes_eth4;
+wire [11:0] remaining_bytes_uart1;
+wire [11:0] remaining_bytes_uart2;
+wire [11:0] remaining_bytes_uart3;
+wire [11:0] remaining_bytes_eth1;
+wire [11:0] remaining_bytes_eth2;
+wire [11:0] remaining_bytes_eth3;
+wire [11:0] remaining_bytes_eth4;
 
-assign remaining_bytes_eth1 = (rx_fifo_empty_eth1 || (count_eth1 >= rx_eth_valid_bytes_eth1_kernel)) ? 
-                                11'd0 : (rx_eth_valid_bytes_eth1_kernel - count_eth1);
+assign remaining_bytes_uart1 = rx_valid_byte_count_uart1_kernel;
+
+assign remaining_bytes_uart2 = rx_valid_byte_count_uart2_kernel;
+
+assign remaining_bytes_uart3 = rx_valid_byte_count_uart3_kernel;
+
+assign remaining_bytes_eth1 = rx_eth_valid_bytes_eth1_kernel;
                                 
-assign remaining_bytes_eth2 = (rx_fifo_empty_eth2 || (count_eth2 >= rx_eth_valid_bytes_eth2_kernel)) ? 
-                                11'd0 : (rx_eth_valid_bytes_eth2_kernel - count_eth2);
+assign remaining_bytes_eth2 = rx_eth_valid_bytes_eth2_kernel;
 
-assign remaining_bytes_eth3 = (rx_fifo_empty_eth3 || (count_eth3 >= rx_eth_valid_bytes_eth3_kernel)) ? 
-                                11'd0 : (rx_eth_valid_bytes_eth3_kernel - count_eth3);
+assign remaining_bytes_eth3 = rx_eth_valid_bytes_eth3_kernel;
                                 
-assign remaining_bytes_eth4 = (rx_fifo_empty_eth4 || (count_eth4 >= rx_eth_valid_bytes_eth4_kernel)) ? 
-                                11'd0 : (rx_eth_valid_bytes_eth4_kernel - count_eth4);
+assign remaining_bytes_eth4 = rx_eth_valid_bytes_eth4_kernel;
 
 reg [11:0] bkp_data_reg;
 
@@ -201,13 +214,13 @@ begin
         rx_fifo_rd_en_eth4 <= 0;
         captured_address <= 0;
         bkp_data_reg <= 0;
-        count_uart1 <= 0;
-        count_uart2 <= 0;
-        count_uart3 <= 0;
-        count_eth1 <= 0;
-        count_eth2 <= 0;
-        count_eth3 <= 0;
-        count_eth4 <= 0;
+        count_uart1_kernel <= 0;
+        count_uart2_kernel <= 0;
+        count_uart3_kernel <= 0;
+        count_eth1_kernel <= 0;
+        count_eth2_kernel <= 0;
+        count_eth3_kernel <= 0;
+        count_eth4_kernel <= 0;
         state <= IDLE;
     end
     else
@@ -226,7 +239,7 @@ begin
                                 if (!rx_fifo_empty_uart1)
                                 begin
                                     rx_fifo_rd_en_uart1 <= 1'b1;
-                                    count_uart1 <= count_uart1 + 1;
+                                    count_uart1_kernel <= count_uart1_kernel + 1;
                                     state <= FIFO_WAIT_STATE;
                                 end
                                 else
@@ -241,7 +254,7 @@ begin
                                 if (!rx_fifo_empty_uart2)
                                 begin
                                     rx_fifo_rd_en_uart2 <= 1'b1;
-                                    count_uart2 <= count_uart2 + 1;
+                                    count_uart2_kernel <= count_uart2_kernel + 1;
                                     state <= FIFO_WAIT_STATE;
                                 end
                                 else
@@ -256,7 +269,7 @@ begin
                                 if (!rx_fifo_empty_uart3)
                                 begin
                                     rx_fifo_rd_en_uart3 <= 1'b1;
-                                    count_uart3 <= count_uart3 + 1;
+                                    count_uart3_kernel <= count_uart3_kernel + 1;
                                     state <= FIFO_WAIT_STATE;
                                 end
                                 else
@@ -271,7 +284,7 @@ begin
                                 if (!rx_fifo_empty_eth1)
                                 begin
                                     rx_fifo_rd_en_eth1 <= 1'b1;
-                                    count_eth1 <= count_eth1 + 1;
+                                    count_eth1_kernel <= count_eth1_kernel + 1;
                                     state <= FIFO_WAIT_STATE;
                                 end
                                 else
@@ -286,7 +299,7 @@ begin
                                 if (!rx_fifo_empty_eth2)
                                 begin
                                     rx_fifo_rd_en_eth2 <= 1'b1;
-                                    count_eth2 <= count_eth2 + 1;
+                                    count_eth2_kernel <= count_eth2_kernel + 1;
                                     state <= FIFO_WAIT_STATE;
                                 end
                                 else
@@ -301,7 +314,7 @@ begin
                                 if (!rx_fifo_empty_eth3)
                                 begin
                                     rx_fifo_rd_en_eth3 <= 1'b1;
-                                    count_eth3 <= count_eth3 + 1;
+                                    count_eth3_kernel <= count_eth3_kernel + 1;
                                     state <= FIFO_WAIT_STATE;
                                 end
                                 else
@@ -316,7 +329,7 @@ begin
                                 if (!rx_fifo_empty_eth4)
                                 begin
                                     rx_fifo_rd_en_eth4 <= 1'b1;
-                                    count_eth4 <= count_eth4 + 1;
+                                    count_eth4_kernel <= count_eth4_kernel + 1;
                                     state <= FIFO_WAIT_STATE;
                                 end
                                 else
@@ -374,14 +387,12 @@ begin
                     
                     6'd1:
                     begin
-                        bkp_data_reg[10:0] <= rx_valid_byte_count_uart1_kernel - count_uart1 ;
-                        bkp_data_reg[11] <= 1'b0;
+                        bkp_data_reg[11:0] <= remaining_bytes_uart1;
                     end
                     
                     6'd2:
                     begin
-                        bkp_data_reg[10:0] <= rx_corrupt_byte_count_uart1_kernel;
-                        bkp_data_reg[11] <= 1'b0;
+                        bkp_data_reg[11:0] <= rx_corrupt_byte_count_uart1_kernel;
                     end
                     
                     6'd3:
@@ -392,14 +403,12 @@ begin
                     
                     6'd4:
                     begin
-                        bkp_data_reg[10:0] <= rx_valid_byte_count_uart2_kernel - count_uart2;
-                        bkp_data_reg[11] <= 1'b0;
+                        bkp_data_reg[11:0] <= remaining_bytes_uart2;
                     end
                     
                     6'd5:
                     begin
-                        bkp_data_reg[10:0] <= rx_corrupt_byte_count_uart2_kernel;
-                        bkp_data_reg[11] <= 1'b0;
+                        bkp_data_reg[11:0] <= rx_corrupt_byte_count_uart2_kernel;
                     end
                     
                     6'd6:
@@ -410,14 +419,12 @@ begin
                     
                     6'd7:
                     begin
-                        bkp_data_reg[10:0] <= rx_valid_byte_count_uart3_kernel - count_uart3;
-                        bkp_data_reg[11] <= 1'b0;
+                        bkp_data_reg[11:0] <= remaining_bytes_uart3;
                     end
                     
                     6'd8:
                     begin
-                        bkp_data_reg[10:0] <= rx_corrupt_byte_count_uart3_kernel;
-                        bkp_data_reg[11] <= 1'b0;
+                        bkp_data_reg[11:0] <= rx_corrupt_byte_count_uart3_kernel;
                     end
                     
                     6'd9:
@@ -428,18 +435,12 @@ begin
                     
                     6'd10:
                     begin
-                        bkp_data_reg[10:0] <= remaining_bytes_eth1;
-                        if(remaining_bytes_eth1 == 0)
-                        begin
-                            count_eth1 <= 0;
-                        end
-                        bkp_data_reg[11] <= 1'b0;
+                        bkp_data_reg[11:0] <= remaining_bytes_eth1;
                     end
                     
                     6'd11:
                     begin
-                        bkp_data_reg[10:0] <= rx_eth_corrupt_frame_count_eth1_kernel;
-                        bkp_data_reg[11] <= 1'b0;
+                        bkp_data_reg[11:0] <= rx_eth_corrupt_frame_count_eth1_kernel;
                     end
                     
                     6'd12:
@@ -450,18 +451,12 @@ begin
                     
                     6'd13:
                     begin
-                        bkp_data_reg[10:0] <= remaining_bytes_eth2;
-                        if(remaining_bytes_eth2 == 0)
-                        begin
-                            count_eth2 <= 0;
-                        end
-                        bkp_data_reg[11] <= 1'b0;
+                        bkp_data_reg[11:0] <= remaining_bytes_eth2;
                     end
                     
                     6'd14:
                     begin
-                        bkp_data_reg[10:0] <= rx_eth_corrupt_frame_count_eth2_kernel;
-                        bkp_data_reg[11] <= 1'b0;
+                        bkp_data_reg[11:0] <= rx_eth_corrupt_frame_count_eth2_kernel;
                     end
                     
                     6'd15:
@@ -472,18 +467,12 @@ begin
                     
                     6'd16:
                     begin
-                        bkp_data_reg[10:0] <= remaining_bytes_eth3;
-                        if(remaining_bytes_eth3 == 0)
-                        begin
-                            count_eth3 <= 0;
-                        end
-                        bkp_data_reg[11] <= 1'b0;
+                        bkp_data_reg[11:0] <= remaining_bytes_eth3;
                     end
                     
                     6'd17:
                     begin
-                        bkp_data_reg[10:0] <= rx_eth_corrupt_frame_count_eth3_kernel;
-                        bkp_data_reg[11] <= 1'b0;
+                        bkp_data_reg[11:0] <= rx_eth_corrupt_frame_count_eth3_kernel;
                     end
                     
                     6'd18:
@@ -494,18 +483,12 @@ begin
                     
                     6'd19:
                     begin
-                        bkp_data_reg[10:0] <= remaining_bytes_eth4;
-                        if(remaining_bytes_eth4 == 0)
-                        begin
-                            count_eth4 <= 0;
-                        end
-                        bkp_data_reg[11] <= 1'b0;
+                        bkp_data_reg[11:0] <= remaining_bytes_eth4;
                     end
                     
                     6'd20:
                     begin
-                        bkp_data_reg[10:0] <= rx_eth_corrupt_frame_count_eth4_kernel;
-                        bkp_data_reg[11] <= 1'b0;
+                        bkp_data_reg[11:0] <= rx_eth_corrupt_frame_count_eth4_kernel;
                     end
                     
                     6'd21:
@@ -600,7 +583,84 @@ begin
 end
 
 
-cdc_count_11bit_toggle cdc_rx_valid_byte_count_uart1_inst
+cdc_count_12bit_toggle cdc_count_uart1_kernel_inst
+(
+    .src_clk    (clk),
+    .dst_clk    (clk_uart),
+    .rst_n      (rst_n),
+
+    .src_count  (count_uart1_kernel),
+
+    .dst_count  (count_uart1)
+);
+
+cdc_count_12bit_toggle cdc_count_uart2_kernel_inst
+(
+    .src_clk    (clk),
+    .dst_clk    (clk_uart),
+    .rst_n      (rst_n),
+
+    .src_count  (count_uart2_kernel),
+
+    .dst_count  (count_uart2)
+);
+
+cdc_count_12bit_toggle cdc_count_uart3_kernel_inst
+(
+    .src_clk    (clk),
+    .dst_clk    (clk_uart),
+    .rst_n      (rst_n),
+
+    .src_count  (count_uart3_kernel),
+
+    .dst_count  (count_uart3)
+);
+
+cdc_count_12bit_toggle cdc_count_eth1_kernel_inst
+(
+    .src_clk    (clk),
+    .dst_clk    (rx_clk_eth1),
+    .rst_n      (rst_n),
+
+    .src_count  (count_eth1_kernel),
+
+    .dst_count  (count_eth1)
+);
+
+cdc_count_12bit_toggle cdc_count_eth2_kernel_inst
+(
+    .src_clk    (clk),
+    .dst_clk    (rx_clk_eth2),
+    .rst_n      (rst_n),
+
+    .src_count  (count_eth2_kernel),
+
+    .dst_count  (count_eth2)
+);
+
+cdc_count_12bit_toggle cdc_count_eth3_kernel_inst
+(
+    .src_clk    (clk),
+    .dst_clk    (rx_clk_eth3),
+    .rst_n      (rst_n),
+
+    .src_count  (count_eth3_kernel),
+
+    .dst_count  (count_eth3)
+);
+
+cdc_count_12bit_toggle cdc_count_eth4_kernel_inst
+(
+    .src_clk    (clk),
+    .dst_clk    (rx_clk_eth4),
+    .rst_n      (rst_n),
+
+    .src_count  (count_eth4_kernel),
+
+    .dst_count  (count_eth4)
+);
+
+cdc_count_12bit_toggle cdc_rx_valid_byte_count_uart1_inst
 (
     .src_clk    (clk_uart),
     .dst_clk    (clk),
@@ -613,7 +673,7 @@ cdc_count_11bit_toggle cdc_rx_valid_byte_count_uart1_inst
 
 
 
-cdc_count_11bit_toggle cdc_rx_valid_byte_count_uart2_inst
+cdc_count_12bit_toggle cdc_rx_valid_byte_count_uart2_inst
 (
     .src_clk    (clk_uart),
     .dst_clk    (clk),
@@ -626,7 +686,7 @@ cdc_count_11bit_toggle cdc_rx_valid_byte_count_uart2_inst
 
 
 
-cdc_count_11bit_toggle cdc_rx_valid_byte_count_uart3_inst
+cdc_count_12bit_toggle cdc_rx_valid_byte_count_uart3_inst
 (
     .src_clk    (clk_uart),
     .dst_clk    (clk),
@@ -640,7 +700,7 @@ cdc_count_11bit_toggle cdc_rx_valid_byte_count_uart3_inst
 
 
 
-cdc_count_11bit_toggle cdc_rx_eth_valid_bytes_eth1_inst
+cdc_count_12bit_toggle cdc_rx_eth_valid_bytes_eth1_inst
 (
     .src_clk    (rx_clk_eth1),
     .dst_clk    (clk),
@@ -653,7 +713,7 @@ cdc_count_11bit_toggle cdc_rx_eth_valid_bytes_eth1_inst
 
 
 
-cdc_count_11bit_toggle cdc_rx_eth_valid_bytes_eth2_inst
+cdc_count_12bit_toggle cdc_rx_eth_valid_bytes_eth2_inst
 (
     .src_clk    (rx_clk_eth2),
     .dst_clk    (clk),
@@ -666,7 +726,7 @@ cdc_count_11bit_toggle cdc_rx_eth_valid_bytes_eth2_inst
 
 
 
-cdc_count_11bit_toggle cdc_rx_eth_valid_bytes_eth3_inst
+cdc_count_12bit_toggle cdc_rx_eth_valid_bytes_eth3_inst
 (
     .src_clk    (rx_clk_eth3),
     .dst_clk    (clk),
@@ -678,7 +738,7 @@ cdc_count_11bit_toggle cdc_rx_eth_valid_bytes_eth3_inst
 );
 
 
-cdc_count_11bit_toggle cdc_rx_eth_valid_bytes_eth4_inst
+cdc_count_12bit_toggle cdc_rx_eth_valid_bytes_eth4_inst
 (
     .src_clk    (rx_clk_eth4),
     .dst_clk    (clk),
@@ -690,7 +750,7 @@ cdc_count_11bit_toggle cdc_rx_eth_valid_bytes_eth4_inst
 );
 
 
-cdc_count_11bit_toggle cdc_rx_corrupt_byte_count_uart1_inst
+cdc_count_12bit_toggle cdc_rx_corrupt_byte_count_uart1_inst
 (
     .src_clk    (clk_uart),
     .dst_clk    (clk),
@@ -702,7 +762,7 @@ cdc_count_11bit_toggle cdc_rx_corrupt_byte_count_uart1_inst
 );
 
 
-cdc_count_11bit_toggle cdc_rx_corrupt_byte_count_uart2_inst
+cdc_count_12bit_toggle cdc_rx_corrupt_byte_count_uart2_inst
 (
     .src_clk    (clk_uart),
     .dst_clk    (clk),
@@ -714,7 +774,7 @@ cdc_count_11bit_toggle cdc_rx_corrupt_byte_count_uart2_inst
 );
 
 
-cdc_count_11bit_toggle cdc_rx_corrupt_byte_count_uart3_inst
+cdc_count_12bit_toggle cdc_rx_corrupt_byte_count_uart3_inst
 (
     .src_clk    (clk_uart),
     .dst_clk    (clk),
@@ -727,7 +787,7 @@ cdc_count_11bit_toggle cdc_rx_corrupt_byte_count_uart3_inst
 
 
 
-cdc_count_11bit_toggle cdc_rx_eth_corrupt_frame_count_eth1_inst
+cdc_count_12bit_toggle cdc_rx_eth_corrupt_frame_count_eth1_inst
 (
     .src_clk    (rx_clk_eth1),
     .dst_clk    (clk),
@@ -739,7 +799,7 @@ cdc_count_11bit_toggle cdc_rx_eth_corrupt_frame_count_eth1_inst
 );
 
 
-cdc_count_11bit_toggle cdc_rx_eth_corrupt_frame_count_eth2_inst
+cdc_count_12bit_toggle cdc_rx_eth_corrupt_frame_count_eth2_inst
 (
     .src_clk    (rx_clk_eth2),
     .dst_clk    (clk),
@@ -751,7 +811,7 @@ cdc_count_11bit_toggle cdc_rx_eth_corrupt_frame_count_eth2_inst
 );
 
 
-cdc_count_11bit_toggle cdc_rx_eth_corrupt_frame_count_eth3_inst
+cdc_count_12bit_toggle cdc_rx_eth_corrupt_frame_count_eth3_inst
 (
     .src_clk    (rx_clk_eth3),
     .dst_clk    (clk),
@@ -763,7 +823,7 @@ cdc_count_11bit_toggle cdc_rx_eth_corrupt_frame_count_eth3_inst
 );
 
 
-cdc_count_11bit_toggle cdc_rx_eth_corrupt_frame_count_eth4_inst
+cdc_count_12bit_toggle cdc_rx_eth_corrupt_frame_count_eth4_inst
 (
     .src_clk    (rx_clk_eth4),
     .dst_clk    (clk),

@@ -14,13 +14,27 @@ module uart_IF(
 		output reg								parity_odd_even_reg,
 		output reg[12:0]						clock_delay_param,
 		
-		input [10:0]							rx_corrupt_byte_count,
+		input [11:0]							rx_corrupt_byte_count,
 		input 									rx_acq_done,
 		
-		output reg [10:0]						rx_valid_byte_count
+		output reg [11:0]						rx_valid_byte_count,
+		
+		input [11:0]							count_uart//
 );
 
-reg [10:0] rx_corrupt_byte_count_buff;
+reg [11:0] rx_corrupt_byte_count_buff;
+
+reg [11:0] count_uart_d;
+
+wire [11:0] count_uart_delta;
+wire        rx_valid_byte_done;
+wire [12:0] rx_count_after_add;
+
+assign count_uart_delta = count_uart - count_uart_d;
+
+assign rx_valid_byte_done = rx_acq_done && (rx_corrupt_byte_count_buff == rx_corrupt_byte_count);
+
+assign rx_count_after_add = {1'b0, rx_valid_byte_count} + (rx_valid_byte_done ? 13'd1 : 13'd0);
 
 always @ (posedge clk or negedge rst_n)
 begin
@@ -65,28 +79,25 @@ begin
 	begin
 		rx_valid_byte_count <= 0;
 		rx_corrupt_byte_count_buff <= 0;
+		count_uart_d <= 0;
 	end
 	else
 	begin
+		count_uart_d <= count_uart;
 		if(rx_acq_done)
 		begin
 			rx_corrupt_byte_count_buff <= rx_corrupt_byte_count;
-			if(rx_corrupt_byte_count_buff == rx_corrupt_byte_count)
-			begin
-				rx_valid_byte_count <= rx_valid_byte_count + 1;
-			end
-			else
-			begin
-				rx_valid_byte_count <= rx_valid_byte_count;
-			end
+		end
+		
+		if(rx_count_after_add > {1'b0, count_uart_delta})
+		begin
+			rx_valid_byte_count <= rx_count_after_add - {1'b0, count_uart_delta};
 		end
 		else
 		begin
-			rx_valid_byte_count <= rx_valid_byte_count;
+			rx_valid_byte_count <= 12'd0;
 		end
 	end
 end
-
-
 
 endmodule

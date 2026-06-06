@@ -22,11 +22,13 @@ module kernel_config(
 		// =========================================================
 		// Global configuration done pulse
 		// =========================================================
-		output reg 						  config_done_uart,
-		output reg 						  config_done_eth1,
-		output reg 						  config_done_eth2,
-		output reg 						  config_done_eth3,
-		output reg 						  config_done_eth4,
+		output wire						  config_done_uart1,
+		output wire						  config_done_uart2,
+		output wire						  config_done_uart3,
+		output wire						  config_done_eth1,
+		output wire						  config_done_eth2,
+		output wire						  config_done_eth3,
+		output wire						  config_done_eth4,
 		output reg 						  config_done_pulse,
 		// =========================================================
 		// UART1 configuration outputs
@@ -116,7 +118,6 @@ reg       	config_read_done;
 reg [1:0] 	state;
 localparam 	IDLE = 2'd0;
 localparam 	CONFIG_READ_STATE = 2'd1;
-localparam 	CONFIG_DONE_STATE = 2'd2;
 
 reg [2:0] addr_count [0:40];
 
@@ -133,8 +134,6 @@ reg [15:0] source_port_eth      [0:4];
 reg [15:0] dest_port_eth        [0:4];
 reg [10:0] tx_payload_length_eth[0:4];
 
-reg        config_done_latched;
-
 wire [1:0] uart_index;
 wire [2:0] eth_index;
 wire [2:0] eth_field;
@@ -144,11 +143,21 @@ assign eth_index  = (bkp_address - 6'd3) / 7;
 assign eth_field  = (bkp_address - 6'd3) % 7;
 
 wire cfg_wr_hit;
+wire cfg_done_ctrl_hit;
+reg  cfg_done_ctrl_hit_d;
+wire cfg_done_ctrl_hit_pulse;
+
+assign cfg_done_ctrl_hit_pulse = cfg_done_ctrl_hit & ~cfg_done_ctrl_hit_d;
 
 assign cfg_wr_hit = bkp_config_wr_pulse && 
-					(bkp_card_id == fpga_card_id) 
-					&& bkp_data_dir && 
+					(bkp_card_id == fpga_card_id) && 
+					bkp_data_dir && 
 					(bkp_address <= 6'd40);
+
+assign cfg_done_ctrl_hit = bkp_config_wr_pulse &&
+						   (bkp_card_id == fpga_card_id) &&
+						   bkp_data_dir &&
+						   (bkp_address == 6'd41);
 
 assign baudrate_uart1        = baudrate_uart[0];
 assign baudrate_uart2        = baudrate_uart[1];
@@ -208,19 +217,14 @@ assign tx_payload_length_eth3    = tx_payload_length_eth[2];
 assign tx_payload_length_eth4    = tx_payload_length_eth[3];
 assign tx_payload_length_eth_nrz = tx_payload_length_eth[4];
 
-reg all_config_received;
-integer a;
+reg config_done_uart1_src_pulse;
+reg config_done_uart2_src_pulse;
+reg config_done_uart3_src_pulse;
 
-always @(*)
-begin
-    all_config_received = 1'b1;
-
-    for (a = 0; a < 41; a = a + 1)
-    begin
-        if (addr_count[a] < required_writes(a[5:0]))
-            all_config_received = 1'b0;
-    end
-end
+reg config_done_eth1_src_pulse;
+reg config_done_eth2_src_pulse;
+reg config_done_eth3_src_pulse;
+reg config_done_eth4_src_pulse;
 
 integer i;
 
@@ -228,14 +232,21 @@ always @(posedge clk or negedge rst_n)
 begin
     if (!rst_n)
     begin
-        state                 <= IDLE;
-        config_done_pulse     <= 1'b0;
-        config_done_latched   <= 1'b0;
-        config_read_done      <= 1'b0;
-        tx_zero_endian_eth_nrz <= 1'b0;
-		tx_bpw_eth_nrz			 <= 2'd0;
-		tx_sync_word1_eth_nrz	 <= 12'd0;
-		tx_sync_word2_eth_nrz	 <= 12'd0;
+        state                 		<= IDLE;
+		cfg_done_ctrl_hit_d 		<= 1'b0;
+		config_done_uart1_src_pulse <= 1'b0;
+		config_done_uart2_src_pulse <= 1'b0;
+		config_done_uart3_src_pulse <= 1'b0;
+		config_done_eth1_src_pulse  <= 1'b0;
+		config_done_eth2_src_pulse  <= 1'b0;
+		config_done_eth3_src_pulse  <= 1'b0;
+		config_done_eth4_src_pulse  <= 1'b0;
+        config_done_pulse     		<= 1'b0;
+        config_read_done      		<= 1'b0;
+        tx_zero_endian_eth_nrz 		<= 1'b0;
+		tx_bpw_eth_nrz			 	<= 2'd0;
+		tx_sync_word1_eth_nrz	 	<= 12'd0;
+		tx_sync_word2_eth_nrz	 	<= 12'd0;
         for (i = 0; i < 41; i = i + 1)
         begin
             addr_count[i] <= 3'd0;
@@ -260,255 +271,219 @@ begin
     end
     else
     begin
-        config_done_pulse <= 1'b0;
-        case (state)
-            IDLE:
-            begin
-                config_read_done <= 1'b0;
-                if (!config_done_latched && all_config_received)
-                begin
-                    state <= CONFIG_DONE_STATE;
-                end
-                else if (cfg_wr_hit && !config_done_latched)
-                begin
-                    state <= CONFIG_READ_STATE;
-                end
-                else
-                begin
-                    state <= IDLE;
-                end
-            end
-            
-			CONFIG_READ_STATE:
-            begin
-                if (!config_read_done)
-                begin
-                    config_read_done <= 1'b1;
-                    if (addr_count[bkp_address] < required_writes(bkp_address))
-                    begin
-                        addr_count[bkp_address] <= addr_count[bkp_address] + 1'b1;
-                        if (bkp_address <= 6'd2)
-                        begin
-                            baudrate_uart[uart_index]        <= {baudrate_uart[uart_index][23:0], bkp_data[7:0]};
-                            parity_en_uart[uart_index]       <= bkp_data[8];
-                            parity_odd_even_uart[uart_index] <= bkp_data[9];
-                            data_width_uart[uart_index]      <= bkp_data[10];
-                        end
-                        else if(bkp_address <= 6'd37)
-                        begin
-                            case (eth_field)
-
-                                3'd0:
-                                begin
-                                    dest_mac_eth[eth_index] <= {dest_mac_eth[eth_index][35:0], bkp_data[11:0]};
-                                end
-
-                                3'd1:
-                                begin
-                                    source_mac_eth[eth_index] <= {source_mac_eth[eth_index][35:0], bkp_data[11:0]};
-                                end
-
-                                3'd2:
-                                begin
-                                    source_ip_eth[eth_index] <= {source_ip_eth[eth_index][23:0], bkp_data[7:0]};
-                                end
-
-                                3'd3:
-                                begin
-                                    dest_ip_eth[eth_index] <= {dest_ip_eth[eth_index][23:0], bkp_data[7:0]};
-                                end
-
-                                3'd4:
-                                begin
-                                    source_port_eth[eth_index] <= {source_port_eth[eth_index][7:0], bkp_data[7:0]};
-                                end
-
-                                3'd5:
-                                begin
-                                    dest_port_eth[eth_index] <= {dest_port_eth[eth_index][7:0], bkp_data[7:0]};
-                                end
-
-                                3'd6:
-                                begin
-                                    tx_payload_length_eth[eth_index] <= bkp_data[10:0];
-
-                                    if (eth_index == 3'd4)
-                                    begin
-                                        tx_zero_endian_eth_nrz <= bkp_data[11];
-                                    end
-                                end
-
-                                default:
-                                begin
-                                    // no operation
-                                end
-
-                            endcase
-                        end
-						else
-						begin
-							case(bkp_address)
-								6'd38:
-								begin
-									tx_bpw_eth_nrz <= bkp_data[1:0];
-								end
-								
-								6'd39:
-								begin
-									tx_sync_word1_eth_nrz <= bkp_data[11:0];
-								end
-								
-								6'd40:
-								begin
-									tx_sync_word2_eth_nrz <= bkp_data[11:0];
-								end
-								
-								default:
-								begin
-									// do nothing
-								end
-								
-							endcase
-						end
-                    end
-                end
-                if (cfg_wr_hit)
-                begin
-                    state <= CONFIG_READ_STATE;
-                end
-                else
-                begin
-                    config_read_done <= 1'b0;
-                    state <= IDLE;
-                end
-            end
-            
-			CONFIG_DONE_STATE:
-            begin
-                config_done_pulse   <= 1'b1;
-                config_done_latched <= 1'b1;
-                state               <= IDLE;
-            end
-            
-			default:
-            begin
-                state            <= IDLE;
-                config_read_done <= 1'b0;
-            end
-        endcase
-    end
-end
-
-
-
-// ============================================================
-// config_done_pulse CDC
-// Source domain : clk       = 64 MHz kernel clock
-// UART domain   : uart_clk  = 44.2368 MHz
-// ETH domain    : eth_clk   = 125 MHz
-// ============================================================
-
-reg config_done_toggle_kernel;
-
-(* ASYNC_REG = "TRUE" *) reg [2:0] config_done_uart_sync;
-(* ASYNC_REG = "TRUE" *) reg [2:0] config_done_eth1_sync;
-(* ASYNC_REG = "TRUE" *) reg [2:0] config_done_eth2_sync;
-(* ASYNC_REG = "TRUE" *) reg [2:0] config_done_eth3_sync;
-(* ASYNC_REG = "TRUE" *) reg [2:0] config_done_eth4_sync;
-
-// ============================================================
-// Kernel clock domain: convert config_done_pulse into toggle
-// ============================================================
-always @(posedge clk or negedge rst_n)
-begin
-    if (!rst_n)
-    begin
-        config_done_toggle_kernel <= 1'b0;
-    end
-    else
-    begin
-        if (config_done_pulse)
+        config_done_uart1_src_pulse <= 1'b0;
+		config_done_uart2_src_pulse <= 1'b0;
+		config_done_uart3_src_pulse <= 1'b0;
+		config_done_eth1_src_pulse  <= 1'b0;
+		config_done_eth2_src_pulse  <= 1'b0;
+		config_done_eth3_src_pulse  <= 1'b0;
+		config_done_eth4_src_pulse  <= 1'b0;
+        config_done_pulse     		<= 1'b0;
+		cfg_done_ctrl_hit_d 		<= cfg_done_ctrl_hit;
+		if(cfg_done_ctrl_hit_pulse)
         begin
-            config_done_toggle_kernel <= ~config_done_toggle_kernel;
+            config_done_uart1_src_pulse <= bkp_data[0];
+            config_done_uart2_src_pulse <= bkp_data[1];
+            config_done_uart3_src_pulse <= bkp_data[2];
+            config_done_eth1_src_pulse  <= bkp_data[3];
+            config_done_eth2_src_pulse  <= bkp_data[4];
+            config_done_eth3_src_pulse  <= bkp_data[5];
+            config_done_eth4_src_pulse  <= bkp_data[6];
+            config_done_pulse           <= bkp_data[7];
+			state 						<= IDLE;
+			config_read_done 			<= 1'b0;
         end
+		else
+		begin
+			case (state)
+				IDLE:
+				begin
+					if(cfg_wr_hit)
+					begin
+						state <= CONFIG_READ_STATE;
+					end
+					else
+					begin
+						state <= IDLE;
+					end
+				end
+				
+				CONFIG_READ_STATE:
+				begin
+					if (!config_read_done)
+					begin
+						config_read_done <= 1'b1;
+						if (addr_count[bkp_address] < required_writes(bkp_address))
+						begin
+							addr_count[bkp_address] <= addr_count[bkp_address] + 1'b1;
+							if (bkp_address <= 6'd2)
+							begin
+								baudrate_uart[uart_index]        <= {baudrate_uart[uart_index][23:0], bkp_data[7:0]};
+								parity_en_uart[uart_index]       <= bkp_data[8];
+								parity_odd_even_uart[uart_index] <= bkp_data[9];
+								data_width_uart[uart_index]      <= bkp_data[10];
+							end
+							else if(bkp_address <= 6'd37)
+							begin
+								case (eth_field)
+
+									3'd0:
+									begin
+										dest_mac_eth[eth_index] <= {dest_mac_eth[eth_index][35:0], bkp_data[11:0]};
+									end
+
+									3'd1:
+									begin
+										source_mac_eth[eth_index] <= {source_mac_eth[eth_index][35:0], bkp_data[11:0]};
+									end
+
+									3'd2:
+									begin
+										source_ip_eth[eth_index] <= {source_ip_eth[eth_index][23:0], bkp_data[7:0]};
+									end
+
+									3'd3:
+									begin
+										dest_ip_eth[eth_index] <= {dest_ip_eth[eth_index][23:0], bkp_data[7:0]};
+									end
+
+									3'd4:
+									begin
+										source_port_eth[eth_index] <= {source_port_eth[eth_index][7:0], bkp_data[7:0]};
+									end
+
+									3'd5:
+									begin
+										dest_port_eth[eth_index] <= {dest_port_eth[eth_index][7:0], bkp_data[7:0]};
+									end
+
+									3'd6:
+									begin
+										tx_payload_length_eth[eth_index] <= bkp_data[10:0];
+
+										if (eth_index == 3'd4)
+										begin
+											tx_zero_endian_eth_nrz <= bkp_data[11];
+										end
+									end
+
+									default:
+									begin
+										// no operation
+									end
+
+								endcase
+							end
+							else
+							begin
+								case(bkp_address)
+									6'd38:
+									begin
+										tx_bpw_eth_nrz <= bkp_data[1:0];
+									end
+									
+									6'd39:
+									begin
+										tx_sync_word1_eth_nrz <= bkp_data[11:0];
+									end
+									
+									6'd40:
+									begin
+										tx_sync_word2_eth_nrz <= bkp_data[11:0];
+									end
+									
+									default:
+									begin
+										// do nothing
+									end
+									
+								endcase
+							end
+						end
+					end
+					if (cfg_wr_hit)
+					begin
+						state <= CONFIG_READ_STATE;
+					end
+					else
+					begin
+						config_read_done <= 1'b0;
+						state <= IDLE;
+					end
+				end
+				
+				default:
+				begin
+					state            <= IDLE;
+					config_read_done <= 1'b0;
+				end
+			endcase
+		end
     end
 end
 
 // ============================================================
-// UART clock domain: synchronize toggle and generate pulse
+// Manual config-done CDC using reusable pulse-toggle synchronizers
+// Source domain : clk      = 64 MHz kernel clock
+// UART domain   : clk_uart = 55.296 MHz
+// ETH domains   : clk_eth* = 125 MHz
 // ============================================================
-always @(posedge clk_uart or negedge rst_n)
-begin
-    if (!rst_n)
-    begin
-        config_done_uart_sync <= 3'b000;
-        config_done_uart      <= 1'b0;
-    end
-    else
-    begin
-        config_done_uart_sync <= {config_done_uart_sync[1:0], config_done_toggle_kernel};
-        config_done_uart      <= config_done_uart_sync[2] ^ config_done_uart_sync[1];
-    end
-end
 
-// ============================================================
-// ETH clock domain: synchronize toggle and generate pulse
-// ============================================================
-always @(posedge clk_eth1 or negedge rst_n)
-begin
-    if (!rst_n)
-    begin
-        config_done_eth1_sync <= 3'b000;
-        config_done_eth1      <= 1'b0;
-    end
-    else
-    begin
-        config_done_eth1_sync <= {config_done_eth1_sync[1:0], config_done_toggle_kernel};
-        config_done_eth1      <= config_done_eth1_sync[2] ^ config_done_eth1_sync[1];
-    end
-end
+cdc_pulse_toggle_sync u_cdc_config_done_uart1 (
+    .src_clk   (clk),
+    .dst_clk   (clk_uart),
+    .rst_n     (rst_n),
+    .src_pulse (config_done_uart1_src_pulse),
+    .dst_pulse (config_done_uart1)
+);
 
-always @(posedge clk_eth2 or negedge rst_n)
-begin
-    if (!rst_n)
-    begin
-        config_done_eth2_sync <= 3'b000;
-        config_done_eth2      <= 1'b0;
-    end
-    else
-    begin
-        config_done_eth2_sync <= {config_done_eth2_sync[1:0], config_done_toggle_kernel};
-        config_done_eth2      <= config_done_eth2_sync[2] ^ config_done_eth2_sync[1];
-    end
-end
+cdc_pulse_toggle_sync u_cdc_config_done_uart2 (
+    .src_clk   (clk),
+    .dst_clk   (clk_uart),
+    .rst_n     (rst_n),
+    .src_pulse (config_done_uart2_src_pulse),
+    .dst_pulse (config_done_uart2)
+);
 
-always @(posedge clk_eth3 or negedge rst_n)
-begin
-    if (!rst_n)
-    begin
-        config_done_eth3_sync <= 3'b000;
-        config_done_eth3      <= 1'b0;
-    end
-    else
-    begin
-        config_done_eth3_sync <= {config_done_eth3_sync[1:0], config_done_toggle_kernel};
-        config_done_eth3      <= config_done_eth3_sync[2] ^ config_done_eth3_sync[1];
-    end
-end
+cdc_pulse_toggle_sync u_cdc_config_done_uart3 (
+    .src_clk   (clk),
+    .dst_clk   (clk_uart),
+    .rst_n     (rst_n),
+    .src_pulse (config_done_uart3_src_pulse),
+    .dst_pulse (config_done_uart3)
+);
 
-always @(posedge clk_eth4 or negedge rst_n)
-begin
-    if (!rst_n)
-    begin
-        config_done_eth4_sync <= 3'b000;
-        config_done_eth4      <= 1'b0;
-    end
-    else
-    begin
-        config_done_eth4_sync <= {config_done_eth4_sync[1:0], config_done_toggle_kernel};
-        config_done_eth4      <= config_done_eth4_sync[2] ^ config_done_eth4_sync[1];
-    end
-end
+cdc_pulse_toggle_sync u_cdc_config_done_eth1 (
+    .src_clk   (clk),
+    .dst_clk   (clk_eth1),
+    .rst_n     (rst_n),
+    .src_pulse (config_done_eth1_src_pulse),
+    .dst_pulse (config_done_eth1)
+);
+
+cdc_pulse_toggle_sync u_cdc_config_done_eth2 (
+    .src_clk   (clk),
+    .dst_clk   (clk_eth2),
+    .rst_n     (rst_n),
+    .src_pulse (config_done_eth2_src_pulse),
+    .dst_pulse (config_done_eth2)
+);
+
+cdc_pulse_toggle_sync u_cdc_config_done_eth3 (
+    .src_clk   (clk),
+    .dst_clk   (clk_eth3),
+    .rst_n     (rst_n),
+    .src_pulse (config_done_eth3_src_pulse),
+    .dst_pulse (config_done_eth3)
+);
+
+cdc_pulse_toggle_sync u_cdc_config_done_eth4 (
+    .src_clk   (clk),
+    .dst_clk   (clk_eth4),
+    .rst_n     (rst_n),
+    .src_pulse (config_done_eth4_src_pulse),
+    .dst_pulse (config_done_eth4)
+);
 
 
 

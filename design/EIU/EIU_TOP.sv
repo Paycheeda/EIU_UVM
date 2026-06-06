@@ -1,6 +1,49 @@
-module EIU_TOP(
+module EIU_TOP#(
+                
+            parameter integer PARAM_MAX_DATA_WIDTH_ETH      = 8,
+            parameter         PARAM_FIFO_SIZE_ETH_TX        = "18Kb",
+            parameter         PARAM_FIFO_SIZE_ETH_RX        = "36Kb",
+
+            parameter integer PARAM_MAX_DATA_WIDTH_UART1    = 9,
+            parameter         PARAM_FIFO_SIZE_UART1_TX      = "18Kb",
+            parameter         PARAM_FIFO_SIZE_UART1_RX      = "18Kb",
+
+            parameter integer PARAM_MAX_DATA_WIDTH_UART2    = 9,
+            parameter         PARAM_FIFO_SIZE_UART2_TX      = "18Kb",
+            parameter         PARAM_FIFO_SIZE_UART2_RX      = "18Kb",
+
+            parameter integer PARAM_MAX_DATA_WIDTH_UART3    = 9,
+            parameter         PARAM_FIFO_SIZE_UART3_TX      = "18Kb",
+            parameter         PARAM_FIFO_SIZE_UART3_RX      = "18Kb",
+
+            parameter integer RXD0_IDELAY_VALUE_ETH1        = 26,
+            parameter integer RXD1_IDELAY_VALUE_ETH1        = 26,
+            parameter integer RXD2_IDELAY_VALUE_ETH1        = 26,
+            parameter integer RXD3_IDELAY_VALUE_ETH1        = 26,
+            parameter integer RXCTL_IDELAY_VALUE_ETH1       = 26,
+
+            parameter integer RXD0_IDELAY_VALUE_ETH2        = 26,
+            parameter integer RXD1_IDELAY_VALUE_ETH2        = 26,
+            parameter integer RXD2_IDELAY_VALUE_ETH2        = 26,
+            parameter integer RXD3_IDELAY_VALUE_ETH2        = 26,
+            parameter integer RXCTL_IDELAY_VALUE_ETH2       = 26,
+
+            parameter integer RXD0_IDELAY_VALUE_ETH3        = 26,
+            parameter integer RXD1_IDELAY_VALUE_ETH3        = 26,
+            parameter integer RXD2_IDELAY_VALUE_ETH3        = 26,
+            parameter integer RXD3_IDELAY_VALUE_ETH3        = 26,
+            parameter integer RXCTL_IDELAY_VALUE_ETH3       = 26,
+
+            parameter integer RXD0_IDELAY_VALUE_ETH4        = 28,
+            parameter integer RXD1_IDELAY_VALUE_ETH4        = 28,
+            parameter integer RXD2_IDELAY_VALUE_ETH4        = 28,
+            parameter integer RXD3_IDELAY_VALUE_ETH4        = 28,
+            parameter integer RXCTL_IDELAY_VALUE_ETH4       = 28
+
+)(
 
         input               clk_64MHz,
+        input               clk_25MHz,//
 
         input               clk_125MHz_eth1,
         input               clk_125MHz_eth2,
@@ -72,22 +115,32 @@ module EIU_TOP(
         input               bkp_data_dir,
         input  [5:0]        bkp_address,
         inout  [11:0]       bkp_data_bus,
-        input               word_start_strobe_pulse
+        input               word_start_strobe_pulse,
+        
+        // General purpose LEDs
+        output [7:0]        LED,//
+        
+        // MDC ETH1
+        output              mdc_eth1,//
+        inout               mdio_eth1,//
+        
+        // MDC ETH2
+        output              mdc_eth2,//
+        inout               mdio_eth2,//
+        
+        // MDC ETH3
+        output              mdc_eth3,//
+        inout               mdio_eth3,//
+        
+        // MDC ETH4
+        output              mdc_eth4,//
+        inout               mdio_eth4,//
+        
+        // MDC ETH_NRZ
+        output              mdc_eth_nrz,//
+        inout               mdio_eth_nrz//
 
 );
-
-parameter integer PARAM_MAX_DATA_WIDTH_ETH = 8;
-parameter         PARAM_FIFO_SIZE_ETH      = "18Kb";
-
-parameter integer PARAM_MAX_DATA_WIDTH_UART1 = 9;
-parameter         PARAM_FIFO_SIZE_UART1      = "18Kb";
-
-parameter integer PARAM_MAX_DATA_WIDTH_UART2 = 9;
-parameter         PARAM_FIFO_SIZE_UART2      = "18Kb";
-
-parameter integer PARAM_MAX_DATA_WIDTH_UART3 = 9;
-parameter         PARAM_FIFO_SIZE_UART3      = "18Kb";
-
 
 // =====================================================
 // ETH RX clock buffers
@@ -131,6 +184,8 @@ wire clk_125MHz_eth4_buf;
 wire clk_125MHz_eth_nrz_buf;
 wire clk_20MHz_buf;
 wire clk_uart_55_296MHz_buf;
+wire clk_25MHz_buf;
+wire clk_64MHz_buf;
 
 BUFG u_bufg_clk_125MHz_eth1 (
     .I(clk_125MHz_eth1),
@@ -167,6 +222,15 @@ BUFG u_bufg_clk_uart_55_296MHz (
     .O(clk_uart_55_296MHz_buf)
 );
 
+BUFG u_bufg_clk_25MHz (
+    .I(clk_25MHz),
+    .O(clk_25MHz_buf)
+);
+
+BUFG u_bufg_clk_64MHz (
+    .I(clk_64MHz),
+    .O(clk_64MHz_buf)
+);
 
 // =====================================================
 // SHARED 200 MHz IDELAY REFERENCE CLOCK
@@ -188,7 +252,7 @@ clk_wiz_125_to_200 u_clk_wiz_125_to_200 (
 // UART1 CONFIG WIRES FROM KERNEL
 // =====================================================
 
-wire        config_done_uart;
+wire        config_done_uart1;
 
 wire [31:0] baudrate_uart1;
 wire        parity_en_uart1;
@@ -198,6 +262,7 @@ wire [3:0]  data_width_uart1;
 // =====================================================
 // UART2 CONFIG WIRES FROM KERNEL
 // =====================================================
+wire        config_done_uart2;
 
 wire [31:0] baudrate_uart2;
 wire        parity_en_uart2;
@@ -207,6 +272,7 @@ wire [3:0]  data_width_uart2;
 // =====================================================
 // UART3 CONFIG WIRES FROM KERNEL
 // =====================================================
+wire        config_done_uart3;
 
 wire [31:0] baudrate_uart3;
 wire        parity_en_uart3;
@@ -218,93 +284,95 @@ wire [3:0]  data_width_uart3;
 // UART1 TX WIRES
 // =====================================================
 
-wire        tx_fifo_wr_en_uart1;
-wire [8:0]  tx_fifo_data_in_uart1;
-wire        tx_fifo_rd_en_uart1;
-wire [8:0]  tx_fifo_data_out_uart1;
-wire        tx_fifo_full_uart1;
-wire        tx_fifo_empty_uart1;
+wire                                        tx_fifo_wr_en_uart1;
+wire [PARAM_MAX_DATA_WIDTH_UART1 - 1:0]     tx_fifo_data_in_uart1;
+wire                                        tx_fifo_rd_en_uart1;
+wire [PARAM_MAX_DATA_WIDTH_UART1 - 1:0]     tx_fifo_data_out_uart1;
+wire                                        tx_fifo_full_uart1;
+wire                                        tx_fifo_empty_uart1;
 
-wire        tx_acq_start_uart1;
-wire        uart_tx_busy_uart1;
-wire        tx_acq_done_uart1;
+wire                                        tx_acq_start_uart1;
+wire                                        uart_tx_busy_uart1;
+wire                                        tx_acq_done_uart1;
 
 // =====================================================
 // UART2 TX WIRES
 // =====================================================
 
-wire        tx_fifo_wr_en_uart2;
-wire [8:0]  tx_fifo_data_in_uart2;
-wire        tx_fifo_rd_en_uart2;
-wire [8:0]  tx_fifo_data_out_uart2;
-wire        tx_fifo_full_uart2;
-wire        tx_fifo_empty_uart2;
+wire                                        tx_fifo_wr_en_uart2;
+wire [PARAM_MAX_DATA_WIDTH_UART2 - 1:0]     tx_fifo_data_in_uart2;
+wire                                        tx_fifo_rd_en_uart2;
+wire [PARAM_MAX_DATA_WIDTH_UART2 - 1:0]     tx_fifo_data_out_uart2;
+wire                                        tx_fifo_full_uart2;
+wire                                        tx_fifo_empty_uart2;
 
-wire        tx_acq_start_uart2;
-wire        uart_tx_busy_uart2;
-wire        tx_acq_done_uart2;
+wire                                        tx_acq_start_uart2;
+wire                                        uart_tx_busy_uart2;
+wire                                        tx_acq_done_uart2;
 
 // =====================================================
 // UART3 TX WIRES
 // =====================================================
 
-wire        tx_fifo_wr_en_uart3;
-wire [8:0]  tx_fifo_data_in_uart3;
-wire        tx_fifo_rd_en_uart3;
-wire [8:0]  tx_fifo_data_out_uart3;
-wire        tx_fifo_full_uart3;
-wire        tx_fifo_empty_uart3;
+wire                                        tx_fifo_wr_en_uart3;
+wire [PARAM_MAX_DATA_WIDTH_UART3 - 1:0]     tx_fifo_data_in_uart3;
+wire                                        tx_fifo_rd_en_uart3;
+wire [PARAM_MAX_DATA_WIDTH_UART3 - 1:0]     tx_fifo_data_out_uart3;
+wire                                        tx_fifo_full_uart3;
+wire                                        tx_fifo_empty_uart3;
 
-wire        tx_acq_start_uart3;
-wire        uart_tx_busy_uart3;
-wire        tx_acq_done_uart3;
+wire                                        tx_acq_start_uart3;
+wire                                        uart_tx_busy_uart3;
+wire                                        tx_acq_done_uart3;
 
 
 // =====================================================
 // UART1 RX WIRES
 // =====================================================
 
-wire        rx_fifo_wr_en_uart1;
-wire [8:0]  rx_fifo_data_in_uart1;
-wire        rx_fifo_rd_en_uart1;
-wire [8:0]  rx_fifo_data_out_uart1;
-wire        rx_fifo_full_uart1;
-wire        rx_fifo_empty_uart1;
+wire                                        rx_fifo_wr_en_uart1;
+wire [PARAM_MAX_DATA_WIDTH_UART1 - 1:0]     rx_fifo_data_in_uart1;
+wire                                        rx_fifo_rd_en_uart1;
+wire [PARAM_MAX_DATA_WIDTH_UART1 - 1:0]     rx_fifo_data_out_uart1;
+wire                                        rx_fifo_full_uart1;
+wire                                        rx_fifo_empty_uart1;
 
-wire        uart_rx_busy_uart1;
-wire [10:0] uart1_rx_valid_count;
-wire [10:0] uart1_rx_corrupt_count;
+wire                                        uart_rx_busy_uart1;
+wire [11:0]                                 uart1_rx_valid_count;
+wire [11:0]                                 uart1_rx_corrupt_count;
+wire [11:0]                                 count_uart1;
 
 // =====================================================
 // UART2 RX WIRES
 // =====================================================
 
-wire        rx_fifo_wr_en_uart2;
-wire [8:0]  rx_fifo_data_in_uart2;
-wire        rx_fifo_rd_en_uart2;
-wire [8:0]  rx_fifo_data_out_uart2;
-wire        rx_fifo_full_uart2;
-wire        rx_fifo_empty_uart2;
+wire                                        rx_fifo_wr_en_uart2;
+wire [PARAM_MAX_DATA_WIDTH_UART2 - 1:0]     rx_fifo_data_in_uart2;
+wire                                        rx_fifo_rd_en_uart2;
+wire [PARAM_MAX_DATA_WIDTH_UART2 - 1:0]     rx_fifo_data_out_uart2;
+wire                                        rx_fifo_full_uart2;
+wire                                        rx_fifo_empty_uart2;
 
-wire        uart_rx_busy_uart2;
-wire [10:0] uart2_rx_valid_count;
-wire [10:0] uart2_rx_corrupt_count;
+wire                                        uart_rx_busy_uart2;
+wire [11:0]                                 uart2_rx_valid_count;
+wire [11:0]                                 uart2_rx_corrupt_count;
+wire [11:0]                                 count_uart2;
 
 // =====================================================
 // UART3 RX WIRES
 // =====================================================
 
-wire        rx_fifo_wr_en_uart3;
-wire [8:0]  rx_fifo_data_in_uart3;
-wire        rx_fifo_rd_en_uart3;
-wire [8:0]  rx_fifo_data_out_uart3;
-wire        rx_fifo_full_uart3;
-wire        rx_fifo_empty_uart3;
+wire                                        rx_fifo_wr_en_uart3;
+wire [PARAM_MAX_DATA_WIDTH_UART3 - 1:0]     rx_fifo_data_in_uart3;
+wire                                        rx_fifo_rd_en_uart3;
+wire [PARAM_MAX_DATA_WIDTH_UART3 - 1:0]     rx_fifo_data_out_uart3;
+wire                                        rx_fifo_full_uart3;
+wire                                        rx_fifo_empty_uart3;
 
-wire        uart_rx_busy_uart3;
-wire [10:0] uart3_rx_valid_count;
-wire [10:0] uart3_rx_corrupt_count;
-
+wire                                        uart_rx_busy_uart3;
+wire [11:0]                                 uart3_rx_valid_count;
+wire [11:0]                                 uart3_rx_corrupt_count;
+wire [11:0]                                 count_uart3;
 
 // =====================================================
 // ETH1 RX WIRES
@@ -318,10 +386,10 @@ wire                                rx_fifo_full_eth1;
 wire                                rx_fifo_empty_eth1;
 wire                                rx_fifo_rd_en_eth1;
 
-wire [10:0]                         rx_eth_corrupt_frame_count_eth1;
+wire [11:0]                         rx_eth_corrupt_frame_count_eth1;
 wire                                eth_rx_data_valid_eth1;
-wire [10:0]                         rx_eth_valid_bytes_eth1;
-
+wire [11:0]                         rx_eth_valid_bytes_eth1;
+wire [11:0]                         count_eth1;
 
 // =====================================================
 // ETH1 TX WIRES
@@ -364,10 +432,10 @@ wire                                rx_fifo_full_eth2;
 wire                                rx_fifo_empty_eth2;
 wire                                rx_fifo_rd_en_eth2;
 
-wire [10:0]                         rx_eth_corrupt_frame_count_eth2;
+wire [11:0]                         rx_eth_corrupt_frame_count_eth2;
 wire                                eth_rx_data_valid_eth2;
-wire [10:0]                         rx_eth_valid_bytes_eth2;
-
+wire [11:0]                         rx_eth_valid_bytes_eth2;
+wire [11:0]                         count_eth2;
 
 // =====================================================
 // ETH2 TX WIRES
@@ -410,10 +478,10 @@ wire                                rx_fifo_full_eth3;
 wire                                rx_fifo_empty_eth3;
 wire                                rx_fifo_rd_en_eth3;
 
-wire [10:0]                         rx_eth_corrupt_frame_count_eth3;
+wire [11:0]                         rx_eth_corrupt_frame_count_eth3;
 wire                                eth_rx_data_valid_eth3;
-wire [10:0]                         rx_eth_valid_bytes_eth3;
-
+wire [11:0]                         rx_eth_valid_bytes_eth3;
+wire [11:0]                         count_eth3;
 
 // =====================================================
 // ETH3 TX WIRES
@@ -456,10 +524,10 @@ wire                                rx_fifo_full_eth4;
 wire                                rx_fifo_empty_eth4;
 wire                                rx_fifo_rd_en_eth4;
 
-wire [10:0]                         rx_eth_corrupt_frame_count_eth4;
+wire [11:0]                         rx_eth_corrupt_frame_count_eth4;
 wire                                eth_rx_data_valid_eth4;
-wire [10:0]                         rx_eth_valid_bytes_eth4;
-
+wire [11:0]                         rx_eth_valid_bytes_eth4;
+wire [11:0]                         count_eth4;
 
 // =====================================================
 // ETH4 TX WIRES
@@ -499,9 +567,10 @@ wire                                rx_fifo_wr_en_eth_nrz;
 wire [PARAM_MAX_DATA_WIDTH_ETH-1:0] rx_fifo_data_in_eth_nrz;
 wire                                rx_fifo_rst_n_eth_nrz;
 
-wire [10:0]                         rx_eth_corrupt_frame_count_eth_nrz;
+wire [11:0]                         rx_eth_corrupt_frame_count_eth_nrz;
 wire                                eth_rx_data_valid_eth_nrz;
-wire [10:0]                         rx_eth_valid_bytes_eth_nrz;
+wire [11:0]                         rx_eth_valid_bytes_eth_nrz;
+wire [11:0]                         count_eth_nrz;
 
 
 // =====================================================
@@ -533,6 +602,74 @@ wire [15:0]                         source_port_eth_nrz;
 wire [15:0]                         dest_port_eth_nrz;
 wire [10:0]                         tx_payload_length_eth_nrz;
 
+// ============================================================
+// MDIO configuration status wires
+// ============================================================
+
+wire mdio_config_busy_any;
+
+wire mdio_all_config_done;
+wire mdio_all_config_done_pulse;
+wire mdio_all_config_success;
+wire mdio_all_config_failed;
+wire mdio_any_config_error;
+
+wire [4:0] mdio_phy_config_busy;
+wire [4:0] mdio_phy_config_done;
+wire [4:0] mdio_phy_config_success;
+wire [4:0] mdio_phy_config_error;
+
+wire [7:0] mdio_status_led;
+
+assign LED = mdio_status_led[7:0];
+
+// ============================================================
+// MDC / MDIO top-level PHY configuration block
+// ============================================================
+
+mdio_top #(
+    .PHY_ADDR_ETH1      (5'd1),
+    .PHY_ADDR_ETH2      (5'd1),
+    .PHY_ADDR_ETH3      (5'd1),
+    .PHY_ADDR_ETH4      (5'd1),
+    .PHY_ADDR_ETH5      (5'd1),
+
+    .POLL_MAX_ATTEMPTS  (16'd65535)
+) u_mdio_top (
+    .clk                    (clk_25MHz_buf),
+    .rst_n                  (rst_n),
+
+    .config_busy_any        (mdio_config_busy_any),
+
+    .all_config_done        (mdio_all_config_done),
+    .all_config_done_pulse  (mdio_all_config_done_pulse),
+    .all_config_success     (mdio_all_config_success),
+    .all_config_failed      (mdio_all_config_failed),
+    .any_config_error       (mdio_any_config_error),
+
+    .phy_config_busy        (mdio_phy_config_busy),
+    .phy_config_done        (mdio_phy_config_done),
+    .phy_config_success     (mdio_phy_config_success),
+    .phy_config_error       (mdio_phy_config_error),
+
+    .mdio_status_led        (mdio_status_led),
+
+    .mdc_eth1               (mdc_eth1),
+    .mdio_eth1              (mdio_eth1),
+
+    .mdc_eth2               (mdc_eth2),
+    .mdio_eth2              (mdio_eth2),
+
+    .mdc_eth3               (mdc_eth3),
+    .mdio_eth3              (mdio_eth3),
+
+    .mdc_eth4               (mdc_eth4),
+    .mdio_eth4              (mdio_eth4),
+
+    .mdc_eth5               (mdc_eth_nrz),
+    .mdio_eth5              (mdio_eth_nrz)
+);
+
 // =====================================================
 // UART1 MODULE
 // =====================================================
@@ -547,7 +684,7 @@ uart #(
     .parity_en              (parity_en_uart1),
     .parity_odd_even        (parity_odd_even_uart1),
     .data_width             (data_width_uart1),
-    .config_done_pulse      (config_done_uart),
+    .config_done_pulse      (config_done_uart1),
 
     .rx                     (uart1_rx),
     .tx                     (uart1_tx),
@@ -564,7 +701,9 @@ uart #(
 
     .rx_corrupt_byte_count  (uart1_rx_corrupt_count),
     .uart_rx_busy           (uart_rx_busy_uart1),
-    .rx_valid_byte_count    (uart1_rx_valid_count)
+    .rx_valid_byte_count    (uart1_rx_valid_count),
+    
+    .count_uart             (count_uart1)
 );
 
 // =====================================================
@@ -581,7 +720,7 @@ uart #(
     .parity_en              (parity_en_uart2),
     .parity_odd_even        (parity_odd_even_uart2),
     .data_width             (data_width_uart2),
-    .config_done_pulse      (config_done_uart),
+    .config_done_pulse      (config_done_uart2),
 
     .rx                     (uart2_rx),
     .tx                     (uart2_tx),
@@ -598,7 +737,9 @@ uart #(
 
     .rx_corrupt_byte_count  (uart2_rx_corrupt_count),
     .uart_rx_busy           (uart_rx_busy_uart2),
-    .rx_valid_byte_count    (uart2_rx_valid_count)
+    .rx_valid_byte_count    (uart2_rx_valid_count),
+    
+    .count_uart             (count_uart2)
 );
 
 
@@ -616,7 +757,7 @@ uart #(
     .parity_en              (parity_en_uart3),
     .parity_odd_even        (parity_odd_even_uart3),
     .data_width             (data_width_uart3),
-    .config_done_pulse      (config_done_uart),
+    .config_done_pulse      (config_done_uart3),
 
     .rx                     (uart3_rx),
     .tx                     (uart3_tx),
@@ -633,7 +774,9 @@ uart #(
 
     .rx_corrupt_byte_count  (uart3_rx_corrupt_count),
     .uart_rx_busy           (uart_rx_busy_uart3),
-    .rx_valid_byte_count    (uart3_rx_valid_count)
+    .rx_valid_byte_count    (uart3_rx_valid_count),
+    
+    .count_uart             (count_uart3)
 );
 
 // =====================================================
@@ -642,7 +785,9 @@ uart #(
 
 wire rx1_clk_shifted;
 wire rx1_clk_shifted_locked;
-wire eth1_rx_ready = rx1_clk_shifted_locked & idelay_refclk_locked;
+
+wire eth1_rx_ready; 
+assign eth1_rx_ready = rx1_clk_shifted_locked & idelay_refclk_locked;
 
 wire eth1_rx_rst_n;
 
@@ -666,8 +811,9 @@ reset_synchronizer u_eth1_rx_reset_synchronizer (
 
 wire rx2_clk_shifted;
 wire rx2_clk_shifted_locked;
-wire eth2_rx_ready = rx2_clk_shifted_locked & idelay_refclk_locked;
 
+wire eth2_rx_ready; 
+assign eth2_rx_ready = rx2_clk_shifted_locked & idelay_refclk_locked;
 
 wire eth2_rx_rst_n;
 
@@ -691,8 +837,9 @@ reset_synchronizer u_eth2_rx_reset_synchronizer (
 
 wire rx3_clk_shifted;
 wire rx3_clk_shifted_locked;
-wire eth3_rx_ready = rx3_clk_shifted_locked & idelay_refclk_locked;
 
+wire eth3_rx_ready; 
+assign eth3_rx_ready = rx3_clk_shifted_locked & idelay_refclk_locked;
 
 wire eth3_rx_rst_n;
 
@@ -716,8 +863,9 @@ reset_synchronizer u_eth3_rx_reset_synchronizer (
 
 wire rx4_clk_shifted;
 wire rx4_clk_shifted_locked;
-wire eth4_rx_ready = rx4_clk_shifted_locked & idelay_refclk_locked;
 
+wire eth4_rx_ready; 
+assign eth4_rx_ready = rx4_clk_shifted_locked & idelay_refclk_locked;
 
 wire eth4_rx_rst_n;
 
@@ -741,11 +889,11 @@ reset_synchronizer u_eth4_rx_reset_synchronizer (
 
 eth #(
     .IODELAY_GROUP_NAME("ETH1_IDELAY_GROUP"),
-    .RXD0_IDELAY_VALUE  (26),
-    .RXD1_IDELAY_VALUE  (26),
-    .RXD2_IDELAY_VALUE  (26),
-    .RXD3_IDELAY_VALUE  (26),
-    .RXCTL_IDELAY_VALUE (26)
+    .RXD0_IDELAY_VALUE  (RXD0_IDELAY_VALUE_ETH1),
+    .RXD1_IDELAY_VALUE  (RXD1_IDELAY_VALUE_ETH1),
+    .RXD2_IDELAY_VALUE  (RXD2_IDELAY_VALUE_ETH1),
+    .RXD3_IDELAY_VALUE  (RXD3_IDELAY_VALUE_ETH1),
+    .RXCTL_IDELAY_VALUE (RXCTL_IDELAY_VALUE_ETH1)
 ) u_eth1 (
         .tx_clk                     (clk_125MHz_eth1_buf),
         .rx_clk                     (rx1_clk_shifted),
@@ -786,7 +934,9 @@ eth #(
         .tx_fifo_empty              (tx_fifo_empty_eth1),
         .tx_fifo_data_out           (tx_fifo_data_out_eth1),
 
-        .eth_tx_data_sent           (eth_tx_data_sent_eth1)
+        .eth_tx_data_sent           (eth_tx_data_sent_eth1),
+        
+        .count_eth                  (count_eth1)
 );
 
 // =====================================================
@@ -795,11 +945,11 @@ eth #(
 
 eth #(
     .IODELAY_GROUP_NAME("ETH2_IDELAY_GROUP"),
-    .RXD0_IDELAY_VALUE  (26),
-    .RXD1_IDELAY_VALUE  (26),
-    .RXD2_IDELAY_VALUE  (26),
-    .RXD3_IDELAY_VALUE  (26),
-    .RXCTL_IDELAY_VALUE (26)
+    .RXD0_IDELAY_VALUE  (RXD0_IDELAY_VALUE_ETH2),
+    .RXD1_IDELAY_VALUE  (RXD1_IDELAY_VALUE_ETH2),
+    .RXD2_IDELAY_VALUE  (RXD2_IDELAY_VALUE_ETH2),
+    .RXD3_IDELAY_VALUE  (RXD3_IDELAY_VALUE_ETH2),
+    .RXCTL_IDELAY_VALUE (RXCTL_IDELAY_VALUE_ETH2)
 ) u_eth2 (
         .tx_clk                     (clk_125MHz_eth2_buf),
         .rx_clk                     (rx2_clk_shifted),
@@ -840,7 +990,9 @@ eth #(
         .tx_fifo_empty              (tx_fifo_empty_eth2),
         .tx_fifo_data_out           (tx_fifo_data_out_eth2),
 
-        .eth_tx_data_sent           (eth_tx_data_sent_eth2)
+        .eth_tx_data_sent           (eth_tx_data_sent_eth2),
+        
+        .count_eth                  (count_eth2)
 );
 
 // =====================================================
@@ -849,11 +1001,11 @@ eth #(
 
 eth #(
     .IODELAY_GROUP_NAME("ETH3_IDELAY_GROUP"),
-    .RXD0_IDELAY_VALUE  (26),
-    .RXD1_IDELAY_VALUE  (26),
-    .RXD2_IDELAY_VALUE  (26),
-    .RXD3_IDELAY_VALUE  (26),
-    .RXCTL_IDELAY_VALUE (26)
+    .RXD0_IDELAY_VALUE  (RXD0_IDELAY_VALUE_ETH3),
+    .RXD1_IDELAY_VALUE  (RXD1_IDELAY_VALUE_ETH3),
+    .RXD2_IDELAY_VALUE  (RXD2_IDELAY_VALUE_ETH3),
+    .RXD3_IDELAY_VALUE  (RXD3_IDELAY_VALUE_ETH3),
+    .RXCTL_IDELAY_VALUE (RXCTL_IDELAY_VALUE_ETH3)
 ) u_eth3 (
         .tx_clk                     (clk_125MHz_eth3_buf),
         .rx_clk                     (rx3_clk_shifted),
@@ -894,7 +1046,9 @@ eth #(
         .tx_fifo_empty              (tx_fifo_empty_eth3),
         .tx_fifo_data_out           (tx_fifo_data_out_eth3),
 
-        .eth_tx_data_sent           (eth_tx_data_sent_eth3)
+        .eth_tx_data_sent           (eth_tx_data_sent_eth3),
+        
+        .count_eth                  (count_eth3)
 );
 
 // =====================================================
@@ -903,11 +1057,11 @@ eth #(
 
 eth #(
     .IODELAY_GROUP_NAME("ETH4_IDELAY_GROUP"),
-    .RXD0_IDELAY_VALUE  (28),
-    .RXD1_IDELAY_VALUE  (28),
-    .RXD2_IDELAY_VALUE  (28),
-    .RXD3_IDELAY_VALUE  (28),
-    .RXCTL_IDELAY_VALUE (28)
+    .RXD0_IDELAY_VALUE  (RXD0_IDELAY_VALUE_ETH4),
+    .RXD1_IDELAY_VALUE  (RXD1_IDELAY_VALUE_ETH4),
+    .RXD2_IDELAY_VALUE  (RXD2_IDELAY_VALUE_ETH4),
+    .RXD3_IDELAY_VALUE  (RXD3_IDELAY_VALUE_ETH4),
+    .RXCTL_IDELAY_VALUE (RXCTL_IDELAY_VALUE_ETH4)
 ) u_eth4 (
         .tx_clk                     (clk_125MHz_eth4_buf),
         .rx_clk                     (rx4_clk_shifted),
@@ -948,7 +1102,9 @@ eth #(
         .tx_fifo_empty              (tx_fifo_empty_eth4),
         .tx_fifo_data_out           (tx_fifo_data_out_eth4),
 
-        .eth_tx_data_sent           (eth_tx_data_sent_eth4)
+        .eth_tx_data_sent           (eth_tx_data_sent_eth4),
+        
+        .count_eth                  (count_eth4)
 );
 
 // =====================================================
@@ -960,7 +1116,7 @@ eth  #(
     .ENABLE_RX(0)
 )u_eth_nrz(
         .tx_clk                     (clk_125MHz_eth_nrz_buf),
-        .rx_clk                     (),
+        .rx_clk                     (clk_125MHz_eth_nrz_buf),
         .rst_n                      (rst_n),
         .eth_rx_rst_n               (rst_n),
 
@@ -998,7 +1154,9 @@ eth  #(
         .tx_fifo_empty              (tx_fifo_empty_eth_nrz),
         .tx_fifo_data_out           (tx_fifo_data_out_eth_nrz),
 
-        .eth_tx_data_sent           (eth_tx_data_sent_eth_nrz)
+        .eth_tx_data_sent           (eth_tx_data_sent_eth_nrz),
+        
+        .count_eth                  ()
 );
 
 
@@ -1008,7 +1166,7 @@ eth  #(
 
 dual_port_FIFO #(
     .PARAM_DATA_WIDTH(PARAM_MAX_DATA_WIDTH_UART1),
-    .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_UART1)
+    .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_UART1_RX)
 ) rx_fifo_uart1 (
     .rst_n      (rst_n),
 
@@ -1016,7 +1174,7 @@ dual_port_FIFO #(
     .data_in    (rx_fifo_data_in_uart1),
     .wr_en      (rx_fifo_wr_en_uart1),
 
-    .rd_clk     (clk_64MHz),
+    .rd_clk     (clk_64MHz_buf),
     .rd_en      (rx_fifo_rd_en_uart1),
     .data_out   (rx_fifo_data_out_uart1),
 
@@ -1030,7 +1188,7 @@ dual_port_FIFO #(
 
 dual_port_FIFO #(
     .PARAM_DATA_WIDTH(PARAM_MAX_DATA_WIDTH_UART2),
-    .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_UART2)
+    .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_UART2_RX)
 ) rx_fifo_uart2 (
     .rst_n      (rst_n),
 
@@ -1038,7 +1196,7 @@ dual_port_FIFO #(
     .data_in    (rx_fifo_data_in_uart2),
     .wr_en      (rx_fifo_wr_en_uart2),
 
-    .rd_clk     (clk_64MHz),
+    .rd_clk     (clk_64MHz_buf),
     .rd_en      (rx_fifo_rd_en_uart2),
     .data_out   (rx_fifo_data_out_uart2),
 
@@ -1052,7 +1210,7 @@ dual_port_FIFO #(
 
 dual_port_FIFO #(
     .PARAM_DATA_WIDTH(PARAM_MAX_DATA_WIDTH_UART3),
-    .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_UART3)
+    .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_UART3_RX)
 ) rx_fifo_uart3 (
     .rst_n      (rst_n),
 
@@ -1060,7 +1218,7 @@ dual_port_FIFO #(
     .data_in    (rx_fifo_data_in_uart3),
     .wr_en      (rx_fifo_wr_en_uart3),
 
-    .rd_clk     (clk_64MHz),
+    .rd_clk     (clk_64MHz_buf),
     .rd_en      (rx_fifo_rd_en_uart3),
     .data_out   (rx_fifo_data_out_uart3),
 
@@ -1074,13 +1232,13 @@ dual_port_FIFO #(
 
 dual_port_FIFO #(
         .PARAM_DATA_WIDTH(PARAM_MAX_DATA_WIDTH_ETH),
-        .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_ETH)
+        .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_ETH_RX)
 ) rx_fifo_eth1 (
         .rst_n      (rx_fifo_rst_n_eth1),
         .wr_clk     (rx1_clk_shifted),
         .data_in    (rx_fifo_data_in_eth1),
         .wr_en      (rx_fifo_wr_en_eth1),
-        .rd_clk     (clk_64MHz),
+        .rd_clk     (clk_64MHz_buf),
         .rd_en      (rx_fifo_rd_en_eth1),
         .data_out   (rx_fifo_data_out_eth1),
         .fifo_full  (rx_fifo_full_eth1),
@@ -1093,13 +1251,13 @@ dual_port_FIFO #(
 
 dual_port_FIFO #(
         .PARAM_DATA_WIDTH(PARAM_MAX_DATA_WIDTH_ETH),
-        .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_ETH)
+        .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_ETH_RX)
 ) rx_fifo_eth2 (
         .rst_n      (rx_fifo_rst_n_eth2),
         .wr_clk     (rx2_clk_shifted),
         .data_in    (rx_fifo_data_in_eth2),
         .wr_en      (rx_fifo_wr_en_eth2),
-        .rd_clk     (clk_64MHz),
+        .rd_clk     (clk_64MHz_buf),
         .rd_en      (rx_fifo_rd_en_eth2),
         .data_out   (rx_fifo_data_out_eth2),
         .fifo_full  (rx_fifo_full_eth2),
@@ -1112,13 +1270,13 @@ dual_port_FIFO #(
 
 dual_port_FIFO #(
         .PARAM_DATA_WIDTH(PARAM_MAX_DATA_WIDTH_ETH),
-        .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_ETH)
+        .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_ETH_RX)
 ) rx_fifo_eth3 (
         .rst_n      (rx_fifo_rst_n_eth3),
         .wr_clk     (rx3_clk_shifted),
         .data_in    (rx_fifo_data_in_eth3),
         .wr_en      (rx_fifo_wr_en_eth3),
-        .rd_clk     (clk_64MHz),
+        .rd_clk     (clk_64MHz_buf),
         .rd_en      (rx_fifo_rd_en_eth3),
         .data_out   (rx_fifo_data_out_eth3),
         .fifo_full  (rx_fifo_full_eth3),
@@ -1131,13 +1289,13 @@ dual_port_FIFO #(
 
 dual_port_FIFO #(
         .PARAM_DATA_WIDTH(PARAM_MAX_DATA_WIDTH_ETH),
-        .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_ETH)
+        .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_ETH_RX)
 ) rx_fifo_eth4 (
         .rst_n      (rx_fifo_rst_n_eth4),
         .wr_clk     (rx4_clk_shifted),
         .data_in    (rx_fifo_data_in_eth4),
         .wr_en      (rx_fifo_wr_en_eth4),
-        .rd_clk     (clk_64MHz),
+        .rd_clk     (clk_64MHz_buf),
         .rd_en      (rx_fifo_rd_en_eth4),
         .data_out   (rx_fifo_data_out_eth4),
         .fifo_full  (rx_fifo_full_eth4),
@@ -1150,11 +1308,11 @@ dual_port_FIFO #(
 
 dual_port_FIFO #(
     .PARAM_DATA_WIDTH(PARAM_MAX_DATA_WIDTH_UART1),
-    .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_UART1)
+    .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_UART1_TX)
 ) tx_fifo_uart1 (
     .rst_n      (rst_n),
 
-    .wr_clk     (clk_64MHz),
+    .wr_clk     (clk_64MHz_buf),
     .data_in    (tx_fifo_data_in_uart1),
     .wr_en      (tx_fifo_wr_en_uart1),
 
@@ -1172,11 +1330,11 @@ dual_port_FIFO #(
 
 dual_port_FIFO #(
     .PARAM_DATA_WIDTH(PARAM_MAX_DATA_WIDTH_UART2),
-    .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_UART2)
+    .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_UART2_TX)
 ) tx_fifo_uart2 (
     .rst_n      (rst_n),
 
-    .wr_clk     (clk_64MHz),
+    .wr_clk     (clk_64MHz_buf),
     .data_in    (tx_fifo_data_in_uart2),
     .wr_en      (tx_fifo_wr_en_uart2),
 
@@ -1194,11 +1352,11 @@ dual_port_FIFO #(
 
 dual_port_FIFO #(
     .PARAM_DATA_WIDTH(PARAM_MAX_DATA_WIDTH_UART3),
-    .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_UART3)
+    .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_UART3_TX)
 ) tx_fifo_uart3 (
     .rst_n      (rst_n),
 
-    .wr_clk     (clk_64MHz),
+    .wr_clk     (clk_64MHz_buf),
     .data_in    (tx_fifo_data_in_uart3),
     .wr_en      (tx_fifo_wr_en_uart3),
 
@@ -1217,10 +1375,10 @@ dual_port_FIFO #(
 
 dual_port_FIFO #(
         .PARAM_DATA_WIDTH(PARAM_MAX_DATA_WIDTH_ETH),
-        .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_ETH)
+        .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_ETH_TX)
 ) tx_fifo_eth1 (
         .rst_n      (rst_n),
-        .wr_clk     (clk_64MHz),
+        .wr_clk     (clk_64MHz_buf),
         .data_in    (tx_fifo_data_in_eth1),
         .wr_en      (tx_fifo_wr_en_eth1),
         .rd_clk     (clk_125MHz_eth1_buf),
@@ -1236,10 +1394,10 @@ dual_port_FIFO #(
 
 dual_port_FIFO #(
         .PARAM_DATA_WIDTH(PARAM_MAX_DATA_WIDTH_ETH),
-        .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_ETH)
+        .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_ETH_TX)
 ) tx_fifo_eth2 (
         .rst_n      (rst_n),
-        .wr_clk     (clk_64MHz),
+        .wr_clk     (clk_64MHz_buf),
         .data_in    (tx_fifo_data_in_eth2),
         .wr_en      (tx_fifo_wr_en_eth2),
         .rd_clk     (clk_125MHz_eth2_buf),
@@ -1255,10 +1413,10 @@ dual_port_FIFO #(
 
 dual_port_FIFO #(
         .PARAM_DATA_WIDTH(PARAM_MAX_DATA_WIDTH_ETH),
-        .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_ETH)
+        .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_ETH_TX)
 ) tx_fifo_eth3 (
         .rst_n      (rst_n),
-        .wr_clk     (clk_64MHz),
+        .wr_clk     (clk_64MHz_buf),
         .data_in    (tx_fifo_data_in_eth3),
         .wr_en      (tx_fifo_wr_en_eth3),
         .rd_clk     (clk_125MHz_eth3_buf),
@@ -1274,10 +1432,10 @@ dual_port_FIFO #(
 
 dual_port_FIFO #(
         .PARAM_DATA_WIDTH(PARAM_MAX_DATA_WIDTH_ETH),
-        .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_ETH)
+        .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_ETH_TX)
 ) tx_fifo_eth4 (
         .rst_n      (rst_n),
-        .wr_clk     (clk_64MHz),
+        .wr_clk     (clk_64MHz_buf),
         .data_in    (tx_fifo_data_in_eth4),
         .wr_en      (tx_fifo_wr_en_eth4),
         .rd_clk     (clk_125MHz_eth4_buf),
@@ -1293,10 +1451,10 @@ dual_port_FIFO #(
 
 dual_port_FIFO #(
         .PARAM_DATA_WIDTH(PARAM_MAX_DATA_WIDTH_ETH),
-        .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_ETH)
+        .PARAM_FIFO_SIZE (PARAM_FIFO_SIZE_ETH_TX)
 ) tx_fifo_eth_nrz (
         .rst_n      (rst_n),
-        .wr_clk     (clk_64MHz),
+        .wr_clk     (clk_64MHz_buf),
         .data_in    (tx_fifo_data_in_eth_nrz),
         .wr_en      (tx_fifo_wr_en_eth_nrz),
         .rd_clk     (clk_125MHz_eth_nrz_buf),
@@ -1309,12 +1467,10 @@ dual_port_FIFO #(
 
 // =====================================================
 // KERNEL MODULE
-// ETH1, ETH2, ETH3, ETH4, and ETH_NRZ/ETH5 are connected meaningfully.
-// UART paths are tied off for this test top.
 // =====================================================
 
 kernel u_kernel (
-        .clk                        (clk_64MHz),
+        .clk                        (clk_64MHz_buf),
         .clk_uart                   (clk_uart_55_296MHz_buf),
 
         .clk_eth1                   (clk_125MHz_eth1_buf),
@@ -1342,7 +1498,9 @@ kernel u_kernel (
         .bkp_data_bus               (bkp_data_bus),
         .word_start_strobe_pulse    (word_start_strobe_pulse),
 
-        .config_done_uart           (config_done_uart),
+        .config_done_uart1          (config_done_uart1),
+        .config_done_uart2          (config_done_uart2),
+        .config_done_uart3          (config_done_uart3),
         .config_done_eth1           (config_done_eth1),
         .config_done_eth2           (config_done_eth2),
         .config_done_eth3           (config_done_eth3),
@@ -1500,7 +1658,15 @@ kernel u_kernel (
         .eth_tx_data_sent_eth2      (eth_tx_data_sent_eth2),
         .eth_tx_data_sent_eth3      (eth_tx_data_sent_eth3),
         .eth_tx_data_sent_eth4      (eth_tx_data_sent_eth4),
-        .eth_tx_data_sent_eth_nrz   (eth_tx_data_sent_eth_nrz)
+        .eth_tx_data_sent_eth_nrz   (eth_tx_data_sent_eth_nrz),
+        
+        .count_uart1                (count_uart1),
+        .count_uart2                (count_uart2),
+        .count_uart3                (count_uart3),
+        .count_eth1                 (count_eth1),
+        .count_eth2                 (count_eth2),
+        .count_eth3                 (count_eth3),
+        .count_eth4                 (count_eth4)
 );
 
 endmodule

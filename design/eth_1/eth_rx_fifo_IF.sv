@@ -9,7 +9,8 @@ module eth_rx_fifo_IF(
 			
 			output reg eth_rx_data_valid,
 			
-			output reg[10:0] valid_eth_frame,
+			output wire[11:0] valid_eth_bytes_count,
+			input [11:0] count_eth,
 			
 			output reg rx_fifo_wr_en,
 			output reg [7:0] rx_fifo_data_in,
@@ -17,16 +18,37 @@ module eth_rx_fifo_IF(
 			output reg int_fifo_rd_en,
 			input [7:0] int_fifo_data_out,
 			
-			output reg [10:0] corrupt_packet_counter,
+			output reg [11:0] corrupt_packet_counter,
 			
 			output reg ext_fifo_rst_n
 
 		);
 
+localparam integer FIFO_MAX_BYTE_COUNT = 4095;
+
 reg[10:0] byte_counter;
 
 reg[10:0] bytes_to_remove;
 reg[10:0] invalid_byte_counter;
+
+reg[10:0] valid_eth_frame_bytes;
+reg[12:0] bytes_in_fifo;
+
+reg  [11:0] count_eth_d;
+
+wire [11:0] count_eth_delta;
+wire [12:0] count_eth_delta_ext;
+wire [12:0] bytes_in_fifo_after_read;
+wire [12:0] incoming_valid_frame_bytes;
+
+assign count_eth_delta     = count_eth - count_eth_d;
+assign count_eth_delta_ext = {1'b0, count_eth_delta};
+
+assign bytes_in_fifo_after_read = (bytes_in_fifo > count_eth_delta_ext) ? (bytes_in_fifo - count_eth_delta_ext) : 13'd0;
+
+assign incoming_valid_frame_bytes = {2'b00, metadata_fifo_data_out[10:0]} + 13'd42;
+
+assign valid_eth_bytes_count = bytes_in_fifo[11:0];
 
 reg[4:0] rst_counter;
 
@@ -38,10 +60,11 @@ localparam METADATA_FIFO_READ_STATE = 4'd2;
 localparam INVALID_BYTE_CHECK_STATE = 4'd3;
 localparam INVALID_BYTE_WAIT_STATE = 4'd4;
 localparam INVALID_BYTE_COUNT_STATE = 4'd5;
-localparam RST_STATE = 4'd6;
-localparam WAIT_STATE = 4'd7;
-localparam BYTE_ACQ_STATE = 4'd8;
-localparam ACQ_DONE_STATE = 4'd9;
+localparam FIFO_CHECK_STATE = 4'd6;
+localparam RST_STATE = 4'd7;
+localparam WAIT_STATE = 4'd8;
+localparam BYTE_ACQ_STATE = 4'd9;
+localparam ACQ_DONE_STATE = 4'd10;
 
 always @ (posedge clk or negedge rst_n)
 begin
@@ -51,7 +74,9 @@ begin
 		rx_fifo_wr_en <= 0;
 		rx_fifo_data_in <= 0;
 		byte_counter <= 0;
-		valid_eth_frame <= 0;
+		count_eth_d <= 0;
+		bytes_in_fifo <= 0;
+		valid_eth_frame_bytes <= 0;
 		invalid_byte_counter <= 0;
 		corrupt_packet_counter <= 0;
 		bytes_to_remove <= 0;
@@ -63,6 +88,8 @@ begin
 	end
 	else
 	begin
+		count_eth_d <= count_eth;
+		bytes_in_fifo <= bytes_in_fifo_after_read;
 		case(state)
 			IDLE:
 			begin
@@ -97,12 +124,13 @@ begin
 				ext_fifo_rst_n <= 1;
 				if(!metadata_fifo_data_out[22])
 				begin
-					valid_eth_frame <= metadata_fifo_data_out[10:0] + 11'd42;
+					valid_eth_frame_bytes <= incoming_valid_frame_bytes[10:0];
+					bytes_in_fifo <= bytes_in_fifo_after_read + incoming_valid_frame_bytes;
 					bytes_to_remove <= 0;
-					ext_fifo_rst_n <= 0;
-					rst_counter <= 1;
+					ext_fifo_rst_n <= 1;
+					rst_counter <= 0;
 					int_fifo_rd_en <= 0;
-					state <= RST_STATE;
+					state <= FIFO_CHECK_STATE;
 				end
 				else
 				begin
@@ -111,6 +139,25 @@ begin
 					bytes_to_remove <= metadata_fifo_data_out[21:11];
 					int_fifo_rd_en <= 0;
 					state <= INVALID_BYTE_CHECK_STATE;
+				end
+			end
+			
+			FIFO_CHECK_STATE:
+			begin
+				if(bytes_in_fifo <= FIFO_MAX_BYTE_COUNT)
+				begin
+					rst_counter <= 0;
+					ext_fifo_rst_n <= 1;
+					int_fifo_rd_en <= 1;
+					state <= WAIT_STATE;
+				end
+				else
+				begin
+					bytes_in_fifo <= valid_eth_frame_bytes;
+					ext_fifo_rst_n <= 0;
+					rst_counter <= 1;
+					int_fifo_rd_en <= 0;
+					state <= RST_STATE;
 				end
 			end
 			
@@ -189,13 +236,13 @@ begin
 			begin
 				rx_fifo_data_in <= int_fifo_data_out;
 				rx_fifo_wr_en <= 1;
-				if(byte_counter < valid_eth_frame - 2)
+				if(byte_counter < valid_eth_frame_bytes - 2)
 				begin
 					byte_counter <= byte_counter + 1;
 					int_fifo_rd_en <= 1;
 					state <= BYTE_ACQ_STATE;
 				end
-				else if(byte_counter == valid_eth_frame - 2)
+				else if(byte_counter == valid_eth_frame_bytes - 2)
 				begin
 					byte_counter <= byte_counter + 1;
 					int_fifo_rd_en <= 0;

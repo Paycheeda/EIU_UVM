@@ -23,9 +23,11 @@ module uart#(
 		output wire								uart_tx_busy,
 		output wire 							tx_acq_done,
 		
-		output [10:0]							rx_corrupt_byte_count,
+		output [11:0]							rx_corrupt_byte_count,
 		output 									uart_rx_busy,
-		output [10:0]							rx_valid_byte_count
+		output [11:0]							rx_valid_byte_count,
+		
+		input [11:0]							count_uart
 );
 
 wire[12:0] clock_delay_param;
@@ -52,7 +54,9 @@ uart_IF u_uart_IF
 		.clock_delay_param(clock_delay_param),
 		.rx_corrupt_byte_count(rx_corrupt_byte_count),
 		.rx_acq_done(rx_acq_done),
-		.rx_valid_byte_count(rx_valid_byte_count)
+		.rx_valid_byte_count(rx_valid_byte_count),
+		
+		.count_uart(count_uart)
 );
 
 
