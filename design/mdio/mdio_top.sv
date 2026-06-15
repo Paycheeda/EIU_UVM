@@ -1,16 +1,24 @@
 module mdio_top #(
 
-    parameter [4:0] PHY_ADDR_ETH1 = 5'd1,
-    parameter [4:0] PHY_ADDR_ETH2 = 5'd1,
-    parameter [4:0] PHY_ADDR_ETH3 = 5'd1,
-    parameter [4:0] PHY_ADDR_ETH4 = 5'd1,
-    parameter [4:0] PHY_ADDR_ETH5 = 5'd1,
+    parameter [4:0] PHY_ADDR_ETH1 = 5'd7,
+    parameter [4:0] PHY_ADDR_ETH2 = 5'd7,
+    parameter [4:0] PHY_ADDR_ETH3 = 5'd7,
+    parameter [4:0] PHY_ADDR_ETH4 = 5'd7,
+    parameter [4:0] PHY_ADDR_ETH5 = 5'd7,
 
-    parameter [15:0] POLL_MAX_ATTEMPTS = 16'd65535
+    parameter [15:0] POLL_MAX_ATTEMPTS = 16'd65535,
+    
+    parameter [31:0] PHY_RESET_LOW_CYCLES = 32'd10
 
 )(
     input  wire clk,
     input  wire rst_n,
+    
+    output wire phy_rst_n_eth1,
+    output wire phy_rst_n_eth2,
+    output wire phy_rst_n_eth3,
+    output wire phy_rst_n_eth4,
+    output wire phy_rst_n_eth5,
 
     output wire config_busy_any,
 
@@ -44,7 +52,56 @@ module mdio_top #(
 );
 
 // ============================================================
-// Internal one-time start pulse after reset release
+// PHY reset generator for ETH1 to ETH5
+//
+// After FPGA programming / rst_n release:
+// all PHY reset outputs stay LOW for PHY_RESET_LOW_CYCLES clk cycles,
+// then all go HIGH.
+// MDIO configuration starts only after all PHY resets are released.
+// ============================================================
+
+reg [4:0]  phy_rst_n_reg     = 5'b00000;
+reg        phy_reset_done    = 1'b0;
+reg [31:0] phy_reset_counter = 32'd0;
+
+assign phy_rst_n_eth1 = phy_rst_n_reg[0];
+assign phy_rst_n_eth2 = phy_rst_n_reg[1];
+assign phy_rst_n_eth3 = phy_rst_n_reg[2];
+assign phy_rst_n_eth4 = phy_rst_n_reg[3];
+assign phy_rst_n_eth5 = phy_rst_n_reg[4];
+
+always @(posedge clk or negedge rst_n)
+begin
+    if(!rst_n)
+    begin
+        phy_rst_n_reg     <= 5'b00000;
+        phy_reset_done    <= 1'b0;
+        phy_reset_counter <= 32'd0;
+    end
+    else
+    begin
+        if(!phy_reset_done)
+        begin
+            if(phy_reset_counter < PHY_RESET_LOW_CYCLES)
+            begin
+                phy_rst_n_reg     <= 5'b00000;
+                phy_reset_counter <= phy_reset_counter + 1'b1;
+            end
+            else
+            begin
+                phy_rst_n_reg  <= 5'b11111;
+                phy_reset_done <= 1'b1;
+            end
+        end
+        else
+        begin
+            phy_rst_n_reg <= 5'b11111;
+        end
+    end
+end
+
+// ============================================================
+// Internal one-time start pulse after all PHY resets complete
 // ============================================================
 
 reg start_config_issued;
@@ -59,7 +116,12 @@ begin
     end
     else
     begin
-        if(!start_config_issued)
+        if(!phy_reset_done)
+        begin
+            start_config_issued <= 1'b0;
+            start_config_pulse  <= 1'b0;
+        end
+        else if(!start_config_issued)
         begin
             start_config_pulse  <= 1'b1;
             start_config_issued <= 1'b1;

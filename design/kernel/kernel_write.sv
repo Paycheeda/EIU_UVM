@@ -37,7 +37,7 @@ module kernel_write(
 );
 
 wire en_detect;
-assign en_detect = (bkp_data_dir) && (bkp_card_id == fpga_card_id) && (bkp_address >= 6'd41 && bkp_address <= 6'd47);
+assign en_detect = (bkp_data_dir) && (bkp_card_id == fpga_card_id) && (bkp_address >= 6'd42 && bkp_address <= 6'd48);
 
 reg [5:0] captured_address;
 reg [11:0] captured_data;
@@ -104,7 +104,7 @@ begin
 			begin
 				state <= DATA_WRITE_STATE;
 				case(captured_address)
-					6'd41:
+					6'd42:
 					begin
 						data_send_uart1 <= captured_data[9];
 						if(!captured_data[9])
@@ -119,7 +119,7 @@ begin
 						
 					end
 					
-					6'd42:
+					6'd43:
 					begin
 						data_send_uart2 <= captured_data[9];
 						if(!captured_data[9])
@@ -133,7 +133,7 @@ begin
 						end
 					end
 					
-					6'd43:
+					6'd44:
 					begin
 						data_send_uart3 <= captured_data[9];
 						if(!captured_data[9])
@@ -147,7 +147,7 @@ begin
 						end
 					end
 					
-					6'd44:
+					6'd45:
 					begin
 						data_send_eth1 <= captured_data[8];
 						if(!captured_data[8])
@@ -161,7 +161,7 @@ begin
 						end
 					end
 					
-					6'd45:
+					6'd46:
 					begin
 						data_send_eth2 <= captured_data[8];
 						if(!captured_data[8])
@@ -175,7 +175,7 @@ begin
 						end
 					end
 					
-					6'd46:
+					6'd47:
 					begin
 						data_send_eth3 <= captured_data[8];
 						if(!captured_data[8])
@@ -189,7 +189,7 @@ begin
 						end
 					end
 					
-					6'd47:
+					6'd48:
 					begin
 						data_send_eth4 <= captured_data[8];
 						if(!captured_data[8])

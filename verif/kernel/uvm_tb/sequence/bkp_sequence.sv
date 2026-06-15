@@ -77,7 +77,7 @@ class bkp_sequence extends uvm_sequence #(bkp_item);
         ctrl_bits = (req_width_rtl << 10) | (req_odd_even << 9) | (req_parity_en << 8);
         b3 = ctrl_bits | (baud_div & 8'hFF);
 
-        // Loop through ALL 41 Configuration Addresses to satisfy the global lockout
+        // Loop through ALL 41 Configuration Addresses (0-40)
         for (int addr = 0; addr <= 40; addr++) begin
             req_wr = get_required_writes(addr); 
             
@@ -202,6 +202,20 @@ class bkp_sequence extends uvm_sequence #(bkp_item);
                 finish_item(req_item);
             end
         end
+
+        // Latch all programmed configuration into the EIU.  Address 41 is
+        // no longer a TX data address; it is the config-done control address.
+        // 12'hFFF drives all config-done bits high for UART/ETH/NRZ.
+        req_item = bkp_item::type_id::create("cfg_done_item");
+        start_item(req_item);
+        req_item.trans_type   = BKP_CFG_WRITE;
+        req_item.bkp_address  = 6'd41;
+        req_item.bkp_data     = 12'hFFF;
+        req_item.bkp_card_id  = target_card_id;
+        req_item.fpga_card_id = target_card_id;
+        req_item.delay_cycles = 0;
+        req_item.apply_trans_type_rules();
+        finish_item(req_item);
 
         `uvm_info("BKP_SEQ", "<<< FULL Hardware Initialization Sequence Complete.", UVM_LOW)
     endtask

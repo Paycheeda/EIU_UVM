@@ -59,8 +59,8 @@ class kwr_scoreboard extends uvm_scoreboard;
         forever begin
             bkp_fifo.get(req);
             
-            // Filter: Only process valid writes meant for addresses 41-47
-            if (req.bkp_card_id == req.fpga_card_id && req.bkp_data_dir && (req.bkp_address >= 41 && req.bkp_address <= 47)) begin
+            // Filter: Only process valid writes meant for addresses 42-48
+            if (req.bkp_card_id == req.fpga_card_id && req.bkp_data_dir && (req.bkp_address >= 42 && req.bkp_address <= 48)) begin
                 
                 exp_item = kwr_item::type_id::create("exp_item");
                 
@@ -70,15 +70,15 @@ class kwr_scoreboard extends uvm_scoreboard;
                 // Route and slice the data exactly like the RTL
                 case(req.bkp_address)
                     // UART Logic (9-bit payload, bit 9 is Send Command)
-                    6'd41: begin exp_item.target = UART1; exp_item.payload = req.bkp_data[8:0]; exp_item.is_send = req.bkp_data[9]; exp_item.is_write = ~req.bkp_data[9]; end
-                    6'd42: begin exp_item.target = UART2; exp_item.payload = req.bkp_data[8:0]; exp_item.is_send = req.bkp_data[9]; exp_item.is_write = ~req.bkp_data[9]; end
-                    6'd43: begin exp_item.target = UART3; exp_item.payload = req.bkp_data[8:0]; exp_item.is_send = req.bkp_data[9]; exp_item.is_write = ~req.bkp_data[9]; end
+                    6'd42: begin exp_item.target = UART1; exp_item.payload = req.bkp_data[8:0]; exp_item.is_send = req.bkp_data[9]; exp_item.is_write = ~req.bkp_data[9]; end
+                    6'd43: begin exp_item.target = UART2; exp_item.payload = req.bkp_data[8:0]; exp_item.is_send = req.bkp_data[9]; exp_item.is_write = ~req.bkp_data[9]; end
+                    6'd44: begin exp_item.target = UART3; exp_item.payload = req.bkp_data[8:0]; exp_item.is_send = req.bkp_data[9]; exp_item.is_write = ~req.bkp_data[9]; end
                     
                     // ETH Logic (8-bit payload, bit 8 is Send Command)
-                    6'd44: begin exp_item.target = ETH1; exp_item.payload = req.bkp_data[7:0]; exp_item.is_send = req.bkp_data[8]; exp_item.is_write = ~req.bkp_data[8]; end
-                    6'd45: begin exp_item.target = ETH2; exp_item.payload = req.bkp_data[7:0]; exp_item.is_send = req.bkp_data[8]; exp_item.is_write = ~req.bkp_data[8]; end
-                    6'd46: begin exp_item.target = ETH3; exp_item.payload = req.bkp_data[7:0]; exp_item.is_send = req.bkp_data[8]; exp_item.is_write = ~req.bkp_data[8]; end
-                    6'd47: begin exp_item.target = ETH4; exp_item.payload = req.bkp_data[7:0]; exp_item.is_send = req.bkp_data[8]; exp_item.is_write = ~req.bkp_data[8]; end
+                    6'd45: begin exp_item.target = ETH1; exp_item.payload = req.bkp_data[7:0]; exp_item.is_send = req.bkp_data[8]; exp_item.is_write = ~req.bkp_data[8]; end
+                    6'd46: begin exp_item.target = ETH2; exp_item.payload = req.bkp_data[7:0]; exp_item.is_send = req.bkp_data[8]; exp_item.is_write = ~req.bkp_data[8]; end
+                    6'd47: begin exp_item.target = ETH3; exp_item.payload = req.bkp_data[7:0]; exp_item.is_send = req.bkp_data[8]; exp_item.is_write = ~req.bkp_data[8]; end
+                    6'd48: begin exp_item.target = ETH4; exp_item.payload = req.bkp_data[7:0]; exp_item.is_send = req.bkp_data[8]; exp_item.is_write = ~req.bkp_data[8]; end
                 endcase
                 
                 // Push the golden prediction into the queue

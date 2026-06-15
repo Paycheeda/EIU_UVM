@@ -1,0 +1,276 @@
+diff --git a/design/kernel/kernel_write.sv b/design/kernel/kernel_write.sv
+index 7e4be94..9565f31 100755
+--- a/design/kernel/kernel_write.sv
++++ b/design/kernel/kernel_write.sv
+@@ -37,7 +37,7 @@ module kernel_write(
+ );
+ 
+ wire en_detect;
+-assign en_detect = (bkp_data_dir) && (bkp_card_id == fpga_card_id) && (bkp_address >= 6'd41 && bkp_address <= 6'd47);
++assign en_detect = (bkp_data_dir) && (bkp_card_id == fpga_card_id) && (bkp_address >= 6'd42 && bkp_address <= 6'd48);
+ 
+ reg [5:0] captured_address;
+ reg [11:0] captured_data;
+@@ -104,7 +104,7 @@ begin
+ 			begin
+ 				state <= DATA_WRITE_STATE;
+ 				case(captured_address)
+-					6'd41:
++					6'd42:
+ 					begin
+ 						data_send_uart1 <= captured_data[9];
+ 						if(!captured_data[9])
+@@ -119,7 +119,7 @@ begin
+ 						
+ 					end
+ 					
+-					6'd42:
++					6'd43:
+ 					begin
+ 						data_send_uart2 <= captured_data[9];
+ 						if(!captured_data[9])
+@@ -133,7 +133,7 @@ begin
+ 						end
+ 					end
+ 					
+-					6'd43:
++					6'd44:
+ 					begin
+ 						data_send_uart3 <= captured_data[9];
+ 						if(!captured_data[9])
+@@ -147,7 +147,7 @@ begin
+ 						end
+ 					end
+ 					
+-					6'd44:
++					6'd45:
+ 					begin
+ 						data_send_eth1 <= captured_data[8];
+ 						if(!captured_data[8])
+@@ -161,7 +161,7 @@ begin
+ 						end
+ 					end
+ 					
+-					6'd45:
++					6'd46:
+ 					begin
+ 						data_send_eth2 <= captured_data[8];
+ 						if(!captured_data[8])
+@@ -175,7 +175,7 @@ begin
+ 						end
+ 					end
+ 					
+-					6'd46:
++					6'd47:
+ 					begin
+ 						data_send_eth3 <= captured_data[8];
+ 						if(!captured_data[8])
+@@ -189,7 +189,7 @@ begin
+ 						end
+ 					end
+ 					
+-					6'd47:
++					6'd48:
+ 					begin
+ 						data_send_eth4 <= captured_data[8];
+ 						if(!captured_data[8])
+diff --git a/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv b/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv
+index d1ff577..746ca77 100644
+--- a/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv
++++ b/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv
+@@ -522,8 +522,8 @@ class eiu_scoreboard extends uvm_scoreboard;
+             if (item.trans_type == BKP_DATA_WRITE) begin
+                 is_send_cmd = (item.bkp_data[9] == 1'b1 || (item.bkp_data[8] == 1'b1 && item.bkp_data[9] == 1'b0 && item.bkp_data[7:0] == 8'h00));
+ 
+-                is_eth_data_addr = (item.bkp_address >= 6'd44 && item.bkp_address <= 6'd47);
+-                eth_wr_id = item.bkp_address - 6'd44;
++                is_eth_data_addr = (item.bkp_address >= 6'd45 && item.bkp_address <= 6'd48);
++                eth_wr_id = item.bkp_address - 6'd45;
+ 
+                 if (is_eth_data_addr) begin
+                     if (is_send_cmd) begin
+@@ -540,9 +540,9 @@ class eiu_scoreboard extends uvm_scoreboard;
+                     end
+                 end else if (!is_send_cmd) begin
+                     case (item.bkp_address)
+-                        6'd41: begin exp_uart_tx_q[0].push_back(item.bkp_data[8:0]); uart_tx_inj_cnt[0]++; uart_tx_pkt_inj_cnt[0]++; print_counts(0, "UART"); end
+-                        6'd42: begin exp_uart_tx_q[1].push_back(item.bkp_data[8:0]); uart_tx_inj_cnt[1]++; uart_tx_pkt_inj_cnt[1]++; print_counts(1, "UART"); end
+-                        6'd43: begin exp_uart_tx_q[2].push_back(item.bkp_data[8:0]); uart_tx_inj_cnt[2]++; uart_tx_pkt_inj_cnt[2]++; print_counts(2, "UART"); end
++                        6'd42: begin exp_uart_tx_q[0].push_back(item.bkp_data[8:0]); uart_tx_inj_cnt[0]++; uart_tx_pkt_inj_cnt[0]++; print_counts(0, "UART"); end
++                        6'd43: begin exp_uart_tx_q[1].push_back(item.bkp_data[8:0]); uart_tx_inj_cnt[1]++; uart_tx_pkt_inj_cnt[1]++; print_counts(1, "UART"); end
++                        6'd44: begin exp_uart_tx_q[2].push_back(item.bkp_data[8:0]); uart_tx_inj_cnt[2]++; uart_tx_pkt_inj_cnt[2]++; print_counts(2, "UART"); end
+                     endcase
+                 end
+             end 
+diff --git a/verif/kernel/uvm_tb/scoreboard/kst_scoreboard.sv b/verif/kernel/uvm_tb/scoreboard/kst_scoreboard.sv
+index 0c1991b..fb149c5 100644
+--- a/verif/kernel/uvm_tb/scoreboard/kst_scoreboard.sv
++++ b/verif/kernel/uvm_tb/scoreboard/kst_scoreboard.sv
+@@ -36,18 +36,18 @@ class kst_scoreboard extends uvm_scoreboard;
+         forever begin
+             bkp_fifo.get(req);
+             
+-            // Only care about writes to addresses 41-47
+-            if (req.bkp_card_id == req.fpga_card_id && req.bkp_data_dir && (req.bkp_address >= 41 && req.bkp_address <= 47)) begin
++            // Only care about writes to addresses 42-48
++            if (req.bkp_card_id == req.fpga_card_id && req.bkp_data_dir && (req.bkp_address >= 42 && req.bkp_address <= 48)) begin
+                 
+                 // Increment the specific channel's expectation counter
+-                if (req.bkp_address == 41 && req.bkp_data[9]) begin exp_counts["UART1"]++; total_commands++; end
+-                if (req.bkp_address == 42 && req.bkp_data[9]) begin exp_counts["UART2"]++; total_commands++; end
+-                if (req.bkp_address == 43 && req.bkp_data[9]) begin exp_counts["UART3"]++; total_commands++; end
++                if (req.bkp_address == 42 && req.bkp_data[9]) begin exp_counts["UART1"]++; total_commands++; end
++                if (req.bkp_address == 43 && req.bkp_data[9]) begin exp_counts["UART2"]++; total_commands++; end
++                if (req.bkp_address == 44 && req.bkp_data[9]) begin exp_counts["UART3"]++; total_commands++; end
+                 
+-                if (req.bkp_address == 44 && req.bkp_data[8]) begin exp_counts["ETH1"]++; total_commands++; end
+-                if (req.bkp_address == 45 && req.bkp_data[8]) begin exp_counts["ETH2"]++; total_commands++; end
+-                if (req.bkp_address == 46 && req.bkp_data[8]) begin exp_counts["ETH3"]++; total_commands++; end
+-                if (req.bkp_address == 47 && req.bkp_data[8]) begin exp_counts["ETH4"]++; total_commands++; end
++                if (req.bkp_address == 45 && req.bkp_data[8]) begin exp_counts["ETH1"]++; total_commands++; end
++                if (req.bkp_address == 46 && req.bkp_data[8]) begin exp_counts["ETH2"]++; total_commands++; end
++                if (req.bkp_address == 47 && req.bkp_data[8]) begin exp_counts["ETH3"]++; total_commands++; end
++                if (req.bkp_address == 48 && req.bkp_data[8]) begin exp_counts["ETH4"]++; total_commands++; end
+             end
+         end
+     endtask
+diff --git a/verif/kernel/uvm_tb/scoreboard/kwr_scoreboard.sv b/verif/kernel/uvm_tb/scoreboard/kwr_scoreboard.sv
+index 4abdbb4..e01f38f 100755
+--- a/verif/kernel/uvm_tb/scoreboard/kwr_scoreboard.sv
++++ b/verif/kernel/uvm_tb/scoreboard/kwr_scoreboard.sv
+@@ -59,8 +59,8 @@ class kwr_scoreboard extends uvm_scoreboard;
+         forever begin
+             bkp_fifo.get(req);
+             
+-            // Filter: Only process valid writes meant for addresses 41-47
+-            if (req.bkp_card_id == req.fpga_card_id && req.bkp_data_dir && (req.bkp_address >= 41 && req.bkp_address <= 47)) begin
++            // Filter: Only process valid writes meant for addresses 42-48
++            if (req.bkp_card_id == req.fpga_card_id && req.bkp_data_dir && (req.bkp_address >= 42 && req.bkp_address <= 48)) begin
+                 
+                 exp_item = kwr_item::type_id::create("exp_item");
+                 
+@@ -70,15 +70,15 @@ class kwr_scoreboard extends uvm_scoreboard;
+                 // Route and slice the data exactly like the RTL
+                 case(req.bkp_address)
+                     // UART Logic (9-bit payload, bit 9 is Send Command)
+-                    6'd41: begin exp_item.target = UART1; exp_item.payload = req.bkp_data[8:0]; exp_item.is_send = req.bkp_data[9]; exp_item.is_write = ~req.bkp_data[9]; end
+-                    6'd42: begin exp_item.target = UART2; exp_item.payload = req.bkp_data[8:0]; exp_item.is_send = req.bkp_data[9]; exp_item.is_write = ~req.bkp_data[9]; end
+-                    6'd43: begin exp_item.target = UART3; exp_item.payload = req.bkp_data[8:0]; exp_item.is_send = req.bkp_data[9]; exp_item.is_write = ~req.bkp_data[9]; end
++                    6'd42: begin exp_item.target = UART1; exp_item.payload = req.bkp_data[8:0]; exp_item.is_send = req.bkp_data[9]; exp_item.is_write = ~req.bkp_data[9]; end
++                    6'd43: begin exp_item.target = UART2; exp_item.payload = req.bkp_data[8:0]; exp_item.is_send = req.bkp_data[9]; exp_item.is_write = ~req.bkp_data[9]; end
++                    6'd44: begin exp_item.target = UART3; exp_item.payload = req.bkp_data[8:0]; exp_item.is_send = req.bkp_data[9]; exp_item.is_write = ~req.bkp_data[9]; end
+                     
+                     // ETH Logic (8-bit payload, bit 8 is Send Command)
+-                    6'd44: begin exp_item.target = ETH1; exp_item.payload = req.bkp_data[7:0]; exp_item.is_send = req.bkp_data[8]; exp_item.is_write = ~req.bkp_data[8]; end
+-                    6'd45: begin exp_item.target = ETH2; exp_item.payload = req.bkp_data[7:0]; exp_item.is_send = req.bkp_data[8]; exp_item.is_write = ~req.bkp_data[8]; end
+-                    6'd46: begin exp_item.target = ETH3; exp_item.payload = req.bkp_data[7:0]; exp_item.is_send = req.bkp_data[8]; exp_item.is_write = ~req.bkp_data[8]; end
+-                    6'd47: begin exp_item.target = ETH4; exp_item.payload = req.bkp_data[7:0]; exp_item.is_send = req.bkp_data[8]; exp_item.is_write = ~req.bkp_data[8]; end
++                    6'd45: begin exp_item.target = ETH1; exp_item.payload = req.bkp_data[7:0]; exp_item.is_send = req.bkp_data[8]; exp_item.is_write = ~req.bkp_data[8]; end
++                    6'd46: begin exp_item.target = ETH2; exp_item.payload = req.bkp_data[7:0]; exp_item.is_send = req.bkp_data[8]; exp_item.is_write = ~req.bkp_data[8]; end
++                    6'd47: begin exp_item.target = ETH3; exp_item.payload = req.bkp_data[7:0]; exp_item.is_send = req.bkp_data[8]; exp_item.is_write = ~req.bkp_data[8]; end
++                    6'd48: begin exp_item.target = ETH4; exp_item.payload = req.bkp_data[7:0]; exp_item.is_send = req.bkp_data[8]; exp_item.is_write = ~req.bkp_data[8]; end
+                 endcase
+                 
+                 // Push the golden prediction into the queue
+diff --git a/verif/kernel/uvm_tb/sequence/bkp_sequence.sv b/verif/kernel/uvm_tb/sequence/bkp_sequence.sv
+index af36f42..cbbe587 100755
+--- a/verif/kernel/uvm_tb/sequence/bkp_sequence.sv
++++ b/verif/kernel/uvm_tb/sequence/bkp_sequence.sv
+@@ -77,7 +77,7 @@ class bkp_sequence extends uvm_sequence #(bkp_item);
+         ctrl_bits = (req_width_rtl << 10) | (req_odd_even << 9) | (req_parity_en << 8);
+         b3 = ctrl_bits | (baud_div & 8'hFF);
+ 
+-        // Loop through ALL 41 Configuration Addresses to satisfy the global lockout
++        // Loop through ALL 41 Configuration Addresses (0-40)
+         for (int addr = 0; addr <= 40; addr++) begin
+             req_wr = get_required_writes(addr); 
+             
+@@ -203,6 +203,20 @@ class bkp_sequence extends uvm_sequence #(bkp_item);
+             end
+         end
+ 
++        // Latch all programmed configuration into the EIU.  Address 41 is
++        // no longer a TX data address; it is the config-done control address.
++        // 12'hFFF drives all config-done bits high for UART/ETH/NRZ.
++        req_item = bkp_item::type_id::create("cfg_done_item");
++        start_item(req_item);
++        req_item.trans_type   = BKP_CFG_WRITE;
++        req_item.bkp_address  = 6'd41;
++        req_item.bkp_data     = 12'hFFF;
++        req_item.bkp_card_id  = target_card_id;
++        req_item.fpga_card_id = target_card_id;
++        req_item.delay_cycles = 0;
++        req_item.apply_trans_type_rules();
++        finish_item(req_item);
++
+         `uvm_info("BKP_SEQ", "<<< FULL Hardware Initialization Sequence Complete.", UVM_LOW)
+     endtask
+ endclass
+diff --git a/verif/kernel/uvm_tb/sequence/kwr_sequence.sv b/verif/kernel/uvm_tb/sequence/kwr_sequence.sv
+index 4ea51c0..8a6b378 100755
+--- a/verif/kernel/uvm_tb/sequence/kwr_sequence.sv
++++ b/verif/kernel/uvm_tb/sequence/kwr_sequence.sv
+@@ -47,10 +47,10 @@ class kwr_routing_seq extends uvm_sequence #(bkp_item);
+             // ==========================================
+             // 1. Blast UARTs with Random Data
+             // ==========================================
+-            for (int addr = 41; addr <= 43; addr++) begin
+-                if (addr == 41 && !en_uart[0]) continue;
+-                if (addr == 42 && !en_uart[1]) continue;
+-                if (addr == 43 && !en_uart[2]) continue;
++            for (int uart_idx = 0; uart_idx < 3; uart_idx++) begin
++                int data_addr = 42 + uart_idx; // 42, 43, 44
++
++                if (!en_uart[uart_idx]) continue;
+ 
+                 rand_uart_payload = $urandom_range(0, (1 << req_width) - 1); 
+                 
+@@ -58,7 +58,7 @@ class kwr_routing_seq extends uvm_sequence #(bkp_item);
+                 req = bkp_item::type_id::create("req");
+                 start_item(req);
+                 req.trans_type   = BKP_DATA_WRITE; 
+-                req.bkp_address  = addr;
++                req.bkp_address  = data_addr;
+                 req.bkp_card_id  = test_card_id;
+                 req.fpga_card_id = test_card_id;
+                 req.bkp_data_dir = 1'b1; 
+@@ -78,7 +78,7 @@ class kwr_routing_seq extends uvm_sequence #(bkp_item);
+                 req = bkp_item::type_id::create("req");
+                 start_item(req);
+                 req.trans_type   = BKP_DATA_WRITE; 
+-                req.bkp_address  = addr;
++                req.bkp_address  = data_addr;
+                 req.bkp_card_id  = test_card_id;
+                 req.fpga_card_id = test_card_id;
+                 req.bkp_data_dir = 1'b1;
+@@ -97,7 +97,7 @@ class kwr_routing_seq extends uvm_sequence #(bkp_item);
+             // 2. Blast ETHERNETs with Random Data
+             // ==========================================
+             for (int eth_idx = 0; eth_idx < 4; eth_idx++) begin
+-                int data_addr = 44 + eth_idx; // 44, 45, 46, 47
++                int data_addr = 45 + eth_idx; // 45, 46, 47, 48
+                 
+                 if (!en_eth[eth_idx]) continue;
+ 
+@@ -122,7 +122,7 @@ class kwr_routing_seq extends uvm_sequence #(bkp_item);
+                 // ---> FIX 1: Let the 100 bytes cross the CDC into the FIFO <---
+                 #5us; 
+ 
+-                // ---> FIX 2: Send Command to data_addr (Addr 44) <---
++                // ---> FIX 2: Send Command to data_addr <---
+                 req = bkp_item::type_id::create("req");
+                 start_item(req);
+                 req.trans_type   = BKP_DATA_WRITE; 
+diff --git a/verif/kernel/uvm_tb/sequence_item/bkp_item.sv b/verif/kernel/uvm_tb/sequence_item/bkp_item.sv
+index 965e8dd..7ee84c6 100755
+--- a/verif/kernel/uvm_tb/sequence_item/bkp_item.sv
++++ b/verif/kernel/uvm_tb/sequence_item/bkp_item.sv
+@@ -54,7 +54,7 @@ class bkp_item extends uvm_sequence_item;
+         // Default valid hit assignments
+         bkp_card_id  = 4'h0; //$urandom_range(0, 15);
+         fpga_card_id = bkp_card_id; // Match IDs so EIU listens
+-        bkp_address  = $urandom_range(0, 47); // Max valid address
++        bkp_address  = $urandom_range(0, 48); // Max valid address
+         bkp_data     = $urandom_range(0, 4095);
+         
+         delay_cycles = $urandom_range(1, 5);

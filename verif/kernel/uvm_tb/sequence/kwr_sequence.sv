@@ -47,10 +47,10 @@ class kwr_routing_seq extends uvm_sequence #(bkp_item);
             // ==========================================
             // 1. Blast UARTs with Random Data
             // ==========================================
-            for (int addr = 41; addr <= 43; addr++) begin
-                if (addr == 41 && !en_uart[0]) continue;
-                if (addr == 42 && !en_uart[1]) continue;
-                if (addr == 43 && !en_uart[2]) continue;
+            for (int uart_idx = 0; uart_idx < 3; uart_idx++) begin
+                int data_addr = 42 + uart_idx; // 42, 43, 44
+
+                if (!en_uart[uart_idx]) continue;
 
                 rand_uart_payload = $urandom_range(0, (1 << req_width) - 1); 
                 
@@ -58,7 +58,7 @@ class kwr_routing_seq extends uvm_sequence #(bkp_item);
                 req = bkp_item::type_id::create("req");
                 start_item(req);
                 req.trans_type   = BKP_DATA_WRITE; 
-                req.bkp_address  = addr;
+                req.bkp_address  = data_addr;
                 req.bkp_card_id  = test_card_id;
                 req.fpga_card_id = test_card_id;
                 req.bkp_data_dir = 1'b1; 
@@ -78,7 +78,7 @@ class kwr_routing_seq extends uvm_sequence #(bkp_item);
                 req = bkp_item::type_id::create("req");
                 start_item(req);
                 req.trans_type   = BKP_DATA_WRITE; 
-                req.bkp_address  = addr;
+                req.bkp_address  = data_addr;
                 req.bkp_card_id  = test_card_id;
                 req.fpga_card_id = test_card_id;
                 req.bkp_data_dir = 1'b1;
@@ -97,7 +97,7 @@ class kwr_routing_seq extends uvm_sequence #(bkp_item);
             // 2. Blast ETHERNETs with Random Data
             // ==========================================
             for (int eth_idx = 0; eth_idx < 4; eth_idx++) begin
-                int data_addr = 44 + eth_idx; // 44, 45, 46, 47
+                int data_addr = 45 + eth_idx; // 45, 46, 47, 48
                 
                 if (!en_eth[eth_idx]) continue;
 
@@ -122,7 +122,7 @@ class kwr_routing_seq extends uvm_sequence #(bkp_item);
                 // ---> FIX 1: Let the 100 bytes cross the CDC into the FIFO <---
                 #5us; 
 
-                // ---> FIX 2: Send Command to data_addr (Addr 44) <---
+                // ---> FIX 2: Send Command to data_addr <---
                 req = bkp_item::type_id::create("req");
                 start_item(req);
                 req.trans_type   = BKP_DATA_WRITE; 

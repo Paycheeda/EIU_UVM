@@ -522,8 +522,8 @@ class eiu_scoreboard extends uvm_scoreboard;
             if (item.trans_type == BKP_DATA_WRITE) begin
                 is_send_cmd = (item.bkp_data[9] == 1'b1 || (item.bkp_data[8] == 1'b1 && item.bkp_data[9] == 1'b0 && item.bkp_data[7:0] == 8'h00));
 
-                is_eth_data_addr = (item.bkp_address >= 6'd44 && item.bkp_address <= 6'd47);
-                eth_wr_id = item.bkp_address - 6'd44;
+                is_eth_data_addr = (item.bkp_address >= 6'd45 && item.bkp_address <= 6'd48);
+                eth_wr_id = item.bkp_address - 6'd45;
 
                 if (is_eth_data_addr) begin
                     if (is_send_cmd) begin
@@ -540,9 +540,9 @@ class eiu_scoreboard extends uvm_scoreboard;
                     end
                 end else if (!is_send_cmd) begin
                     case (item.bkp_address)
-                        6'd41: begin exp_uart_tx_q[0].push_back(item.bkp_data[8:0]); uart_tx_inj_cnt[0]++; uart_tx_pkt_inj_cnt[0]++; print_counts(0, "UART"); end
-                        6'd42: begin exp_uart_tx_q[1].push_back(item.bkp_data[8:0]); uart_tx_inj_cnt[1]++; uart_tx_pkt_inj_cnt[1]++; print_counts(1, "UART"); end
-                        6'd43: begin exp_uart_tx_q[2].push_back(item.bkp_data[8:0]); uart_tx_inj_cnt[2]++; uart_tx_pkt_inj_cnt[2]++; print_counts(2, "UART"); end
+                        6'd42: begin exp_uart_tx_q[0].push_back(item.bkp_data[8:0]); uart_tx_inj_cnt[0]++; uart_tx_pkt_inj_cnt[0]++; print_counts(0, "UART"); end
+                        6'd43: begin exp_uart_tx_q[1].push_back(item.bkp_data[8:0]); uart_tx_inj_cnt[1]++; uart_tx_pkt_inj_cnt[1]++; print_counts(1, "UART"); end
+                        6'd44: begin exp_uart_tx_q[2].push_back(item.bkp_data[8:0]); uart_tx_inj_cnt[2]++; uart_tx_pkt_inj_cnt[2]++; print_counts(2, "UART"); end
                     endcase
                 end
             end 

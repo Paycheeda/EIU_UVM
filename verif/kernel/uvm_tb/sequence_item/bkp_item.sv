@@ -54,7 +54,7 @@ class bkp_item extends uvm_sequence_item;
         // Default valid hit assignments
         bkp_card_id  = 4'h0; //$urandom_range(0, 15);
         fpga_card_id = bkp_card_id; // Match IDs so EIU listens
-        bkp_address  = $urandom_range(0, 47); // Max valid address
+        bkp_address  = $urandom_range(0, 48); // Max valid address
         bkp_data     = $urandom_range(0, 4095);
         
         delay_cycles = $urandom_range(1, 5);

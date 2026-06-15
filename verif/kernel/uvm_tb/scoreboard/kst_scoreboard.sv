@@ -36,18 +36,18 @@ class kst_scoreboard extends uvm_scoreboard;
         forever begin
             bkp_fifo.get(req);
             
-            // Only care about writes to addresses 41-47
-            if (req.bkp_card_id == req.fpga_card_id && req.bkp_data_dir && (req.bkp_address >= 41 && req.bkp_address <= 47)) begin
+            // Only care about writes to addresses 42-48
+            if (req.bkp_card_id == req.fpga_card_id && req.bkp_data_dir && (req.bkp_address >= 42 && req.bkp_address <= 48)) begin
                 
                 // Increment the specific channel's expectation counter
-                if (req.bkp_address == 41 && req.bkp_data[9]) begin exp_counts["UART1"]++; total_commands++; end
-                if (req.bkp_address == 42 && req.bkp_data[9]) begin exp_counts["UART2"]++; total_commands++; end
-                if (req.bkp_address == 43 && req.bkp_data[9]) begin exp_counts["UART3"]++; total_commands++; end
+                if (req.bkp_address == 42 && req.bkp_data[9]) begin exp_counts["UART1"]++; total_commands++; end
+                if (req.bkp_address == 43 && req.bkp_data[9]) begin exp_counts["UART2"]++; total_commands++; end
+                if (req.bkp_address == 44 && req.bkp_data[9]) begin exp_counts["UART3"]++; total_commands++; end
                 
-                if (req.bkp_address == 44 && req.bkp_data[8]) begin exp_counts["ETH1"]++; total_commands++; end
-                if (req.bkp_address == 45 && req.bkp_data[8]) begin exp_counts["ETH2"]++; total_commands++; end
-                if (req.bkp_address == 46 && req.bkp_data[8]) begin exp_counts["ETH3"]++; total_commands++; end
-                if (req.bkp_address == 47 && req.bkp_data[8]) begin exp_counts["ETH4"]++; total_commands++; end
+                if (req.bkp_address == 45 && req.bkp_data[8]) begin exp_counts["ETH1"]++; total_commands++; end
+                if (req.bkp_address == 46 && req.bkp_data[8]) begin exp_counts["ETH2"]++; total_commands++; end
+                if (req.bkp_address == 47 && req.bkp_data[8]) begin exp_counts["ETH3"]++; total_commands++; end
+                if (req.bkp_address == 48 && req.bkp_data[8]) begin exp_counts["ETH4"]++; total_commands++; end
             end
         end
     endtask
