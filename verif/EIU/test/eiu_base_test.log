@@ -1,6 +1,6 @@
-# vsim tb_top glbl -modelsimini /home/ahmed/modelsim_2020_libs/modelsim.ini -L unisims_ver -L unimacro_ver -L secureip -L xpm -sv_lib /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/lib/uvm_dpi -work /home/ahmed/uvm_training/verif/EIU/test/work "+NUM_PKTS=2" "+EN_UART1=1" "+EN_UART2=1" "+EN_UART3=1" "+UART_WIDTH=8" "+UART_PARITY_EN=1" "+UART_PARITY_OE=0" "+EN_ETH1=1" "+EN_ETH2=1" "+EN_ETH3=1" "+EN_ETH4=1" "+EN_NRZ=1" "+NRZ_BPW=8" "+NRZ_PLEN=50" "+NRZ_ENDIAN=0" "+ETH_PLEN=100" "+UVM_TESTNAME=eiu_base_test" -l eiu_base_test.log -do " onerror {resume}; add wave -noupdate -divider {=== EIU TOP PINS ===}; add wave -noupdate -r /tb_top/DUT/u_kernel/u_kernel_nrz/*; add wave -noupdate -r /tb_top/DUT/u_eth_nrz/*; add wave -noupdate /tb_top/DUT/*; add wave -noupdate -divider {=== ETH (Config/Write/Read) ===}; add wave -noupdate -r /tb_top/DUT/u_eth1/*; add wave -noupdate -divider {=== UART TX / RX & FIFOs ===}; add wave -noupdate -r /tb_top/DUT/*uart*/*; run -a;" 
-# Start time: 17:43:44 on Jun 12,2026
-# Loading /tmp/root@ahmedpc_dpi_5431/linuxaloem_gcc-7.4.0/export_tramp.so
+# vsim -c tb_top glbl -modelsimini /home/ahmed/modelsim_2020_libs/modelsim.ini -L unisims_ver -L unimacro_ver -L secureip -L xpm -sv_lib /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/lib/uvm_dpi -work /home/ahmed/uvm_training/verif/EIU/test/work "+NUM_PKTS=5" "+EN_UART1=1" "+EN_UART2=1" "+EN_UART3=1" "+UART_WIDTH=8" "+UART_PARITY_EN=1" "+UART_PARITY_OE=0" "+EN_ETH1=1" "+EN_ETH2=1" "+EN_ETH3=1" "+EN_ETH4=1" "+EN_NRZ=1" "+NRZ_BPW=8" "+NRZ_PLEN=50" "+NRZ_ENDIAN=0" "+ETH_PLEN=100" "+UVM_TESTNAME=eiu_base_test" -l eiu_base_test.log -do "run -a; q" 
+# Start time: 10:41:44 on Jul 17,2026
+# Loading /tmp/root@ahmedpc_dpi_7018/linuxaloem_gcc-7.4.0/export_tramp.so
 # ** Note: (vsim-8785) UVM-aware debugging capabilities will be disabled since no compiled "questa_uvm_pkg" can be found.
 # This also means that later if you turn on UVM-aware debugging your debug simulations may have
 # different random seeds from your non-debug simulations.
@@ -254,23 +254,12 @@
 # ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(234): [TFMPC] - Missing connection for port 'clk_eth3'.
 # ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(234): [TFMPC] - Missing connection for port 'clk_eth4'.
 # ** Warning: (vsim-3722) /home/ahmed/uvm_training/verif/EIU/vlib/tb_top.sv(234): [TFMPC] - Missing connection for port 'rst_n'.
-# Compiling /tmp/root@ahmedpc_dpi_5431/linuxaloem_gcc-7.4.0/exportwrapper.c
-# Loading /tmp/root@ahmedpc_dpi_5431/linuxaloem_gcc-7.4.0/vsim_auto_compile.so
+# Compiling /tmp/root@ahmedpc_dpi_7018/linuxaloem_gcc-7.4.0/exportwrapper.c
+# Loading /tmp/root@ahmedpc_dpi_7018/linuxaloem_gcc-7.4.0/vsim_auto_compile.so
 # Loading /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/lib/uvm_dpi.so
-# ** Warning: Design size of 84439 statements exceeds ModelSim-Intel FPGA Starter Edition recommended capacity.
+# ** Warning: Design size of 84471 statements exceeds ModelSim-Intel FPGA Starter Edition recommended capacity.
 # Expect performance to be adversely affected.
-#  onerror {resume}
-#  Warning: onerror command for use within macro
-#  add wave -noupdate -divider {=== EIU TOP PINS ===}
-#  add wave -noupdate -r /tb_top/DUT/u_kernel/u_kernel_nrz/*
-#  add wave -noupdate -r /tb_top/DUT/u_eth_nrz/*
-#  add wave -noupdate /tb_top/DUT/*
-#  add wave -noupdate -divider {=== ETH (Config/Write/Read) ===}
-#  add wave -noupdate -r /tb_top/DUT/u_eth1/*
-#  add wave -noupdate -divider {=== UART TX / RX & FIFOs ===}
-#  add wave -noupdate -r /tb_top/DUT/*uart*/*
-# (vish-4014) No objects found matching '/tb_top/DUT/*uart*/*'.
-#  run -a
+# run -a
 # UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_root.svh(392) @ 0: reporter [UVM/RELNOTES] 
 # ----------------------------------------------------------------
 # UVM-1.2
@@ -294,8 +283,8 @@
 #       (Specify +UVM_NO_RELNOTES to turn off this notice)
 # 
 # UVM_INFO @ 0: reporter [RNTST] Running test eiu_base_test...
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/config/uart_config.sv(48) @ 0: reporter [UART_CFG] CLI Override: num_uart_packets = 2
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/config/uart_config.sv(48) @ 0: reporter [UART_CFG] CLI Override: num_uart_packets = 2
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/config/uart_config.sv(48) @ 0: reporter [UART_CFG] CLI Override: num_uart_packets = 5
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/config/uart_config.sv(48) @ 0: reporter [UART_CFG] CLI Override: num_uart_packets = 5
 # UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(32) @ 0: uvm_test_top.env.uart_rx_agts[2].drvr [DRV_PROBE] Driver started. Waiting 2us for system settle...
 # UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(32) @ 0: uvm_test_top.env.uart_rx_agts[1].drvr [DRV_PROBE] Driver started. Waiting 2us for system settle...
 # UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(32) @ 0: uvm_test_top.env.uart_rx_agts[0].drvr [DRV_PROBE] Driver started. Waiting 2us for system settle...
@@ -314,17 +303,17 @@
 # UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(35) @ 20000000: uvm_test_top.env.uart_rx_agts[1].drvr [DRV_PROBE] Waiting 150us for EIU Hardware to acquire Baudrate lock from Backplane...
 # UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(35) @ 20000000: uvm_test_top.env.uart_rx_agts[0].drvr [DRV_PROBE] Waiting 150us for EIU Hardware to acquire Baudrate lock from Backplane...
 # UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_sequence.sv(220) @ 244750000: uvm_test_top.env.bkp_agt.sqr@@cfg_seq [BKP_SEQ] <<< FULL Hardware Initialization Sequence Complete.
-# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(167) @ 1244750000: uvm_test_top.vsqr@@vseq [VSEQ] === STAGE 2: EVENT-DRIVEN PING-PONG TRAFFIC (2 Packets) ===
-# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(208) @ 1244750000: uvm_test_top.vsqr@@vseq [VSEQ] --- ETH PING-PONG: Pushing Packet 1/2 to PHY ---
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(167) @ 1244750000: uvm_test_top.vsqr@@vseq [VSEQ] === STAGE 2: EVENT-DRIVEN PING-PONG TRAFFIC (5 Packets) ===
+# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(208) @ 1244750000: uvm_test_top.vsqr@@vseq [VSEQ] --- ETH PING-PONG: Pushing Packet 1/5 to PHY ---
 # UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(193) @ 1244750000: uvm_test_top.vsqr@@vseq [VSEQ] Enabling Telemetry Traffic on ETH5 (NRZ)
-# UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/kwr_sequence.sv(43) @ 1244750000: uvm_test_top.env.bkp_agt.sqr@@tx_inj_seq [SEQ] Starting BACK-TO-BACK Burst Test with RANDOM Data: 2 packet(s), 100 ETH byte(s) per enabled FIFO...
+# UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/kwr_sequence.sv(43) @ 1244750000: uvm_test_top.env.bkp_agt.sqr@@tx_inj_seq [SEQ] Starting BACK-TO-BACK Burst Test with RANDOM Data: 5 packet(s), 100 ETH byte(s) per enabled FIFO...
 # UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence/uart_main_sequence.sv(14) @ 1244750000: uvm_test_top.env.uart_rx_agts[0].sqncr@@uart_seq[0] [UART_MAIN_SEQ] Starting tx_seq for EIU Stress Test...
 # UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence/uart_main_sequence.sv(14) @ 1244750000: uvm_test_top.env.uart_rx_agts[1].sqncr@@uart_seq[1] [UART_MAIN_SEQ] Starting tx_seq for EIU Stress Test...
 # UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence/uart_main_sequence.sv(14) @ 1244750000: uvm_test_top.env.uart_rx_agts[2].sqncr@@uart_seq[2] [UART_MAIN_SEQ] Starting tx_seq for EIU Stress Test...
 # UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/nrz_sequence.sv(22) @ 1244750000: uvm_test_top.env.nrz_agt.sqr@@nrz_seq [NRZ_SEQ] Starting Continuous NRZ Serial Injection...
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence/uart_tx_sequence.sv(25) @ 1244750000: uvm_test_top.env.uart_rx_agts[0].sqncr@@tx_seq [UART_TX_SEQ] Generating 2 Packets | Width: 8 | Parity EN: 1 | Parity OE: 0
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence/uart_tx_sequence.sv(25) @ 1244750000: uvm_test_top.env.uart_rx_agts[1].sqncr@@tx_seq [UART_TX_SEQ] Generating 2 Packets | Width: 8 | Parity EN: 1 | Parity OE: 0
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence/uart_tx_sequence.sv(25) @ 1244750000: uvm_test_top.env.uart_rx_agts[2].sqncr@@tx_seq [UART_TX_SEQ] Generating 2 Packets | Width: 8 | Parity EN: 1 | Parity OE: 0
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence/uart_tx_sequence.sv(25) @ 1244750000: uvm_test_top.env.uart_rx_agts[0].sqncr@@tx_seq [UART_TX_SEQ] Generating 5 Packets | Width: 8 | Parity EN: 1 | Parity OE: 0
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence/uart_tx_sequence.sv(25) @ 1244750000: uvm_test_top.env.uart_rx_agts[1].sqncr@@tx_seq [UART_TX_SEQ] Generating 5 Packets | Width: 8 | Parity EN: 1 | Parity OE: 0
+# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence/uart_tx_sequence.sv(25) @ 1244750000: uvm_test_top.env.uart_rx_agts[2].sqncr@@tx_seq [UART_TX_SEQ] Generating 5 Packets | Width: 8 | Parity EN: 1 | Parity OE: 0
 # UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(225) @ 1251520000: uvm_test_top.vsqr@@vseq [VSEQ] --- ETH PING-PONG: Triggering CPU to Extract Packet 1 ---
 # UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_smart_seq.sv(80) @ 1279250000: uvm_test_top.env.bkp_agt.sqr@@poll_seq_pkt_0 [SMART_SEQ] 	*** 71 BYTES WAITING ON ETH1! Initiating Burst Read ***
 # UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(38) @ 1447881000: uvm_test_top.env.eth_tx_agts[4].mon [TX_MON] tx_ctl went HIGH! Start of Frame detected. Sampling DDR pins...
@@ -334,153 +323,8 @@
 # UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(38) @ 1520000000: uvm_test_top.env.uart_rx_agts[1].drvr [DRV_PROBE] Driver awake! Entering main loop.
 # UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(38) @ 1520000000: uvm_test_top.env.uart_rx_agts[0].drvr [DRV_PROBE] Driver awake! Entering main loop.
 # UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_smart_seq.sv(80) @ 1861250000: uvm_test_top.env.bkp_agt.sqr@@poll_seq_pkt_0 [SMART_SEQ] 	*** 71 BYTES WAITING ON ETH2! Initiating Burst Read ***
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(38) @ 2159641000: uvm_test_top.env.eth_tx_agts[0].mon [TX_MON] tx_ctl went HIGH! Start of Frame detected. Sampling DDR pins...
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(67) @ 2171961100: uvm_test_top.env.eth_tx_agts[0].mon [TX_MON] tx_ctl went LOW. Captured 154 bytes from physical pins.
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(119) @ 2171961100: uvm_test_top.env.eth_tx_agts[0].mon [TX_MON] Parsed UDP Payload (100 bytes). Extracted hardware CRC: 0x324fd6b2. Broadcasting to Scoreboard!
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_tx_monitor.sv(95) @ 2172207710: uvm_test_top.env.uart_tx_agts[0].mntr [LINE_TX_MONITOR] Deserialized Wire Frame: [0]_[10000101]_[1]_[1] (Width: 8, Baud: 115200)
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_tx_monitor.sv(95) @ 2194089830: uvm_test_top.env.uart_tx_agts[1].mntr [LINE_TX_MONITOR] Deserialized Wire Frame: [0]_[01011001]_[0]_[1] (Width: 8, Baud: 115200)
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_tx_monitor.sv(95) @ 2216152800: uvm_test_top.env.uart_tx_agts[2].mntr [LINE_TX_MONITOR] Deserialized Wire Frame: [0]_[10011110]_[1]_[1] (Width: 8, Baud: 115200)
-# UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_smart_seq.sv(80) @ 2427250000: uvm_test_top.env.bkp_agt.sqr@@poll_seq_pkt_0 [SMART_SEQ] 	*** 63 BYTES WAITING ON ETH3! Initiating Burst Read ***
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_monitor.sv(92) @ 2431538000: uvm_test_top.env.uart_rx_agts[2].mntr [LINE_RX_MONITOR] Sampled Wire Frame:   [0]_[11110001]_[1]_[1] (Width: 8, Baud: 115200)
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_monitor.sv(92) @ 2431538000: uvm_test_top.env.uart_rx_agts[1].mntr [LINE_RX_MONITOR] Sampled Wire Frame:   [0]_[01010101]_[0]_[1] (Width: 8, Baud: 115200)
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_monitor.sv(92) @ 2431538000: uvm_test_top.env.uart_rx_agts[0].mntr [LINE_RX_MONITOR] Sampled Wire Frame:   [0]_[01101010]_[0]_[1] (Width: 8, Baud: 115200)
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(94) @ 2561745680: uvm_test_top.env.uart_rx_agts[2].drvr [LINE_RX_DRIVER] Injected byte into physical RX pin: 8f
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(94) @ 2561745680: uvm_test_top.env.uart_rx_agts[1].drvr [LINE_RX_DRIVER] Injected byte into physical RX pin: aa
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(94) @ 2561745680: uvm_test_top.env.uart_rx_agts[0].drvr [LINE_RX_DRIVER] Injected byte into physical RX pin: 56
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(38) @ 2654441000: uvm_test_top.env.eth_tx_agts[4].mon [TX_MON] tx_ctl went HIGH! Start of Frame detected. Sampling DDR pins...
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(67) @ 2662761100: uvm_test_top.env.eth_tx_agts[4].mon [TX_MON] tx_ctl went LOW. Captured 104 bytes from physical pins.
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(119) @ 2662761100: uvm_test_top.env.eth_tx_agts[4].mon [TX_MON] Parsed UDP Payload (50 bytes). Extracted hardware CRC: 0x3d629d29. Broadcasting to Scoreboard!
-# UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_smart_seq.sv(80) @ 2947250000: uvm_test_top.env.bkp_agt.sqr@@poll_seq_pkt_0 [SMART_SEQ] 	*** 65 BYTES WAITING ON ETH4! Initiating Burst Read ***
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(38) @ 3021721000: uvm_test_top.env.eth_tx_agts[1].mon [TX_MON] tx_ctl went HIGH! Start of Frame detected. Sampling DDR pins...
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(67) @ 3034041100: uvm_test_top.env.eth_tx_agts[1].mon [TX_MON] tx_ctl went LOW. Captured 154 bytes from physical pins.
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(119) @ 3034041100: uvm_test_top.env.eth_tx_agts[1].mon [TX_MON] Parsed UDP Payload (100 bytes). Extracted hardware CRC: 0x96407d8e. Broadcasting to Scoreboard!
-# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(208) @ 3457250000: uvm_test_top.vsqr@@vseq [VSEQ] --- ETH PING-PONG: Pushing Packet 2/2 to PHY ---
-# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(225) @ 3464960000: uvm_test_top.vsqr@@vseq [VSEQ] --- ETH PING-PONG: Triggering CPU to Extract Packet 2 ---
-# UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_smart_seq.sv(80) @ 3471250000: uvm_test_top.env.bkp_agt.sqr@@poll_seq_pkt_1 [SMART_SEQ] 	*** 1 BYTES WAITING ON UART1! Initiating Burst Read ***
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_monitor.sv(92) @ 3473380290: uvm_test_top.env.uart_rx_agts[2].mntr [LINE_RX_MONITOR] Sampled Wire Frame:   [0]_[00101001]_[1]_[1] (Width: 8, Baud: 115200)
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_monitor.sv(92) @ 3473380290: uvm_test_top.env.uart_rx_agts[1].mntr [LINE_RX_MONITOR] Sampled Wire Frame:   [0]_[01011000]_[1]_[1] (Width: 8, Baud: 115200)
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_monitor.sv(92) @ 3473380290: uvm_test_top.env.uart_rx_agts[0].mntr [LINE_RX_MONITOR] Sampled Wire Frame:   [0]_[11000100]_[1]_[1] (Width: 8, Baud: 115200)
-# UVM_WARNING /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_smart_seq.sv(114) @ 3487250000: uvm_test_top.env.bkp_agt.sqr@@poll_seq_pkt_1 [SMART_SEQ] UART1 post-drain count poll returned 1 instead of 0
-# UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_smart_seq.sv(80) @ 3495250000: uvm_test_top.env.bkp_agt.sqr@@poll_seq_pkt_1 [SMART_SEQ] 	*** 2 BYTES WAITING ON UART2! Initiating Burst Read ***
-# UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_smart_seq.sv(80) @ 3527250000: uvm_test_top.env.bkp_agt.sqr@@poll_seq_pkt_1 [SMART_SEQ] 	*** 2 BYTES WAITING ON UART3! Initiating Burst Read ***
-# UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_smart_seq.sv(80) @ 3559250000: uvm_test_top.env.bkp_agt.sqr@@poll_seq_pkt_1 [SMART_SEQ] 	*** 70 BYTES WAITING ON ETH1! Initiating Burst Read ***
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(94) @ 3603587970: uvm_test_top.env.uart_rx_agts[2].drvr [LINE_RX_DRIVER] Injected byte into physical RX pin: 94
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(94) @ 3603587970: uvm_test_top.env.uart_rx_agts[1].drvr [LINE_RX_DRIVER] Injected byte into physical RX pin: 1a
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_rx_driver.sv(94) @ 3603587970: uvm_test_top.env.uart_rx_agts[0].drvr [LINE_RX_DRIVER] Injected byte into physical RX pin: 23
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence/uart_main_sequence.sv(25) @ 3603587970: uvm_test_top.env.uart_rx_agts[2].sqncr@@uart_seq[2] [UART_MAIN_SEQ] tx_seq finished successfully.
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence/uart_main_sequence.sv(25) @ 3603587970: uvm_test_top.env.uart_rx_agts[1].sqncr@@uart_seq[1] [UART_MAIN_SEQ] tx_seq finished successfully.
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/sequence/uart_main_sequence.sv(25) @ 3603587970: uvm_test_top.env.uart_rx_agts[0].sqncr@@uart_seq[0] [UART_MAIN_SEQ] tx_seq finished successfully.
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(38) @ 3865561000: uvm_test_top.env.eth_tx_agts[2].mon [TX_MON] tx_ctl went HIGH! Start of Frame detected. Sampling DDR pins...
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(67) @ 3877881100: uvm_test_top.env.eth_tx_agts[2].mon [TX_MON] tx_ctl went LOW. Captured 154 bytes from physical pins.
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(119) @ 3877881100: uvm_test_top.env.eth_tx_agts[2].mon [TX_MON] Parsed UDP Payload (100 bytes). Extracted hardware CRC: 0x85d14f3d. Broadcasting to Scoreboard!
-# UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_smart_seq.sv(80) @ 4117250000: uvm_test_top.env.bkp_agt.sqr@@poll_seq_pkt_1 [SMART_SEQ] 	*** 77 BYTES WAITING ON ETH2! Initiating Burst Read ***
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(38) @ 4727641000: uvm_test_top.env.eth_tx_agts[3].mon [TX_MON] tx_ctl went HIGH! Start of Frame detected. Sampling DDR pins...
-# UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_smart_seq.sv(80) @ 4733250000: uvm_test_top.env.bkp_agt.sqr@@poll_seq_pkt_1 [SMART_SEQ] 	*** 82 BYTES WAITING ON ETH3! Initiating Burst Read ***
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(67) @ 4739961100: uvm_test_top.env.eth_tx_agts[3].mon [TX_MON] tx_ctl went LOW. Captured 154 bytes from physical pins.
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(119) @ 4739961100: uvm_test_top.env.eth_tx_agts[3].mon [TX_MON] Parsed UDP Payload (100 bytes). Extracted hardware CRC: 0x38b91b07. Broadcasting to Scoreboard!
-# UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_smart_seq.sv(80) @ 5363250000: uvm_test_top.env.bkp_agt.sqr@@poll_seq_pkt_1 [SMART_SEQ] 	*** 62 BYTES WAITING ON ETH4! Initiating Burst Read ***
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(38) @ 5757641000: uvm_test_top.env.eth_tx_agts[0].mon [TX_MON] tx_ctl went HIGH! Start of Frame detected. Sampling DDR pins...
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(67) @ 5769961100: uvm_test_top.env.eth_tx_agts[0].mon [TX_MON] tx_ctl went LOW. Captured 154 bytes from physical pins.
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(119) @ 5769961100: uvm_test_top.env.eth_tx_agts[0].mon [TX_MON] Parsed UDP Payload (100 bytes). Extracted hardware CRC: 0x777a0630. Broadcasting to Scoreboard!
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_tx_monitor.sv(95) @ 5770099090: uvm_test_top.env.uart_tx_agts[0].mntr [LINE_TX_MONITOR] Deserialized Wire Frame: [0]_[00110110]_[0]_[1] (Width: 8, Baud: 115200)
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_tx_monitor.sv(95) @ 5792162050: uvm_test_top.env.uart_tx_agts[1].mntr [LINE_TX_MONITOR] Deserialized Wire Frame: [0]_[00100000]_[1]_[1] (Width: 8, Baud: 115200)
-# UVM_INFO /home/ahmed/uvm_training/verif/uart_1/uvm_tb/agent/line_tx_monitor.sv(95) @ 5814225020: uvm_test_top.env.uart_tx_agts[2].mntr [LINE_TX_MONITOR] Deserialized Wire Frame: [0]_[01001011]_[0]_[1] (Width: 8, Baud: 115200)
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(38) @ 6081721000: uvm_test_top.env.eth_tx_agts[1].mon [TX_MON] tx_ctl went HIGH! Start of Frame detected. Sampling DDR pins...
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(67) @ 6094041100: uvm_test_top.env.eth_tx_agts[1].mon [TX_MON] tx_ctl went LOW. Captured 154 bytes from physical pins.
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(119) @ 6094041100: uvm_test_top.env.eth_tx_agts[1].mon [TX_MON] Parsed UDP Payload (100 bytes). Extracted hardware CRC: 0x4f26244c. Broadcasting to Scoreboard!
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(38) @ 6343721000: uvm_test_top.env.eth_tx_agts[2].mon [TX_MON] tx_ctl went HIGH! Start of Frame detected. Sampling DDR pins...
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(67) @ 6356041100: uvm_test_top.env.eth_tx_agts[2].mon [TX_MON] tx_ctl went LOW. Captured 154 bytes from physical pins.
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(119) @ 6356041100: uvm_test_top.env.eth_tx_agts[2].mon [TX_MON] Parsed UDP Payload (100 bytes). Extracted hardware CRC: 0xeffb79ef. Broadcasting to Scoreboard!
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(38) @ 6605561000: uvm_test_top.env.eth_tx_agts[3].mon [TX_MON] tx_ctl went HIGH! Start of Frame detected. Sampling DDR pins...
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(67) @ 6617881100: uvm_test_top.env.eth_tx_agts[3].mon [TX_MON] tx_ctl went LOW. Captured 154 bytes from physical pins.
-# UVM_INFO /home/ahmed/uvm_training/verif/eth_1/uvm_tb/agent/eth_tx_monitor.sv(119) @ 6617881100: uvm_test_top.env.eth_tx_agts[3].mon [TX_MON] Parsed UDP Payload (100 bytes). Extracted hardware CRC: 0x819b4dfa. Broadcasting to Scoreboard!
-# UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/kwr_sequence.sv(147) @ 6715250000: uvm_test_top.env.bkp_agt.sqr@@tx_inj_seq [SEQ] Random Burst Sequence Complete! Pipeline flushing...
-# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(252) @ 6715250000: uvm_test_top.vsqr@@vseq [VSEQ] Background traffic generators complete. Performing final CPU RX drain.
-# UVM_INFO /home/ahmed/uvm_training/verif/kernel/uvm_tb/sequence/bkp_smart_seq.sv(80) @ 6821250000: uvm_test_top.env.bkp_agt.sqr@@final_poll_seq_0 [SMART_SEQ] 	*** 1 BYTES WAITING ON UART1! Initiating Burst Read ***
-# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/sequence/eiu_vseq.sv(263) @ 7437250000: uvm_test_top.vsqr@@vseq [VSEQ] === ALL DUPLEX STAGES COMPLETE ===
-# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv(185) @ 7437250000: uvm_test_top.env.scb [SCB_DRAIN] Waiting up to 20000000000 for scoreboard queues/counters to drain
-# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv(191) @ 7477250000: uvm_test_top.env.scb [SCB_DRAIN] Scoreboard drained successfully.
-# ---------------- EIU SCOREBOARD DRAIN STATUS ----------------
-# UART1 TX inj/ver=2/2 exp_q=0 fifo=0 | RX inj/ver=2/2 exp_q=0 fifo=0
-# UART2 TX inj/ver=2/2 exp_q=0 fifo=0 | RX inj/ver=2/2 exp_q=0 fifo=0
-# UART3 TX inj/ver=2/2 exp_q=0 fifo=0 | RX inj/ver=2/2 exp_q=0 fifo=0
-# ETH1  TX inj/ver=200/200 exp_q=0 fifo=0 | RX inj/ver=141/141 exp_q=0 golden_q=0 fifo=0
-# ETH2  TX inj/ver=200/200 exp_q=0 fifo=0 | RX inj/ver=148/148 exp_q=0 golden_q=0 fifo=0
-# ETH3  TX inj/ver=200/200 exp_q=0 fifo=0 | RX inj/ver=145/145 exp_q=0 golden_q=0 fifo=0
-# ETH4  TX inj/ver=200/200 exp_q=0 fifo=0 | RX inj/ver=127/127 exp_q=0 golden_q=0 fifo=0
-# NRZ/ETH5 inj/ver=100/100 exp_q=0 golden_q=0 fifo=0
-# Backplane analysis fifo pending=0
-# ----------------------------------------------------------------
-# 
-# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_objection.svh(1270) @ 7477250000: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
-# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv(326) @ 7477250000: uvm_test_top.env.scb [SCB_DONE] All expected UART, ETH, and NRZ traffic was verified before end-of-test.
-# UVM_INFO /home/ahmed/uvm_training/verif/EIU/uvm_tb/scoreboard/eiu_scoreboard.sv(333) @ 7477250000: uvm_test_top.env.scb [SCB_FINAL_REPORT] 
-# +----------------------------------------------------------------------------------------------------------+
-# |                                      EIU SCOREBOARD FINAL REPORT                                      |
-# +----------------------------------------------------------------------------------------------------------+
-# | Overall Result: PASS                                                                                 |
-# +----------+-----+------------+------------+------------+------------+----------+---------+--------+
-# | Interface| Dir | Inj Pkts   | Ver Pkts   | Inj Bytes  | Ver Bytes  | Fails    | Pending | Result |
-# +----------+-----+------------+------------+------------+------------+----------+---------+--------+
-# | UART1    | TX  |          2 |          2 |          2 |          2 |        0 |       0 | PASS   |
-# | UART1    | RX  |          2 |          2 |          2 |          2 |        0 |       0 | PASS   |
-# | UART2    | TX  |          2 |          2 |          2 |          2 |        0 |       0 | PASS   |
-# | UART2    | RX  |          2 |          2 |          2 |          2 |        0 |       0 | PASS   |
-# | UART3    | TX  |          2 |          2 |          2 |          2 |        0 |       0 | PASS   |
-# | UART3    | RX  |          2 |          2 |          2 |          2 |        0 |       0 | PASS   |
-# | ETH1     | TX  |          2 |          2 |        200 |        200 |        0 |       0 | PASS   |
-# | ETH1     | RX  |          2 |          2 |        141 |        141 |        0 |       0 | PASS   |
-# | ETH2     | TX  |          2 |          2 |        200 |        200 |        0 |       0 | PASS   |
-# | ETH2     | RX  |          2 |          2 |        148 |        148 |        0 |       0 | PASS   |
-# | ETH3     | TX  |          2 |          2 |        200 |        200 |        0 |       0 | PASS   |
-# | ETH3     | RX  |          2 |          2 |        145 |        145 |        0 |       0 | PASS   |
-# | ETH4     | TX  |          2 |          2 |        200 |        200 |        0 |       0 | PASS   |
-# | ETH4     | RX  |          2 |          2 |        127 |        127 |        0 |       0 | PASS   |
-# | ETH5     | NRZ |          2 |          2 |        100 |        100 |        0 |       0 | PASS   |
-# +----------+-----+------------+------------+------------+------------+----------+---------+--------+
-# | PASS requires: injected packets == verified packets, injected bytes == verified bytes, zero fails, zero pending. |
-# +----------------------------------------------------------------------------------------------------------+
-# 
-# UVM_INFO /home/ahmed/uvm_training/verif/EIU/test/eiu_base_test.sv(178) @ 7477250000: uvm_test_top [TEST_SUMMARY] ===============================================================================
-# UVM_INFO /home/ahmed/uvm_training/verif/EIU/test/eiu_base_test.sv(179) @ 7477250000: uvm_test_top [TEST_SUMMARY]                  EIU SYSTEM TEST EXECUTION COMPLETE                            
-# UVM_INFO /home/ahmed/uvm_training/verif/EIU/test/eiu_base_test.sv(180) @ 7477250000: uvm_test_top [TEST_SUMMARY]  Check the [SCB_PASS] logs above for verification of the TX and RX pipelines.  
-# UVM_INFO /home/ahmed/uvm_training/verif/EIU/test/eiu_base_test.sv(181) @ 7477250000: uvm_test_top [TEST_SUMMARY] ===============================================================================
-# UVM_INFO /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_report_server.svh(847) @ 7477250000: reporter [UVM/REPORT/SERVER] 
-# --- UVM Report Summary ---
-# 
-# ** Report counts by severity
-# UVM_INFO :  114
-# UVM_WARNING :    1
-# UVM_ERROR :    0
-# UVM_FATAL :    0
-# ** Report counts by id
-# [BKP_SEQ]     2
-# [DRV_PROBE]     9
-# [LINE_RX_DRIVER]     6
-# [LINE_RX_MONITOR]     6
-# [LINE_TX_MONITOR]     6
-# [NRZ_SEQ]     1
-# [RNTST]     1
-# [RX_DRV]     8
-# [SCB_DONE]     1
-# [SCB_DRAIN]     2
-# [SCB_FINAL_REPORT]     1
-# [SEQ]     2
-# [SMART_SEQ]    13
-# [TEST]     1
-# [TEST_DONE]     1
-# [TEST_SUMMARY]     4
-# [TX_MON]    30
-# [UART_CFG]     2
-# [UART_MAIN_SEQ]     6
-# [UART_TX_SEQ]     3
-# [UVM/RELNOTES]     1
-# [VSEQ]     9
-# 
-# ** Note: $finish    : /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_root.svh(517)
-#    Time: 747725 ns  Iteration: 71  Instance: /tb_top
-# 1
-# Break in Task uvm_pkg/uvm_root::run_test at /home/ahmed/Downloads/NED_IC_Design_Course/Design_Verification_UVM/uvm_1.2/uvm-1.2/src/base/uvm_root.svh line 517
-# 
-# End time: 17:53:23 on Jun 12,2026, Elapsed time: 0:09:39
+# Break key hit
+# Simulation stop requested.
+#  q
+# End time: 10:43:13 on Jul 17,2026, Elapsed time: 0:01:29
 # Errors: 0, Warnings: 108
