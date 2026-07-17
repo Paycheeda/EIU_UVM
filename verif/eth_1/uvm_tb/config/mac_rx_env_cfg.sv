@@ -1,3 +1,26 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  Filename      : mac_rx_env_cfg.sv
+//  Author        : Ahmed Ali
+//  Creation Date : 16/04/2026
+//
+//  Copyright 2026 Avant Labs PVT LTD. All Rights Reserved.
+//
+//  No portions of this material may be reproduced in any form without
+//  the written permission of:
+//
+//    First Floor, Jumaira Arcade,
+//    Fateh Jang Road,
+//    Sector F-17, Islamabad, 45230
+//
+//  All information contained in this document is Avant Labs PVT LTD
+//  company private, proprietary and trade secret.
+//
+//  Description
+//  ===========
+//  UVM configuration object for Ethernet MAC RX verification
+////////////////////////////////////////////////////////////////////////////////
+
 `ifndef MAC_RX_ENV_CFG_SV
 `define MAC_RX_ENV_CFG_SV
 

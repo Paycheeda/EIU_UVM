@@ -1,3 +1,26 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  Filename      : loopback_vseq.sv
+//  Author        : Ahmed Ali
+//  Creation Date : 16/04/2026
+//
+//  Copyright 2026 Avant Labs PVT LTD. All Rights Reserved.
+//
+//  No portions of this material may be reproduced in any form without
+//  the written permission of:
+//
+//    First Floor, Jumaira Arcade,
+//    Fateh Jang Road,
+//    Sector F-17, Islamabad, 45230
+//
+//  All information contained in this document is Avant Labs PVT LTD
+//  company private, proprietary and trade secret.
+//
+//  Description
+//  ===========
+//  UVM virtual sequence for UART loopback verification
+////////////////////////////////////////////////////////////////////////////////
+
 // --- Self-Contained Helper Sequences ---
 class loopback_tx_seq extends uvm_sequence #(fifo_item);
   `uvm_object_utils(loopback_tx_seq)
